@@ -1,0 +1,42 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Search, should appear as action button -->
+    <item android:id="@+id/action_search"
+          android:icon="@drawable/ic_action_search"
+          android:title="@string/action_search"
+          android:showAsAction="ifRoom|collapseActionView"
+          android:actionViewClass="android.widget.SearchView"/>
+    
+    <!-- New, should appear as action button -->
+    <item android:id="@+id/action_new"
+          android:icon="@drawable/ic_action_new"
+          android:title="@string/action_new"
+          android:showAsAction="ifRoom" />
+    
+    <!-- Share, should appear as action button -->
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_action_share"
+        android:title="@string/action_share"
+        android:showAsAction="ifRoom" />
+    
+     <!-- Sort, should always be in the overflow -->
+    <item
+        android:id="@+id/action_sort"
+        android:showAsAction="never"
+        android:title="@string/action_sort" />
+    
+    <!-- Change Pantry, should always be in the overflow -->
+    <item
+        android:id="@+id/action_change_pantry"
+        android:showAsAction="never"
+        android:title="@string/action_change_pantry" />
+    
+    <!-- Settings, should always be in the overflow -->
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings" />
+
+</menu>

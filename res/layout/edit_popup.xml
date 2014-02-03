@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+            
+		<TextView android:id="@+id/nameText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Name" />
+		
+        <EditText
+            android:id="@+id/nameEdit"
+            android:hint="Enter name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" >
+
+            <requestFocus />
+        </EditText>
+            
+		<TextView android:id="@+id/quantityText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Quantity" />
+		
+        <EditText
+            android:id="@+id/quantityEdit"
+            android:hint="Enter quantity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" >
+
+        </EditText>
+            
+		<TextView android:id="@+id/expireText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Expiration Date" />
+		
+        <EditText
+            android:id="@+id/expireEdit"
+            android:hint="Enter expiration date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" >
+
+        </EditText>
+        
+        <TextView android:id="@+id/categoryText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Category" />
+        
+        <Spinner
+    		android:id="@+id/category_spinner"
+    		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:entries="@array/category_array"
+    		android:prompt="@string/category_prompt" />
+
+         <Button
+             android:id="@+id/editButton"
+             android:layout_marginTop="15dp"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:text="Edit Item" 
+             />
+
+</LinearLayout>

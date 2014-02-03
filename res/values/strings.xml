@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Virtual Pantry</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_new">Add Item</string>
+    <string name="action_share">Share</string>
+    <string name="action_sort">Sort by...</string>
+    <string name="action_change_pantry">Change Pantry</string>
+    <string name="title_activity_main">My Pantry</string>
+    <string name="title_activity_display_message">Shopping List</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="editImage">Edit</string>
+    <string-array name="category_array">
+        <item>Beverages</item>
+        <item>Protein</item>
+        <item>Vegetables</item>
+        <item>Fruit</item>
+        <item>Dairy</item>
+        <item>Frozen</item>
+        <item>Condiments</item>
+        <item>Sweets</item>
+        <item>Snacks</item>
+        <item>Grains</item>
+        <item>Other</item>
+    </string-array>
+     <string name="category_prompt">Select Category</string>
+
+</resources>
