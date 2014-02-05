@@ -102,13 +102,13 @@ public class MainActivity extends Activity {
         Tab tab = actionBar.newTab()
                            .setText(R.string.title_activity_main)
                            .setTabListener(new TabListener<SavedTabsFragment>(
-                                   this, "artist", SavedTabsFragment.class));
+                                   this, "Pantry", SavedTabsFragment.class));
         actionBar.addTab(tab);
 
         tab = actionBar.newTab()
                        .setText(R.string.title_activity_display_message)
                        .setTabListener(new TabListener<ShoppingListFragment>(
-                               this, "album", ShoppingListFragment.class));
+                               this, "Shopping List", ShoppingListFragment.class));
         actionBar.addTab(tab);
     }
 
@@ -151,15 +151,6 @@ public class MainActivity extends Activity {
             	shareDialog.show();
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-    
-    public static class ExampleFragment1 extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.activity_main, container, false);
         }
     }
     
