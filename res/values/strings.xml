@@ -10,8 +10,8 @@
     <string name="action_share">Share</string>
     <string name="action_sort">Sort by...</string>
     <string name="action_change_pantry">Change Pantry</string>
-    <string name="title_activity_main">My Pantry</string>
-    <string name="title_activity_display_message">Shopping List</string>
+    <string name="title_activity_pantry">My Pantry</string>
+    <string name="title_activity_shopping_list">Shopping List</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="editImage">Edit</string>
     <string-array name="category_array">

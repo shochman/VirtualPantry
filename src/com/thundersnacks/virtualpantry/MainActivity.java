@@ -1,5 +1,6 @@
 package com.thundersnacks.virtualpantry;
 
+import com.thundersnacks.virtualpantry.PantryFragment.SavedTabsListAdapter;
 import com.thundersnacks.virtualpantry.R;
 
 import android.os.Bundle;
@@ -82,14 +83,9 @@ public class MainActivity extends Activity {
 	        // User selected the already selected tab. Usually do nothing.
 	    }
 	}
-	
-	public final static String EXTRA_MESSAGE = "com.thundersnacks.virtualpantry.MESSAGE";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        
+    protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         // Notice that setContentView() is not used, because we use the root
         // android.R.id.content as the container for each fragment
@@ -99,16 +95,10 @@ public class MainActivity extends Activity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        Tab tab = actionBar.newTab()
-                           .setText(R.string.title_activity_main)
-                           .setTabListener(new TabListener<SavedTabsFragment>(
-                                   this, "Pantry", SavedTabsFragment.class));
+        Tab tab = actionBar.newTab().setText(R.string.title_activity_pantry).setTabListener(new TabListener<PantryFragment>(this, "Pantry", PantryFragment.class));
         actionBar.addTab(tab);
 
-        tab = actionBar.newTab()
-                       .setText(R.string.title_activity_display_message)
-                       .setTabListener(new TabListener<ShoppingListFragment>(
-                               this, "Shopping List", ShoppingListFragment.class));
+        tab = actionBar.newTab().setText(R.string.title_activity_shopping_list).setTabListener(new TabListener<ShoppingListFragment>(this, "Shopping List", ShoppingListFragment.class));
         actionBar.addTab(tab);
     }
 
@@ -127,7 +117,7 @@ public class MainActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_search:
-                //openSearch();
+                //Handle search
                 return true;
             case R.id.action_settings:
             	Intent intent = new Intent(this, SettingsActivity.class);
@@ -135,13 +125,8 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.action_new:
             	final Dialog addDialog = new Dialog(this);
-
                 addDialog.setContentView(R.layout.add_popup);
                 addDialog.setTitle("Add New Item");
-
-                //final EditText editText=(EditText)dialog.findViewById(R.id.editText);
-                //Button save=(Button)dialog.findViewById(R.id.save);
-                //Button btnCancel=(Button)dialog.findViewById(R.id.cancel);
                 addDialog.show();
     		    return true;
             case R.id.action_share:
@@ -153,24 +138,5 @@ public class MainActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    
-    public static class ShoppingListFragment extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            View view = inflater.inflate(R.layout.shopping_list, container, false);
-            
-            String[] food = new String[]{"Cheese", "Milk", "Cereal", "Cookies", "Ice Cream", "Milk", "Butter"};
-         // The checkbox for the each item is specified by the layout android.R.layout.simple_list_item_multiple_choice
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, food);
-       
-            // Getting the reference to the listview object of the layout
-            ListView listView = (ListView) view.findViewById(R.id.listview);
-     
-            // Setting adapter to the listview
-            listView.setAdapter(adapter);
-            return view;
-        }
-    }
+ 
 }
