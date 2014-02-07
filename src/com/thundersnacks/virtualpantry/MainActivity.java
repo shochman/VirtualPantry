@@ -70,6 +70,9 @@ public class MainActivity extends Activity {
 	            // If it exists, simply attach it in order to show it
 	            ft.attach(mFragment);
 	        }
+	        if (((MainActivity) mActivity).firstOpen == true) {
+	        	((MainActivity) mActivity).updateSearch();
+	        }
 	    }
 
 	    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
@@ -83,7 +86,10 @@ public class MainActivity extends Activity {
 	        // User selected the already selected tab. Usually do nothing.
 	    }
 	}
-
+	
+	Menu menu;
+	boolean firstOpen = false;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
@@ -95,11 +101,11 @@ public class MainActivity extends Activity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        Tab tab = actionBar.newTab().setText(R.string.title_activity_pantry).setTabListener(new TabListener<PantryFragment>(this, "Pantry", PantryFragment.class));
-        actionBar.addTab(tab);
+        Tab pantryTab = actionBar.newTab().setText(R.string.title_activity_pantry).setTabListener(new TabListener<PantryFragment>(this, "Pantry", PantryFragment.class));
+        actionBar.addTab(pantryTab);
 
-        tab = actionBar.newTab().setText(R.string.title_activity_shopping_list).setTabListener(new TabListener<ShoppingListFragment>(this, "Shopping List", ShoppingListFragment.class));
-        actionBar.addTab(tab);
+        Tab shoppingListTab = actionBar.newTab().setText(R.string.title_activity_shopping_list).setTabListener(new TabListener<ShoppingListFragment>(this, "Shopping List", ShoppingListFragment.class));
+        actionBar.addTab(shoppingListTab);
     }
 
 
@@ -109,6 +115,8 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setQueryHint("Search Pantry");
+        this.menu = menu;
+        firstOpen = true;
         return true;
     }
     
@@ -134,9 +142,18 @@ public class MainActivity extends Activity {
             	shareDialog.setContentView(R.layout.share_popup);
             	shareDialog.setTitle("Share Your Pantry");
             	shareDialog.show();
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    
+    public void updateSearch() {
+    	SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        if (getActionBar().getSelectedTab().getPosition() == 0)
+        	searchView.setQueryHint("Search Pantry");
+        else if (getActionBar().getSelectedTab().getPosition() == 1)
+        	searchView.setQueryHint("Search Shopping List");
     }
  
 }
