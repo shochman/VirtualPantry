@@ -9,4 +9,5 @@ package com.thundersnacks.virtualpantrymodel;
  */
 public class CustomFoodItem extends FoodItem {
     private int associatedUserId;
+    private int fake;
 }
