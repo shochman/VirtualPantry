@@ -97,19 +97,19 @@ public class PantryFragment extends Fragment {
         }
         
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            String laptopName = (String) getGroup(groupPosition);
+            String categoryName = (String) getGroup(groupPosition);
             if (convertView == null) {
                 LayoutInflater infalInflater = (LayoutInflater) PantryFragment.this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = infalInflater.inflate(R.layout.group_item, null);
             }
             TextView item = (TextView) convertView.findViewById(R.id.item);
             item.setTypeface(null, Typeface.BOLD);
-            item.setText(laptopName);
+            item.setText(categoryName);
             return convertView;
         }
         
         public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            final String laptop = (String) getChild(groupPosition, childPosition);
+            final String foodItem = (String) getChild(groupPosition, childPosition);
             LayoutInflater inflater = PantryFragment.this.getActivity().getLayoutInflater();
      
             if (convertView == null) {
@@ -138,7 +138,7 @@ public class PantryFragment extends Fragment {
                 }
             });
      
-            item.setText(laptop);
+            item.setText(foodItem);
             return convertView;
         }
  
