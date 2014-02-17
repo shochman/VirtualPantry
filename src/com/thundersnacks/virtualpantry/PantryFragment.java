@@ -1,5 +1,7 @@
 package com.thundersnacks.virtualpantry;
 import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantrymodel.Pantry;
+
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -22,7 +24,17 @@ import android.widget.TextView;
  * http://stackoverflow.com/questions/6495898/findviewbyid-in-fragment-android
  */
 public class PantryFragment extends Fragment {
- 
+	
+	private Pantry pantry;
+	
+	public PantryFragment() {
+		this.pantry = null;
+	}
+
+	public void setPantry( Pantry pantry ) {
+		this.pantry = pantry;
+	}
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.saved_tab, null);
@@ -32,7 +44,9 @@ public class PantryFragment extends Fragment {
     }
  
     public class SavedTabsListAdapter extends BaseExpandableListAdapter {
+    	// we need an enum
         private String[] groups = {"Beverages", "Protein", "Fruit", "Vegetables", "Dairy", "Frozen", "Condiments", "Sweets", "Snacks", "Grains", "Other"};
+        // here we'd need the pantry stuff?
         private String[][] children = {
             { "Orange Juice", "Dr. Pepper", "Pepsi" },
             { "Chicken", "Eggs" },
