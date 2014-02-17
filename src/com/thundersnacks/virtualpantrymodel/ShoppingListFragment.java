@@ -1,4 +1,8 @@
-package com.thundersnacks.virtualpantry;
+package com.thundersnacks.virtualpantrymodel;
+
+import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantry.R.id;
+import com.thundersnacks.virtualpantry.R.layout;
 
 import android.app.Fragment;
 import android.os.Bundle;

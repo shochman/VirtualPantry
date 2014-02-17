@@ -1,9 +1,11 @@
-package com.thundersnacks.virtualpantry;
+package com.thundersnacks.virtualpantrymodel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantry.R.id;
+import com.thundersnacks.virtualpantry.R.layout;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

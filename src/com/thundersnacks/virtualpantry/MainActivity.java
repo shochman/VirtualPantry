@@ -1,6 +1,8 @@
 package com.thundersnacks.virtualpantry;
 
-import com.thundersnacks.virtualpantry.PantryFragment.SavedTabsListAdapter;
+import com.thundersnacks.virtualpantrymodel.PantryFragment;
+import com.thundersnacks.virtualpantrymodel.ShoppingListFragment;
+import com.thundersnacks.virtualpantrymodel.PantryFragment.SavedTabsListAdapter;
 import com.thundersnacks.virtualpantry.R;
 
 import android.os.Bundle;

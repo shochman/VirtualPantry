@@ -1,4 +1,4 @@
-package com.thundersnacks.virtualpantry;
+package com.thundersnacks.virtualpantrymodel;
 
 import java.util.HashMap;
 import java.util.Map;
