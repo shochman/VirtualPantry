@@ -1,5 +1,5 @@
 package com.thundersnacks.virtualpantrymodel;
-//DELETE ME
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +14,7 @@ public class ShoppingList{
 		this.databaseID = 0;
 		this.items = new HashMap<FoodItem, Boolean>();
 	}
+	
 	public boolean addItem(FoodItem itemToAdd) 
 	{
 		items.put(itemToAdd,true);

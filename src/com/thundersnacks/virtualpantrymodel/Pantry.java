@@ -1,5 +1,5 @@
 package com.thundersnacks.virtualpantrymodel;
-//DELETE ME
+
 import java.util.ArrayList;
 
 public class Pantry {
@@ -9,24 +9,22 @@ public class Pantry {
 	private ArrayList<FoodItem> foodItems;
 	ShoppingList shoppingList;
 	
-	public Pantry()
-	{
+	public Pantry( String pantryName, int databaseId ) {
 		this.name = "";
 		this.databaseid = 0;
 		this.foodItems = new ArrayList<FoodItem>();
 	}
 	
-	public boolean addItem(FoodItem itemToAdd)
-	{
-		//return true if insert is successful
-		// throws an exception if item cannot be added
+	public boolean addItem(FoodItem itemToAdd) {
+		// return true if insert is successful
+		// throws exception when item can't be added
 		return foodItems.add(itemToAdd);
 	}
 	
-	public boolean removeItem(FoodItem itemToRemove)
-	{
-		//return true if removal is successful
-		// throws an exception if item is not supported
+	public boolean removeItem(FoodItem itemToRemove) {
+		// return true if removal is successful
+		// return false if no item is removed
 		return foodItems.remove(itemToRemove);
 	}
+	
 }

@@ -1,4 +1,4 @@
-package com.thundersnacks.virtualpantrymodel;
+package com.thundersnacks.virtualpantry;
 //DELETE ME
 import java.util.ArrayList;
 import java.util.List;

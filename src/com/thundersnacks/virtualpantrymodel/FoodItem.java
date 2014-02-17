@@ -1,8 +1,8 @@
 package com.thundersnacks.virtualpantrymodel;
 
-import java.sql.Date;
-//DELETE ME
-public class FoodItem {
+import java.util.Date;
+
+public abstract class FoodItem {
 	
 	private String name;
 	private int databaseId;
@@ -10,45 +10,47 @@ public class FoodItem {
 	private String amount;
 	private String picture;
 	
-	FoodItem()
-	{
-		this.name = "";
-		this.databaseId = 0;
-		this.expirationDate = new Date((2004-1900)*365*24*60*60*60);
-		this.amount = "";
-		this.picture = "";
+	FoodItem( String name, int databaseId, Date expDate, String amount, String pic ) {
+		this.name = name;
+		this.databaseId = databaseId;
+		this.expirationDate = expDate;
+		this.amount = amount;
+		this.picture = pic;
 	}
 	
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
-	public void setName(String name)
-	{
+	
+	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getExperiationDate()
-	{
+	
+	public int getDatabaseId() {
+		return databaseId;
+	}
+	
+	public Date getExperiationDate() {
 		return expirationDate;
 	}
-	public void setExperiationDate(Date date)
-	{
+	
+	public void setExperiationDate(Date date) {
 		this.expirationDate = date;
 	}
-	public String getAmount()
-	{
+	
+	public String getAmount() {
 		return amount;
 	}
-	public void setAmount(String Amount)
-	{
+	
+	public void setAmount(String Amount) {
 		this.amount = Amount;
 	}
-	public String getPicture()
-	{
+	
+	public String getPicture() {
 		return picture;
 	}
-	public void setPicture(String Picture)
-	{
+	
+	public void setPicture(String Picture) {
 		this.picture = Picture;
 	}
 

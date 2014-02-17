@@ -1,5 +1,5 @@
-package com.thundersnacks.virtualpantrymodel;
-//DELETE ME
+package com.thundersnacks.virtualpantry;
+
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantry.R.id;
 import com.thundersnacks.virtualpantry.R.layout;
