@@ -1,7 +1,7 @@
 package com.thundersnacks.virtualpantrymodel;
 
 import java.sql.Date;
-
+//DELETE ME
 public class FoodItem {
 	
 	private String name;

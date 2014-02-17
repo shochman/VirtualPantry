@@ -21,6 +21,7 @@ import android.widget.TextView;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
+//DELETE ME
 public class LoginActivity extends Activity {
 	/**
 	 * A dummy authentication store containing known user names and passwords.
