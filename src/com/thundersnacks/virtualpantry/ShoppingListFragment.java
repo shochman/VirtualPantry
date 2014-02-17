@@ -1,9 +1,6 @@
 package com.thundersnacks.virtualpantry;
 
 import com.thundersnacks.virtualpantry.R;
-import com.thundersnacks.virtualpantry.R.id;
-import com.thundersnacks.virtualpantry.R.layout;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,33 +1,17 @@
 package com.thundersnacks.virtualpantry;
-//DELETE ME
-import java.util.ArrayList;
-import java.util.List;
-
 import com.thundersnacks.virtualpantry.R;
-import com.thundersnacks.virtualpantry.R.id;
-import com.thundersnacks.virtualpantry.R.layout;
-
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ExpandableListActivity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.SearchView;
 import android.widget.TextView;
  
 /**

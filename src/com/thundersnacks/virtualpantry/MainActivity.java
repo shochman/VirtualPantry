@@ -1,10 +1,6 @@
 package com.thundersnacks.virtualpantry;
 
-import com.thundersnacks.virtualpantrymodel.PantryFragment;
-import com.thundersnacks.virtualpantrymodel.ShoppingListFragment;
-import com.thundersnacks.virtualpantrymodel.PantryFragment.SavedTabsListAdapter;
 import com.thundersnacks.virtualpantry.R;
-
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -13,32 +9,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.app.ExpandableListActivity;
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.SearchView;
-import android.widget.Spinner;
-import android.widget.TextView;
-//DELETE ME
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
