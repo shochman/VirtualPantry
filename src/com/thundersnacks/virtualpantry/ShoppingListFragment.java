@@ -5,11 +5,11 @@ import java.util.Map;
 
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
-import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.ShoppingList;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -20,6 +20,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,12 +33,7 @@ import android.widget.Toast;
 public class ShoppingListFragment extends Fragment implements OnItemClickListener{
 	private ListView mainListView = null;
 	String[] foodString;
-	// Called when the Fragment is attached to its parent Activity.
-	  //@Override
-		//public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		//	// TODO Auto-generated method stub
-			
-		//}
+
 	  @Override
 	  public void onItemClick(
 	    		AdapterView<?> parent, View v, int position, long id)
@@ -60,12 +56,12 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         ShoppingList sl = new ShoppingList();
-        sl.addItem(new StandardFoodItem("Cheese",0,new Date(),"r", "y", FoodItemCategory.DAIRY));
-        sl.addItem(new StandardFoodItem("Milk",1,new Date(),"", "", FoodItemCategory.DAIRY));
-        sl.addItem(new StandardFoodItem("Cereal",2,new Date(),"", "", FoodItemCategory.GRAIN));
-        sl.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", FoodItemCategory.SWEET));
-        sl.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", FoodItemCategory.FROZEN));
-        sl.addItem(new StandardFoodItem("Butter",5,new Date(),"","", FoodItemCategory.DAIRY)); 
+        sl.addItem(new StandardFoodItem("Cheese",0,new Date(),"r","y", null));
+        sl.addItem(new StandardFoodItem("Milk",1,new Date(),"","", null));
+        sl.addItem(new StandardFoodItem("Cereal",2,new Date(),"","", null));
+        sl.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", null));
+        sl.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", null));
+        sl.addItem(new StandardFoodItem("Butter",5,new Date(),"","", null)); 
     }
 	
 	@Override
@@ -101,9 +97,17 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	    			  s=s+" "+item;
 	    			  /* do whatever you want with the checked item */
 	    			 }
-	    		Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
+	    		if(s != "")
+	    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
         	}
         });
         return view;
     }
+    
+    public void addNewItem(Dialog addDialog)
+    {
+    	EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+    	nameText.getText().toString();
+    }
+    
 }
