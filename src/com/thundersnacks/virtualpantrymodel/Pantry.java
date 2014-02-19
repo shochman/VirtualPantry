@@ -8,13 +8,11 @@ public class Pantry {
 	private int databaseId;
 	private ArrayList<FoodItem> foodItems;
 	private ShoppingList shoppingList;
-	private FoodItemCategory category;
 	
-	public Pantry( String pantryName, int databaseId, FoodItemCategory category ) {
+	public Pantry( String pantryName, int databaseId ) {
 		this.name = pantryName;
 		this.databaseId = databaseId;
 		this.foodItems = new ArrayList<FoodItem>();
-		this.category = category;
 	}
 	
 	public String getName() {		
@@ -33,10 +31,6 @@ public class Pantry {
 	
 	public ShoppingList getShoppingList() {
 		return this.shoppingList;
-	}
-	
-	public FoodItemCategory getCategory() {
-		return this.category;
 	}
 	
 	public boolean addItem(FoodItem itemToAdd) {

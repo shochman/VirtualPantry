@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
+import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.ShoppingList;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
@@ -59,12 +60,12 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         ShoppingList sl = new ShoppingList();
-        sl.addItem(new StandardFoodItem("Cheese",0,new Date(),"r","y"));
-        sl.addItem(new StandardFoodItem("Milk",1,new Date(),"",""));
-        sl.addItem(new StandardFoodItem("Cereal",2,new Date(),"",""));
-        sl.addItem(new StandardFoodItem("Cookies",3,new Date(),"",""));
-        sl.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"",""));
-        sl.addItem(new StandardFoodItem("Butter",5,new Date(),"","")); 
+        sl.addItem(new StandardFoodItem("Cheese",0,new Date(),"r", "y", FoodItemCategory.DAIRY));
+        sl.addItem(new StandardFoodItem("Milk",1,new Date(),"", "", FoodItemCategory.DAIRY));
+        sl.addItem(new StandardFoodItem("Cereal",2,new Date(),"", "", FoodItemCategory.GRAIN));
+        sl.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", FoodItemCategory.SWEET));
+        sl.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", FoodItemCategory.FROZEN));
+        sl.addItem(new StandardFoodItem("Butter",5,new Date(),"","", FoodItemCategory.DAIRY)); 
     }
 	
 	@Override

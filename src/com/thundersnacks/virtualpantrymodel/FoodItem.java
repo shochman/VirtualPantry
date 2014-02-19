@@ -9,13 +9,15 @@ public abstract class FoodItem {
 	private Date expirationDate;
 	private String amount;
 	private String picture;
+	private FoodItemCategory category;
 	
-	FoodItem( String name, int databaseId, Date expDate, String amount, String pic ) {
+	FoodItem( String name, int databaseId, Date expDate, String amount, String pic, FoodItemCategory cat ) {
 		this.name = name;
 		this.databaseId = databaseId;
 		this.expirationDate = expDate;
 		this.amount = amount;
 		this.picture = pic;
+		this.category = cat;
 	}
 	
 	public String getName() {
@@ -52,6 +54,14 @@ public abstract class FoodItem {
 	
 	public void setPicture(String Picture) {
 		this.picture = Picture;
+	}
+	
+	public FoodItemCategory getCategory() {
+		return this.category;
+	}
+	
+	public void setCategory(FoodItemCategory cat) {
+		this.category = cat;
 	}
 
 }
