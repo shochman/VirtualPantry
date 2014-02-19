@@ -109,7 +109,10 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.action_new:
             	final Dialog addDialog = new Dialog(this);
-                addDialog.setContentView(R.layout.add_popup);
+            	if (getActionBar().getSelectedTab().getPosition() == 0)
+            		addDialog.setContentView(R.layout.add_popup);
+                else if (getActionBar().getSelectedTab().getPosition() == 1)
+                	addDialog.setContentView(R.layout.add_popup_shoppinglist);
                 addDialog.setTitle("Add New Item");
                 addDialog.show();
     		    return true;
