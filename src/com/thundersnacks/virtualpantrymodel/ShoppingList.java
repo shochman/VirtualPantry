@@ -5,14 +5,20 @@ import java.util.Map;
 
 public class ShoppingList{
 	
-	private int databaseID;
-	private Map<FoodItem, Boolean> items;
+	private int databaseId;
+	private static Map<FoodItem, Boolean> items;
 	Pantry	pantry;
 	
 	public ShoppingList()
 	{
-		this.databaseID = 0;
+		this.databaseId = 0;
 		this.items = new HashMap<FoodItem, Boolean>();
+	}
+	
+	public ShoppingList(Map<FoodItem, Boolean> items, Pantry pantry)
+	{
+		this.items  = items;
+		this.pantry = pantry;
 	}
 	
 	public boolean addItem(FoodItem itemToAdd) 
@@ -26,11 +32,18 @@ public class ShoppingList{
 		items.remove(itemToRemove);
 		return !items.containsKey(itemToRemove);
 	}
+	
+	public int getDatabaseId() 
+	{		
+		return this.databaseId;		
+	}
+	
 	public Pantry getPantry()
 	{
-		return pantry;
+		return this.pantry;
 	}
-	public Map<FoodItem,Boolean> getItems()
+	
+	public static Map<FoodItem,Boolean> getItems()
 	{
 		return items;
 	}
