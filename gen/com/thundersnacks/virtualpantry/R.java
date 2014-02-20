@@ -33,7 +33,7 @@ public final class R {
         public static final int ic_action_remove=0x7f020002;
         public static final int ic_action_search=0x7f020003;
         public static final int ic_action_share=0x7f020004;
-        public static final int ic_launcher=0x7f020005;
+        public static final int ic_launcher2=0x7f020005;
         public static final int virtual_pantry=0x7f020006;
     }
     public static final class id {
@@ -87,14 +87,15 @@ public final class R {
         public static final int activity_login=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int add_popup=0x7f030002;
-        public static final int child_item=0x7f030003;
-        public static final int display_popup=0x7f030004;
-        public static final int edit_popup=0x7f030005;
-        public static final int group_item=0x7f030006;
-        public static final int register_popup=0x7f030007;
-        public static final int saved_tab=0x7f030008;
-        public static final int share_popup=0x7f030009;
-        public static final int shopping_list=0x7f03000a;
+        public static final int add_popup_shoppinglist=0x7f030003;
+        public static final int child_item=0x7f030004;
+        public static final int display_popup=0x7f030005;
+        public static final int edit_popup=0x7f030006;
+        public static final int group_item=0x7f030007;
+        public static final int register_popup=0x7f030008;
+        public static final int saved_tab=0x7f030009;
+        public static final int share_popup=0x7f03000a;
+        public static final int shopping_list=0x7f03000b;
     }
     public static final class menu {
         public static final int display_message=0x7f090000;
