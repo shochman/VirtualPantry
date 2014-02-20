@@ -135,7 +135,7 @@ public class MainActivity extends Activity {
                                 return true;
                 			case R.id.action_add_from_pantry:
                 				addDialog.setContentView(R.layout.add_popup_shoppinglist_frompantry);
-                				addDialog.setTitle("Add New Item");
+                				addDialog.setTitle("Add Item(s) From Pantry");
                 				
                 				String[] pantryString = {"Beverages", "Protein", "Fruit", "Vegetables", "Dairy", "Frozen", "Condiments", "Sweets", "Snacks", "Grains", "Other"};
                 				
