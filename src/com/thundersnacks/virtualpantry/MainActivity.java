@@ -1,6 +1,7 @@
 package com.thundersnacks.virtualpantry;
 
 import com.thundersnacks.virtualpantry.R;
+
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -12,6 +13,10 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 
 @SuppressLint("NewApi")
@@ -109,13 +114,50 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.action_new:
             	final Dialog addDialog = new Dialog(this);
-            	if (getActionBar().getSelectedTab().getPosition() == 0)
+            	if (getActionBar().getSelectedTab().getPosition() == 0) {
+            		addDialog.setTitle("Add New Item");
             		addDialog.setContentView(R.layout.add_popup);
-                else if (getActionBar().getSelectedTab().getPosition() == 1)
-                	addDialog.setContentView(R.layout.add_popup_shoppinglist);
-                addDialog.setTitle("Add New Item");
-                addDialog.show();
+            		addDialog.show();
+            	}
+                else if (getActionBar().getSelectedTab().getPosition() == 1) {
+                	View menuItemView = findViewById(R.id.action_new);
+                	PopupMenu popupMenu = new PopupMenu(this, menuItemView);
+                	popupMenu.inflate(R.menu.shoppinglist_add_options);
+                	popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+						
+						@Override
+						public boolean onMenuItemClick(MenuItem item) {
+							switch(item.getItemId()) {
+                			case R.id.action_new_item:
+                				addDialog.setContentView(R.layout.add_popup_shoppinglist);
+                				addDialog.setTitle("Add New Item");
+                                addDialog.show();
+                                return true;
+                			case R.id.action_add_from_pantry:
+                				addDialog.setContentView(R.layout.add_popup_shoppinglist_frompantry);
+                				addDialog.setTitle("Add New Item");
+                				
+                				String[] pantryString = {"Beverages", "Protein", "Fruit", "Vegetables", "Dairy", "Frozen", "Condiments", "Sweets", "Snacks", "Grains", "Other"};
+                				
+                				ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_multiple_choice, pantryString);
+                		        
+                		        // Getting the reference to the listview object of the layout
+                		        ListView listView = (ListView) addDialog.findViewById(R.id.PopupListView);
+                		        listView.setTextFilterEnabled(true);
+                		        // Setting adapter to the listview
+                		        listView.setAdapter(adapter);
+                		        
+                                addDialog.show();
+                                return true;
+                			}
+							return false;
+						}
+                	});
+                	popupMenu.show();
+                	//addDialog.setContentView(R.layout.add_popup_shoppinglist);
+                }
     		    return true;
+
             case R.id.action_share:
             	final Dialog shareDialog = new Dialog(this);
             	shareDialog.setContentView(R.layout.share_popup);
