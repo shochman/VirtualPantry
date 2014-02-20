@@ -1,8 +1,9 @@
 package com.thundersnacks.virtualpantrymodel;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class Pantry {
+public class Pantry implements Iterable<FoodItem> {
 
 	private String name;
 	private int databaseId;
@@ -27,8 +28,6 @@ public class Pantry {
 		return this.databaseId;		
 	}
 	
-	// TODO: implement iterator over pantry food items
-	
 	public ShoppingList getShoppingList() {
 		return this.shoppingList;
 	}
@@ -43,6 +42,10 @@ public class Pantry {
 		// return true if removal is successful
 		// return false if no item is removed
 		return foodItems.remove(itemToRemove);
+	}
+	
+	public Iterator<FoodItem> iterator() {
+		return foodItems.iterator();
 	}
 	
 }
