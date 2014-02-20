@@ -188,8 +188,4 @@ public class MainActivity extends Activity {
         else if (getActionBar().getSelectedTab().getPosition() == 1)
         	searchView.setQueryHint("Search Shopping List");
     }
- 
-    public void addButtonPressed(View view) {
-    	System.out.println("hello");
-    }
 }

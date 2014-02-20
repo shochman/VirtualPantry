@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
+import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.ShoppingList;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
@@ -135,7 +136,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.toString();
-    	
+        shoppingList.addItem(new StandardFoodItem(name,0,new Date(),quantity,"y", FoodItemCategory.valueOf(category) ));
     	
     }
     
