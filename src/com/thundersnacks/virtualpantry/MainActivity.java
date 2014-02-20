@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
@@ -132,6 +133,17 @@ public class MainActivity extends Activity {
                 				addDialog.setContentView(R.layout.add_popup_shoppinglist);
                 				addDialog.setTitle("Add New Item");
                                 addDialog.show();
+                                Button addButton = (Button) addDialog.findViewById(R.id.addButton);
+                                addButton.setOnClickListener(new View.OnClickListener() {
+									
+									@Override
+									public void onClick(View v) {
+										ShoppingListFragment slf = new ShoppingListFragment();
+										slf.addNewItem(addDialog);
+										addDialog.dismiss();
+									}
+								});
+
                                 return true;
                 			case R.id.action_add_from_pantry:
                 				addDialog.setContentView(R.layout.add_popup_shoppinglist_frompantry);
@@ -154,10 +166,10 @@ public class MainActivity extends Activity {
 						}
                 	});
                 	popupMenu.show();
-                	//addDialog.setContentView(R.layout.add_popup_shoppinglist);
                 }
+            	
+            	
     		    return true;
-
             case R.id.action_share:
             	final Dialog shareDialog = new Dialog(this);
             	shareDialog.setContentView(R.layout.share_popup);
@@ -177,4 +189,7 @@ public class MainActivity extends Activity {
         	searchView.setQueryHint("Search Shopping List");
     }
  
+    public void addButtonPressed(View view) {
+    	System.out.println("hello");
+    }
 }

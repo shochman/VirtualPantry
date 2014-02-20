@@ -107,7 +107,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     public void addNewItem(Dialog addDialog)
     {
     	EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-    	nameText.getText().toString();
+    	System.out.println(nameText.getText().toString());
     }
     
 }
