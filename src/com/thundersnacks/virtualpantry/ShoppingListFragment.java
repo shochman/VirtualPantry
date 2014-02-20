@@ -15,13 +15,16 @@ import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 /**
@@ -32,8 +35,22 @@ import android.widget.Toast;
  */
 public class ShoppingListFragment extends Fragment implements OnItemClickListener{
 	private ListView mainListView = null;
+	private ShoppingList shoppingList;
 	String[] foodString;
 
+	public ShoppingListFragment()
+	{
+		this.shoppingList = new ShoppingList();
+	}
+	public void setShoppingList(ShoppingList shoppingList)
+	{
+		this.shoppingList = shoppingList;
+	}
+	
+	public static void addItemButton(View v)
+	{
+		System.out.println("addButton Pressed!!");
+	}
 	  @Override
 	  public void onItemClick(
 	    		AdapterView<?> parent, View v, int position, long id)
@@ -55,15 +72,20 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
-        ShoppingList sl = new ShoppingList();
-        sl.addItem(new StandardFoodItem("Cheese",0,new Date(),"r","y", null));
-        sl.addItem(new StandardFoodItem("Milk",1,new Date(),"","", null));
-        sl.addItem(new StandardFoodItem("Cereal",2,new Date(),"","", null));
-        sl.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", null));
-        sl.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", null));
-        sl.addItem(new StandardFoodItem("Butter",5,new Date(),"","", null)); 
+        shoppingList.addItem(new StandardFoodItem("Cheese",0,new Date(),"r","y", null));
+        shoppingList.addItem(new StandardFoodItem("Milk",1,new Date(),"","", null));
+        shoppingList.addItem(new StandardFoodItem("Cereal",2,new Date(),"","", null));
+        shoppingList.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", null));
+        shoppingList.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", null));
+        shoppingList.addItem(new StandardFoodItem("Butter",5,new Date(),"","", null)); 
+        
+        Button addItemButton = (Button) this.getActivity().findViewById(R.id.addButton);
+        addItemButton.setOnClickListener((OnClickListener) this);
     }
-	
+	//public void onClick(View v){
+	//	switch (v.getId()){
+    //    		System.out.println("add pressed... ok!!");
+    //    	}
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -106,8 +128,15 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     
     public void addNewItem(Dialog addDialog)
     {
+    	
     	EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-    	System.out.println(nameText.getText().toString());
+    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+    	String name = nameText.getText().toString();
+    	String quantity = quantityText.getText().toString();
+    	String category = categoryText.toString();
+    	
+    	
     }
     
 }
