@@ -2,12 +2,13 @@ package com.thundersnacks.virtualpantrymodel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Pantry implements Iterable<FoodItem> {
 
 	private String name;
 	private int databaseId;
-	private ArrayList<FoodItem> foodItems;
+	private List<FoodItem> foodItems;
 	private ShoppingList shoppingList;
 	
 	public Pantry( String pantryName, int databaseId ) {
@@ -46,6 +47,16 @@ public class Pantry implements Iterable<FoodItem> {
 	
 	public Iterator<FoodItem> iterator() {
 		return foodItems.iterator();
+	}
+	
+	public List<FoodItem> getItemsByCategory(FoodItemCategory cat) {
+		List<FoodItem> categorized = new ArrayList<FoodItem>();
+		for(FoodItem item: this.foodItems) {
+			if(item.getCategory().equals(cat))
+				categorized.add(item);
+		}
+		
+		return categorized;
 	}
 	
 }

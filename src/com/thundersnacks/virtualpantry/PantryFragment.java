@@ -1,5 +1,9 @@
 package com.thundersnacks.virtualpantry;
+import java.util.List;
+
 import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantrymodel.FoodItem;
+import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.Pantry;
 
 import android.app.Dialog;
@@ -44,23 +48,21 @@ public class PantryFragment extends Fragment {
     }
  
     public class SavedTabsListAdapter extends BaseExpandableListAdapter {
-    	// we need an enum
-        private String[] groups = {"Beverages", "Protein", "Fruit", "Vegetables", "Dairy", "Frozen", "Condiments", "Sweets", "Snacks", "Grains", "Other"};
-        // here we'd need the pantry stuff?
-        private String[][] children = {
-            { "Orange Juice", "Dr. Pepper", "Pepsi" },
-            { "Chicken", "Eggs" },
-            { "Strawberries", "Oranges", "Bananas", "Grapes" },
-            { "Carrots", "Peas", "Corn", "Broccoli" },
-            { "Milk", "Cheese" },
-            { "Ice Cream" },
-            { "Ketchup", "Mustard", "Mayonnaise" },
-            { "Cookies", "Cheesecake", "Chocolate" },
-            { "Crackers", "Chips" },
-            { "Spaghetti", "Cereal", "Bread", "Rice" },
-            { "Potatoes", "Apple Sauce", "Peanut Butter" }
-        };
     	
+        private String[] groups = new String[FoodItemCategory.values().length];
+        private String[][] children = new String[FoodItemCategory.values().length][]; 
+    	
+        public SavedTabsListAdapter() {
+        	for( int i = 0; i < FoodItemCategory.values().length; i ++) {
+        		groups[i] = FoodItemCategory.values()[i].toString();
+        		List<FoodItem> items = pantry.getItemsByCategory(FoodItemCategory.values()[i]);
+        		children[i] = new String[items.size()];
+        		for( int j = 0; j < items.size(); j++ ) {
+        			children[i][j] = items.get(j).getName();
+        		}
+            }
+        }
+        
         @Override
         public int getGroupCount() {
             return groups.length;
