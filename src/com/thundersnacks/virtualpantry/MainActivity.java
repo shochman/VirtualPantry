@@ -138,7 +138,8 @@ public class MainActivity extends Activity {
 									
 									@Override
 									public void onClick(View v) {
-										ShoppingListFragment slf = new ShoppingListFragment();
+										
+										ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 										slf.addNewItem(addDialog);
 										addDialog.dismiss();
 									}
@@ -188,4 +189,8 @@ public class MainActivity extends Activity {
         else if (getActionBar().getSelectedTab().getPosition() == 1)
         	searchView.setQueryHint("Search Shopping List");
     }
+ 
+   // public void addButtonPressed(View view) {
+   // 	System.out.println("hello");
+   // }
 }

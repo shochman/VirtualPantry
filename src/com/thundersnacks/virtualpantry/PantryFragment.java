@@ -1,10 +1,13 @@
 package com.thundersnacks.virtualpantry;
+import java.util.Date;
 import java.util.List;
 
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.Pantry;
+import com.thundersnacks.virtualpantrymodel.ShoppingList;
+import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.app.Dialog;
 import android.app.Fragment;
@@ -38,6 +41,12 @@ public class PantryFragment extends Fragment {
 	public void setPantry( Pantry pantry ) {
 		this.pantry = pantry;
 	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) { 
+        super.onCreate(savedInstanceState);
+        pantry = new Pantry("Foo", 0);
+    }
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
