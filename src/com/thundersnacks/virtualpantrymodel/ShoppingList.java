@@ -33,6 +33,18 @@ public class ShoppingList{
 		return !items.containsKey(itemToRemove);
 	}
 	
+	public boolean removeItemByName(String name)
+	{
+		for (Map.Entry<FoodItem, Boolean> e : items.entrySet()) {
+			if (name.equals(e.getKey().getName())) {
+				removeItem(e.getKey());
+				break;
+			}
+		}
+		return true;
+	}
+
+	
 	public int getDatabaseId() 
 	{		
 		return this.databaseId;		

@@ -107,10 +107,36 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		    			 }
 		    		if(s != "")
 		    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
-		    		
-		    		shoppingList.removeItem((StandardFoodItem)shoppingList.getItem(s));
 	        	}
 	        });
+	        
+	     // Create a ListView-specific touch listener. ListViews are given special treatment because
+	        // by default they handle touches for their list items... i.e. they're in charge of drawing
+	        // the pressed state (the list selector), handling list item clicks, etc.
+	        SwipeDismissListViewTouchListener touchListener =
+	                new SwipeDismissListViewTouchListener(
+	                        listView,
+	                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+	                            @Override
+	                            public boolean canDismiss(int position) {
+	                                return true;
+	                            }
+
+	                            @Override
+	                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+	                                for (int position : reverseSortedPositions) {
+	                                	
+	                                	String foo = (String)listView.getAdapter().getItem(position);
+	                                	shoppingList.removeItemByName(foo);
+	                                    //shoppingList.removeItemByName(adapter.getItem(position));
+	                                    createShoppingList();
+	                                }
+	                            }
+	                        });
+	        listView.setOnTouchListener(touchListener);
+	        // Setting this scroll listener is required to ensure that during ListView scrolling,
+	        // we don't look for swipes.
+	        listView.setOnScrollListener(touchListener.makeScrollListener());
 	}
     
     public void addNewItem(Dialog addDialog)
