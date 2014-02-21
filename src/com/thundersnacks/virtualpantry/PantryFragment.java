@@ -6,7 +6,6 @@ import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.Pantry;
-import com.thundersnacks.virtualpantrymodel.ShoppingList;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.app.Dialog;
@@ -44,13 +43,48 @@ public class PantryFragment extends Fragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) { 
-        super.onCreate(savedInstanceState);
-        pantry = new Pantry("Foo", 0);
+        
+		super.onCreate(savedInstanceState);
+        pantry = new Pantry("My Pantry", 0);
+        
+        pantry.addItem(new StandardFoodItem("Coke", 0, new Date(), "6 cans", "", FoodItemCategory.BEVERAGE));
+        pantry.addItem(new StandardFoodItem("Sprite", 0, new Date(), "4 cans", "", FoodItemCategory.BEVERAGE));
+        
+        pantry.addItem(new StandardFoodItem("Ketchup", 0, new Date(), "1 bottle", "", FoodItemCategory.CONDIMENT));
+        pantry.addItem(new StandardFoodItem("Mustard", 0, new Date(), "1 bottle", "", FoodItemCategory.CONDIMENT));
+        
+        pantry.addItem(new StandardFoodItem("2% Milk", 0, new Date(), "1 gallon", "", FoodItemCategory.DAIRY));
+        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, new Date(), "1 bag", "", FoodItemCategory.DAIRY));
+        pantry.addItem(new StandardFoodItem("Yogurt", 0, new Date(), "3 cups", "", FoodItemCategory.DAIRY));
+        
+        pantry.addItem(new StandardFoodItem("Butter", 0, new Date(), "1/2 stick", "", FoodItemCategory.FAT));
+        
+        pantry.addItem(new StandardFoodItem("Ice Cream", 0, new Date(), "1 tub", "", FoodItemCategory.FROZEN));
+        
+        pantry.addItem(new StandardFoodItem("Apple", 0, new Date(), "1", "", FoodItemCategory.FRUIT));
+        pantry.addItem(new StandardFoodItem("Pear", 0, new Date(), "1", "", FoodItemCategory.FRUIT));
+        
+        pantry.addItem(new StandardFoodItem("Bread", 0, new Date(), "1/2 loaf", "", FoodItemCategory.GRAIN));
+        pantry.addItem(new StandardFoodItem("Cereal", 0, new Date(), "2 boxes", "", FoodItemCategory.GRAIN));
+        
+        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, new Date(), "1 lb", "", FoodItemCategory.PROTEIN));
+        pantry.addItem(new StandardFoodItem("Ground Beef", 0, new Date(), "1/2 lb", "", FoodItemCategory.PROTEIN));
+        
+        pantry.addItem(new StandardFoodItem("Potato Chips", 0, new Date(), "1 bag", "", FoodItemCategory.SNACK));
+        pantry.addItem(new StandardFoodItem("Pretzels", 0, new Date(), "1 bag", "", FoodItemCategory.SNACK));
+        
+        pantry.addItem(new StandardFoodItem("Chocolate", 0, new Date(), "2 bars", "", FoodItemCategory.SWEET));
+        pantry.addItem(new StandardFoodItem("Cookies", 0, new Date(), "1 bag", "", FoodItemCategory.SWEET));
+        
+        pantry.addItem(new StandardFoodItem("Carrots", 0, new Date(), "2 bags", "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Lettuce", 0, new Date(), "1 bag", "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Broccoli", 0, new Date(), "1 stalk", "", FoodItemCategory.VEGETABLE));
+        
     }
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.saved_tab, null);
+        View v = inflater.inflate(R.layout.saved_tab, null); 
         ExpandableListView elv = (ExpandableListView) v.findViewById(R.id.list);
         elv.setAdapter(new SavedTabsListAdapter());
         return v;
