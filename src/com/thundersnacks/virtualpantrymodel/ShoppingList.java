@@ -47,4 +47,15 @@ public class ShoppingList{
 	{
 		return items;
 	}
+	
+	public FoodItem getItem(String name)
+	{
+		for ( FoodItem key : items.keySet() ) 
+		{
+			if( key.getName() == name )
+				return key;
+		}
+		// Given name is not found or case sensitive to FoodItem keys in the set.
+		return null;
+	}
 }

@@ -99,14 +99,16 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		    	    String s="";
 		    		int len =parent.getCount();
 		    		SparseBooleanArray checked=((AbsListView) parent).getCheckedItemPositions();
-		    		for (int i = 0; i < len; i++)
-		    			 if (checked.get(i)) {
-		    			  String item = foodString[i];
-		    			  s=s+" "+item;
+		    		if (position < len)
+		    			 if (checked.get(position)) {
+		    			  String item = foodString[position];
+		    			  s=item;
 		    			  /* do whatever you want with the checked item */
 		    			 }
 		    		if(s != "")
 		    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
+		    		
+		    		shoppingList.removeItem((StandardFoodItem)shoppingList.getItem(s));
 	        	}
 	        });
 	}
