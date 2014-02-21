@@ -80,7 +80,7 @@
 
 
          <Button
-             android:id="@+id/addButton"
+             android:id="@+id/addButtonPantry"
              android:layout_marginTop="15dp"
              android:layout_weight="1"
              android:layout_width="fill_parent"

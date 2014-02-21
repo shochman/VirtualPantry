@@ -119,6 +119,17 @@ public class MainActivity extends Activity {
             		addDialog.setTitle("Add New Item");
             		addDialog.setContentView(R.layout.add_popup);
             		addDialog.show();
+            		Button addButton = (Button) addDialog.findViewById(R.id.addButtonPantry);
+                    addButton.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							
+							PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+							pf.addNewItem(addDialog);
+							addDialog.dismiss();
+						}
+					});
             	}
                 else if (getActionBar().getSelectedTab().getPosition() == 1) {
                 	View menuItemView = findViewById(R.id.action_new);

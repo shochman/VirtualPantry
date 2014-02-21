@@ -18,8 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
  
 /**
@@ -39,6 +42,10 @@ public class PantryFragment extends Fragment {
 
 	public void setPantry( Pantry pantry ) {
 		this.pantry = pantry;
+	}
+	
+	public Pantry getPantry() {
+		return this.pantry;
 	}
 	
 	@Override
@@ -81,6 +88,10 @@ public class PantryFragment extends Fragment {
         pantry.addItem(new StandardFoodItem("Broccoli", 0, new Date(), "1 stalk", "", FoodItemCategory.VEGETABLE));
         
     }
+	
+	public void createPantry() {
+		
+	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -192,6 +203,25 @@ public class PantryFragment extends Fragment {
             return true;
         }
  
+    }
+    
+    public void addNewItem(Dialog addDialog)
+    {
+    	EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+    	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
+    	String name = nameText.getText().toString();
+    	String quantity = quantityText.getText().toString();
+    	String category = categoryText.toString();
+    	/*
+    	 * Date date1= (Date) new Date
+   		(dpBirthDate.getYear(), dpBirthDate.getMonth(), dpBirthDate.getDayOfMonth());
+    	 */
+    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth()); 
+        pantry.addItem(new StandardFoodItem( name, 0, expDate, quantity, "y", FoodItemCategory.BEVERAGE ));
+    	// TODO: fix this 
+        // createShoppingList();
     }
  
 }
