@@ -126,9 +126,9 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
 	                                for (int position : reverseSortedPositions) {
 	                                	
-	                                	String foo = (String)listView.getAdapter().getItem(position);
-	                                	shoppingList.removeItemByName(foo);
-	                                    //shoppingList.removeItemByName(adapter.getItem(position));
+	                                	//String foo = (String)listView.getAdapter().getItem(position);
+	                                	//shoppingList.removeItemByName(foo);
+	                                    shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
 	                                    createShoppingList();
 	                                }
 	                            }
@@ -147,8 +147,11 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.toString();
-        shoppingList.addItem(new StandardFoodItem(name,0,new Date(),quantity,"y", FoodItemCategory.BEVERAGE ));
-    	 createShoppingList();
+    	if( (name != "") && (quantity != "") )
+        {
+    		shoppingList.addItem(new StandardFoodItem(name,0,new Date(),quantity,"y", FoodItemCategory.BEVERAGE ));
+    		createShoppingList();
+        }
     }
     
 }
