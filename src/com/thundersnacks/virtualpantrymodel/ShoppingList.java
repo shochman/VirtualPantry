@@ -64,7 +64,7 @@ public class ShoppingList{
 	{
 		for ( FoodItem key : items.keySet() ) 
 		{
-			if( key.getName() == name )
+			if( key.getName().equals(name) )
 				return key;
 		}
 		// Given name is not found or case sensitive to FoodItem keys in the set.

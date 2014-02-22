@@ -147,7 +147,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.toString();
-    	if( (name != "") && (quantity != "") )
+    	if( !(name.equals("") || quantity.equals("")) )
         {
     		shoppingList.addItem(new StandardFoodItem(name,0,new Date(),quantity,"y", FoodItemCategory.BEVERAGE ));
     		createShoppingList();

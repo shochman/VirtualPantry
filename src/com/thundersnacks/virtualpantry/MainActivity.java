@@ -160,8 +160,12 @@ public class MainActivity extends Activity {
                 			case R.id.action_add_from_pantry:
                 				addDialog.setContentView(R.layout.add_popup_shoppinglist_frompantry);
                 				addDialog.setTitle("Add Item(s) From Pantry");
-                				PantryFragment pantryFrag = (PantryFragment) getFragmentManager().findFragmentByTag("Pan");
-                				String[] pantryString = {"Beverages", "Protein", "Fruit", "Vegetables", "Dairy", "Frozen", "Condiments", "Sweets", "Snacks", "Grains", "Other"};
+                				PantryFragment pantryFrag = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+                				PantryFragment.SavedTabsListAdapter savedTabs = pantryFrag.new SavedTabsListAdapter();
+                				
+                				String[] pantryString = new String[savedTabs.getGroupCount()];
+                				for(int i = 0; i < pantryString.length; i++)
+                					pantryString[i] = (String) savedTabs.getGroup(i);
                 				
                 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_multiple_choice, pantryString);
                 		        
