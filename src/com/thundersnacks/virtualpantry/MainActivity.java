@@ -184,13 +184,17 @@ public class MainActivity extends Activity {
                 	popupMenu.show();
                 }
             	
-            	
     		    return true;
             case R.id.action_share:
             	final Dialog shareDialog = new Dialog(this);
             	shareDialog.setContentView(R.layout.share_popup);
             	shareDialog.setTitle("Share Your Pantry");
             	shareDialog.show();
+            	/*
+            	 * Add code to Emulate a pantry so we can
+            	 * test how the share pantry should work
+            	 * if the Server is not up and running.
+            	 */
             	return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -204,8 +208,4 @@ public class MainActivity extends Activity {
         else if (getActionBar().getSelectedTab().getPosition() == 1)
         	searchView.setQueryHint("Search Shopping List");
     }
- 
-   // public void addButtonPressed(View view) {
-   // 	System.out.println("hello");
-   // }
 }

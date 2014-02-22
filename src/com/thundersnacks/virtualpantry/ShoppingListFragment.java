@@ -1,5 +1,6 @@
 package com.thundersnacks.virtualpantry;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
 
@@ -87,7 +88,11 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        //String[] foodString = {"Cheese", "Milk", "Cereal", "Cookies", "Ice Cream", "Milk", "Butter"};
 	        // The checkbox for the each item is specified by the layout android.R.layout.simple_list_item_multiple_choice
 	        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, foodString);
-	        
+	        adapter.sort(new Comparator<String>(){
+	        	public int compare(String object1,String object2) {
+	        		return object1.compareToIgnoreCase(object2);
+	        	};
+	        });
 	        // Getting the reference to the listview object of the layout
 	        ListView listView = (ListView) view.findViewById(R.id.listview);
 	        listView.setTextFilterEnabled(true);
