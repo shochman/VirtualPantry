@@ -61,12 +61,12 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         shoppingList = new ShoppingList();
-        shoppingList.addItem(new StandardFoodItem("Cheese",0,new Date(),"r","y", null));
-        shoppingList.addItem(new StandardFoodItem("Milk",1,new Date(),"","", null));
-        shoppingList.addItem(new StandardFoodItem("Cereal",2,new Date(),"","", null));
-        shoppingList.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", null));
-        shoppingList.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", null));
-        shoppingList.addItem(new StandardFoodItem("Butter",5,new Date(),"","", null)); 
+        shoppingList.addItem(new StandardFoodItem("Cheese",0,new Date(),"r","y", FoodItemCategory.DAIRY));
+        shoppingList.addItem(new StandardFoodItem("Milk",1,new Date(),"","", FoodItemCategory.DAIRY));
+        shoppingList.addItem(new StandardFoodItem("Cereal",2,new Date(),"","", FoodItemCategory.GRAIN));
+        shoppingList.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", FoodItemCategory.SWEET));
+        shoppingList.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", FoodItemCategory.FROZEN));
+        shoppingList.addItem(new StandardFoodItem("Butter",5,new Date(),"","", FoodItemCategory.FAT)); 
     }
 	
 	@Override
@@ -98,6 +98,10 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        listView.setTextFilterEnabled(true);
 	        // Setting adapter to the listview
 	        listView.setAdapter(adapter);
+	        //AbsListView chec = ((AbsListView) ((AdapterView<?>) adapter).findFocus();
+	        /*
+	         * Find a way to get the AdapterView to our desired method
+	         */
 	        listView.setOnItemClickListener(new OnItemClickListener(){
 	        	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 	        		//---toggle the check displayed next to the item---
@@ -110,8 +114,23 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		    			  s=item;
 		    			  /* do whatever you want with the checked item */
 		    			 }
+		    		
+		    		((AbsListView) parent).setItemChecked(position, false); // remove when the update button is added
+		    		//parent.updateViewLayout(view, ViewGroup new ViewGroup());
 		    		if(s != "")
+		    		{
+		    			/*
+		    			 * The checked Item with be updated to the Item so that it can be 
+		    			 * added to the pantry and removed from the shoppingList.
+		    			 */
+		    			FoodItem foodItem = shoppingList.getItem(s);
+		    			shoppingList.setItemMapValue(foodItem, false);
+		    			updatePantry(); // remove when the update button is added
+		    			
 		    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
+		    			createShoppingList(); 
+		    		}
+		    		
 	        	}
 	        });
 	        
@@ -157,6 +176,14 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     		shoppingList.addItem(new StandardFoodItem(name,0,new Date(),quantity,"y", FoodItemCategory.BEVERAGE ));
     		createShoppingList();
         }
+    }
+    
+    public void updatePantry()
+    {
+    	PantryFragment pantryFrag = (PantryFragment) this.getActivity().getFragmentManager().findFragmentByTag("Pantry");
+    		StandardFoodItem itemToAdd;
+    		while( (itemToAdd = (StandardFoodItem) shoppingList.getCheckedFoodItem()) != null)
+    			pantryFrag.getPantry().addItem(itemToAdd);
     }
     
 }

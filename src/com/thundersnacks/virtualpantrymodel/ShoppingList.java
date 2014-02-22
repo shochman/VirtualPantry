@@ -55,6 +55,11 @@ public class ShoppingList{
 		return this.pantry;
 	}
 	
+	public void setPantry(Pantry pantry)
+	{
+		this.pantry = pantry;
+	}
+	
 	public static Map<FoodItem,Boolean> getItems()
 	{
 		return items;
@@ -69,5 +74,24 @@ public class ShoppingList{
 		}
 		// Given name is not found or case sensitive to FoodItem keys in the set.
 		return null;
+	}
+	
+	public FoodItem getCheckedFoodItem()
+	{
+		for ( FoodItem key : items.keySet() ) 
+		{
+			if( items.containsValue(false) )
+				{
+					removeItem(key);
+					return key;
+				}
+		}
+		// Given name is not found or case sensitive to FoodItem keys in the set.
+		return null;
+	}
+	
+	public void setItemMapValue(FoodItem key, Boolean value)
+	{
+		items.put(key, value);
 	}
 }
