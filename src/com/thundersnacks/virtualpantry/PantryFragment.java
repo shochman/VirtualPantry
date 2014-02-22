@@ -1,5 +1,6 @@
 package com.thundersnacks.virtualpantry;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.thundersnacks.virtualpantry.R;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -35,6 +37,8 @@ import android.widget.TextView;
 public class PantryFragment extends Fragment {
 	
 	private Pantry pantry;
+	View view;
+	FoodItem food;
 	
 	public PantryFragment() {
 		this.pantry = null;
@@ -90,15 +94,15 @@ public class PantryFragment extends Fragment {
     }
 	
 	public void createPantry() {
-		
+		ExpandableListView elv = (ExpandableListView) view.findViewById(R.id.list);
+        elv.setAdapter(new SavedTabsListAdapter());
 	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.saved_tab, null); 
-        ExpandableListView elv = (ExpandableListView) v.findViewById(R.id.list);
-        elv.setAdapter(new SavedTabsListAdapter());
-        return v;
+        view = inflater.inflate(R.layout.saved_tab, null); 
+        createPantry();
+        return view;
     }
  
     public class SavedTabsListAdapter extends BaseExpandableListAdapter {
@@ -179,6 +183,29 @@ public class PantryFragment extends Fragment {
             		final Dialog viewDialog = new Dialog(PantryFragment.this.getActivity());
             		viewDialog.setContentView(R.layout.display_popup);
             		viewDialog.setTitle("View Item");
+            		EditText nameText = (EditText) viewDialog.findViewById(R.id.nameEdit);
+                	EditText quantityText = (EditText) viewDialog.findViewById(R.id.quantityEdit);
+                	Spinner categoryText = (Spinner) viewDialog.findViewById(R.id.category_spinner);
+                	DatePicker expirationDate = (DatePicker) viewDialog.findViewById(R.id.dpResult);
+                	FoodItem food = null;
+                	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
+                		FoodItem test = it.next();
+                		if (test.getName() == foodItem) {
+                			food = test;
+                			break;
+                		}
+                	}
+                	nameText.setText(food.getName());
+                	quantityText.setText(food.getAmount());
+                	int numberOfCat = 0;
+                	for (FoodItemCategory fic : FoodItemCategory.values()) {
+                		if (fic == food.getCategory()) {
+                			categoryText.setSelection(numberOfCat);
+                			break;
+                		}
+                		numberOfCat++;
+                	}
+                	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
             		viewDialog.show();
             	}
             });
@@ -190,7 +217,40 @@ public class PantryFragment extends Fragment {
                 	final Dialog editDialog = new Dialog(PantryFragment.this.getActivity());
                     editDialog.setContentView(R.layout.edit_popup);
                     editDialog.setTitle("Edit Item");
+                    EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+                	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+                	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+                	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+                	food = null;
+                	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
+                		FoodItem test = it.next();
+                		if (test.getName() == foodItem) {
+                			food = test;
+                			break;
+                		}
+                	}
+                	nameText.setText(food.getName());
+                	quantityText.setText(food.getAmount());
+                	int numberOfCat = 0;
+                	for (FoodItemCategory fic : FoodItemCategory.values()) {
+                		if (fic == food.getCategory()) {
+                			categoryText.setSelection(numberOfCat);
+                			break;
+                		}
+                		numberOfCat++;
+                	}
+                	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
                     editDialog.show();
+                    Button addButton = (Button) editDialog.findViewById(R.id.editButton);
+                    addButton.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							
+							editItem(editDialog, food);
+							editDialog.dismiss();
+						}
+					});
                 }
             });
      
@@ -213,15 +273,46 @@ public class PantryFragment extends Fragment {
     	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
-    	String category = categoryText.toString();
+    	String category = categoryText.getSelectedItem().toString();
+    	/*
+    	 * Date date1= (Date) new Date
+   		(dpBirthDate.getYear(), dpBirthDate.getMonth(), dpBirthDate.getDayOfMonth());
+    	 */
+    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+    		if (fic.toString().equals(category)) {
+    			pantry.addItem(new StandardFoodItem( name, 0, expDate, quantity, "y", fic ));
+    			break;
+    		}
+    	}
+        createPantry();
+    	// TODO: fix this 
+        // createShoppingList();
+    }
+    
+    public void editItem(Dialog editDialog, FoodItem food)
+    {
+    	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+    	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+    	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+    	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+    	String name = nameText.getText().toString();
+    	String quantity = quantityText.getText().toString();
+    	String category = categoryText.getSelectedItem().toString();
     	/*
     	 * Date date1= (Date) new Date
    		(dpBirthDate.getYear(), dpBirthDate.getMonth(), dpBirthDate.getDayOfMonth());
     	 */
     	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth()); 
-        pantry.addItem(new StandardFoodItem( name, 0, expDate, quantity, "y", FoodItemCategory.BEVERAGE ));
-    	// TODO: fix this 
-        // createShoppingList();
+    	food.setName(name);
+    	food.setAmount(quantity);
+    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+    		if (fic.toString().equals(category)) {
+    			food.setCategory(fic);
+    			break;
+    		}
+    	}
+    	food.setExperiationDate(expDate);
+    	createPantry();
     }
- 
 }

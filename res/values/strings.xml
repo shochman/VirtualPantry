@@ -15,16 +15,17 @@
     <string name="title_activity_list">ListActivity</string>
     <string name="editImage">Edit</string>
     <string-array name="category_array">
-        <item>Beverages</item>
+        <item>Beverage</item>
         <item>Protein</item>
-        <item>Vegetables</item>
         <item>Fruit</item>
+        <item>Vegetable</item>
         <item>Dairy</item>
         <item>Frozen</item>
-        <item>Condiments</item>
-        <item>Sweets</item>
-        <item>Snacks</item>
-        <item>Grains</item>
+        <item>Condiment</item>
+        <item>Sweet</item>
+        <item>Snack</item>
+        <item>Grain</item>
+        <item>Fat</item>
         <item>Other</item>
     </string-array>
      <string name="category_prompt">Select Category</string>
