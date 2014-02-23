@@ -143,7 +143,7 @@ public class PantryFragment extends Fragment {
     }
  
     public class SavedTabsListAdapter extends BaseExpandableListAdapter {
-    	
+    	 
         private String[] groups = new String[FoodItemCategory.values().length];
         private String[][] children = new String[FoodItemCategory.values().length][]; 
     	
