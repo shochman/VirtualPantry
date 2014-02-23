@@ -23,6 +23,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -88,11 +89,11 @@ public class LoginActivity extends Activity {
 						return false;
 					}
 				});
-
+		
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
+		
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
@@ -248,15 +249,14 @@ public class LoginActivity extends Activity {
 				finish();
 			} else {
 				final Dialog registerDialog = new Dialog(LoginActivity.this);
-	        	registerDialog.setContentView(R.layout.register_popup);
+				registerDialog.setContentView(R.layout.register_popup);
 	        	registerDialog.setTitle("Registration");
 	        	registerDialog.show();
 	        	Button registerButton = (Button) registerDialog.findViewById(R.id.registerButton);
                 registerButton.setOnClickListener(new View.OnClickListener() {
 					
 					@Override
-					public void onClick(View v) {
-						
+					public void onClick(View v) {					
 						if (registerUser(registerDialog, registration)) 
 							registerDialog.dismiss();
 					}
@@ -281,19 +281,53 @@ public class LoginActivity extends Activity {
 			EditText passwordText = (EditText) registerDialog.findViewById(R.id.registerPasswordEdit);
 			EditText confirmText = (EditText) registerDialog.findViewById(R.id.registerPassword2Edit);
 			
+			// reset errors
+			usernameText.setError(null);
+			emailText.setError(null);
+			passwordText.setError(null);
+			confirmText.setError(null);
+			
 			String username = usernameText.getText().toString();
 			String email = emailText.getText().toString();
 			String password = passwordText.getText().toString();
 			String confirm = confirmText.getText().toString();
 			
 			r = new Registration(username, email, password, confirm);
+			boolean valid = true;
 			
-			if(!r.validEmail() || !r.matchingPasswords() || !r.validPassword())
-				return false;
-			else
+			if(r.getUsername().isEmpty()) {
+				usernameText.setError(getString(R.string.error_field_required));
+				valid = false;
+			}
+			
+			if(r.getEmail().isEmpty()) {
+				emailText.setError(getString(R.string.error_field_required));
+				valid = false;
+			} else if(!r.validEmail()) {
+				emailText.setError(getString(R.string.error_invalid_email));
+				valid = false;
+			}
+			
+			if(r.getPassword().isEmpty()) {
+				passwordText.setError(getString(R.string.error_field_required));
+				valid = false;
+			} else if(!r.validPassword()) {
+				passwordText.setError(getString(R.string.error_invalid_password));
+				valid = false;
+			}
+			
+			if(r.getConfirmPassword().isEmpty()) {
+				confirmText.setError(getString(R.string.error_field_required));
+				valid = false;
+			} else if(!r.matchingPasswords()) {
+				confirmText.setError("Passwords do not match");
+				valid = false;
+			}
+			
+			if(valid)
 				DUMMY_CREDENTIALS.add(email+":"+password);
 			
-			return true;
+			return valid;
 			
 		}
 	}
