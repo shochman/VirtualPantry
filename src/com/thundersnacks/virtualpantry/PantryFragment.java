@@ -111,13 +111,21 @@ public class PantryFragment extends Fragment {
 	
 	public void createPantry() {
 		elv = (ExpandableListView) view.findViewById(R.id.list);
+		Boolean[] openedTab = new Boolean[elv.getExpandableListAdapter().getGroupCount()];
+		for (int i = 0; i < elv.getExpandableListAdapter().getGroupCount(); i++) {
+			openedTab[i] = elv.isGroupExpanded(i);
+		}
         elv.setAdapter(new SavedTabsListAdapter());
+        for (int i = 0; i < elv.getExpandableListAdapter().getGroupCount(); i++) {
+			if (openedTab[i]) elv.expandGroup(i);
+		}
 	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.saved_tab, null); 
-        createPantry();
+        elv = (ExpandableListView) view.findViewById(R.id.list);
+        elv.setAdapter(new SavedTabsListAdapter());
         return view;
     }
  
