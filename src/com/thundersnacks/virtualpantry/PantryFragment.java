@@ -60,55 +60,77 @@ public class PantryFragment extends Fragment {
 		super.onCreate(savedInstanceState);
         pantry = new Pantry("My Pantry", 0);
         
-        pantry.addItem(new StandardFoodItem("Coke", 0, new Date(), "6 cans", "", FoodItemCategory.BEVERAGE));
-        pantry.addItem(new StandardFoodItem("Sprite", 0, new Date(), "4 cans", "", FoodItemCategory.BEVERAGE));
+        Date d1 = new Date(2014,2,28);
         
-        pantry.addItem(new StandardFoodItem("Ketchup", 0, new Date(), "1 bottle", "", FoodItemCategory.CONDIMENT));
-        pantry.addItem(new StandardFoodItem("Mustard", 0, new Date(), "1 bottle", "", FoodItemCategory.CONDIMENT));
+        Date d2 = new Date(2014, 4, 2);
         
-        pantry.addItem(new StandardFoodItem("2% Milk", 0, new Date(), "1 gallon", "", FoodItemCategory.DAIRY));
-        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, new Date(), "1 bag", "", FoodItemCategory.DAIRY));
-        pantry.addItem(new StandardFoodItem("Yogurt", 0, new Date(), "3 cups", "", FoodItemCategory.DAIRY));
+        Date d3 = new Date(2014, 7, 15);
         
-        pantry.addItem(new StandardFoodItem("Butter", 0, new Date(), "1/2 stick", "", FoodItemCategory.FAT));
+        Date d4 = new Date(2014, 9, 25);
         
-        pantry.addItem(new StandardFoodItem("Ice Cream", 0, new Date(), "1 tub", "", FoodItemCategory.FROZEN));
+        Date d5 = new Date(2014, 11, 6 );
         
-        pantry.addItem(new StandardFoodItem("Apple", 0, new Date(), "1", "", FoodItemCategory.FRUIT));
-        pantry.addItem(new StandardFoodItem("Pear", 0, new Date(), "1", "", FoodItemCategory.FRUIT));
+        Date d6 = new Date(2015, 10, 10);
         
-        pantry.addItem(new StandardFoodItem("Bread", 0, new Date(), "1/2 loaf", "", FoodItemCategory.GRAIN));
-        pantry.addItem(new StandardFoodItem("Cereal", 0, new Date(), "2 boxes", "", FoodItemCategory.GRAIN));
+        Date d7 = new Date(2014, 0, 1);
         
-        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, new Date(), "1 lb", "", FoodItemCategory.PROTEIN));
-        pantry.addItem(new StandardFoodItem("Ground Beef", 0, new Date(), "1/2 lb", "", FoodItemCategory.PROTEIN));
+        pantry.addItem(new StandardFoodItem("Coke", 0, d5, "6 cans", "", FoodItemCategory.BEVERAGE));
+        pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , "4 cans", "", FoodItemCategory.BEVERAGE));
         
-        pantry.addItem(new StandardFoodItem("Potato Chips", 0, new Date(), "1 bag", "", FoodItemCategory.SNACK));
-        pantry.addItem(new StandardFoodItem("Pretzels", 0, new Date(), "1 bag", "", FoodItemCategory.SNACK));
+        pantry.addItem(new StandardFoodItem("Ketchup", 0, d3, "1 bottle", "", FoodItemCategory.CONDIMENT));
+        pantry.addItem(new StandardFoodItem("Mustard", 0, d2, "1 bottle", "", FoodItemCategory.CONDIMENT));
         
-        pantry.addItem(new StandardFoodItem("Chocolate", 0, new Date(), "2 bars", "", FoodItemCategory.SWEET));
-        pantry.addItem(new StandardFoodItem("Cookies", 0, new Date(), "1 bag", "", FoodItemCategory.SWEET));
+        pantry.addItem(new StandardFoodItem("2% Milk", 0, d2, "1 gallon", "", FoodItemCategory.DAIRY));
+        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, d3, "1 bag", "", FoodItemCategory.DAIRY));
+        pantry.addItem(new StandardFoodItem("Yogurt", 0, d1, "3 cups", "", FoodItemCategory.DAIRY));
         
-        pantry.addItem(new StandardFoodItem("Carrots", 0, new Date(), "2 bags", "", FoodItemCategory.VEGETABLE));
-        pantry.addItem(new StandardFoodItem("Lettuce", 0, new Date(), "1 bag", "", FoodItemCategory.VEGETABLE));
-        pantry.addItem(new StandardFoodItem("Broccoli", 0, new Date(), "1 stalk", "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Butter", 0, d4, "1/2 stick", "", FoodItemCategory.FAT));
+        
+        pantry.addItem(new StandardFoodItem("Ice Cream", 0, d3, "1 tub", "", FoodItemCategory.FROZEN));
+        
+        pantry.addItem(new StandardFoodItem("Apple", 0, d2, "1", "", FoodItemCategory.FRUIT));
+        pantry.addItem(new StandardFoodItem("Pear", 0, d2, "1", "", FoodItemCategory.FRUIT));
+        
+        pantry.addItem(new StandardFoodItem("Bread", 0, d1, "1/2 loaf", "", FoodItemCategory.GRAIN));
+        pantry.addItem(new StandardFoodItem("Cereal", 0, d3, "2 boxes", "", FoodItemCategory.GRAIN));
+        
+        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, d2, "1 lb", "", FoodItemCategory.PROTEIN));
+        pantry.addItem(new StandardFoodItem("Ground Beef", 0, d4, "1/2 lb", "", FoodItemCategory.PROTEIN));
+        
+        pantry.addItem(new StandardFoodItem("Potato Chips", 0, d3, "1 bag", "", FoodItemCategory.SNACK));
+        pantry.addItem(new StandardFoodItem("Pretzels", 0, d7, "1 bag", "", FoodItemCategory.SNACK));
+        
+        pantry.addItem(new StandardFoodItem("Chocolate", 0, d7, "2 bars", "", FoodItemCategory.SWEET));
+        pantry.addItem(new StandardFoodItem("Cookies", 0, d3, "1 bag", "", FoodItemCategory.SWEET));
+        
+        pantry.addItem(new StandardFoodItem("Carrots", 0, d1, "2 bags", "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Lettuce", 0, d4, "1 bag", "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Broccoli", 0, d2, "1 stalk", "", FoodItemCategory.VEGETABLE));
         
     }
 	
 	public void createPantry() {
 		elv = (ExpandableListView) view.findViewById(R.id.list);
+		Boolean[] openedTab = new Boolean[elv.getExpandableListAdapter().getGroupCount()];
+		for (int i = 0; i < elv.getExpandableListAdapter().getGroupCount(); i++) {
+			openedTab[i] = elv.isGroupExpanded(i);
+		}
         elv.setAdapter(new SavedTabsListAdapter());
+        for (int i = 0; i < elv.getExpandableListAdapter().getGroupCount(); i++) {
+			if (openedTab[i]) elv.expandGroup(i);
+		}
 	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.saved_tab, null); 
-        createPantry();
+        elv = (ExpandableListView) view.findViewById(R.id.list);
+        elv.setAdapter(new SavedTabsListAdapter());
         return view;
     }
  
     public class SavedTabsListAdapter extends BaseExpandableListAdapter {
-    	
+    	 
         private String[] groups = new String[FoodItemCategory.values().length];
         private String[][] children = new String[FoodItemCategory.values().length][]; 
     	
@@ -120,7 +142,7 @@ public class PantryFragment extends Fragment {
         		for( int j = 0; j < items.size(); j++ ) {
         			children[i][j] = items.get(j).getName();
         		}
-            }
+            } 
         }
         
         @Override
@@ -307,10 +329,6 @@ public class PantryFragment extends Fragment {
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.getSelectedItem().toString();
-    	/*
-    	 * Date date1= (Date) new Date
-   		(dpBirthDate.getYear(), dpBirthDate.getMonth(), dpBirthDate.getDayOfMonth());
-    	 */
     	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
     	for (FoodItemCategory fic : FoodItemCategory.values()) {
     		if (fic.toString().equals(category)) {
@@ -318,9 +336,8 @@ public class PantryFragment extends Fragment {
     			break;
     		}
     	}
+    	
         createPantry();
-    	// TODO: fix this 
-        // createShoppingList();
     }
     
     public void editItem(Dialog editDialog, FoodItem food)
@@ -332,10 +349,6 @@ public class PantryFragment extends Fragment {
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.getSelectedItem().toString();
-    	/*
-    	 * Date date1= (Date) new Date
-   		(dpBirthDate.getYear(), dpBirthDate.getMonth(), dpBirthDate.getDayOfMonth());
-    	 */
     	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth()); 
     	food.setName(name);
     	food.setAmount(quantity);

@@ -19,6 +19,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -161,6 +162,15 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        // Setting this scroll listener is required to ensure that during ListView scrolling,
 	        // we don't look for swipes.
 	        listView.setOnScrollListener(touchListener.makeScrollListener());
+	        
+	        Button addToPantryButton = (Button) view.findViewById(R.id.addToPantryButton);
+	        addToPantryButton.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+				}
+			});
 	}
     
     public void addNewItem(Dialog addDialog)
