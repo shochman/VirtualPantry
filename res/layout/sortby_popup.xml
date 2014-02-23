@@ -28,6 +28,12 @@
         android:layout_height="wrap_content"
         android:text="Expiration Date" />
     </RadioGroup>
-    
+
+    <Button
+        android:id="@+id/SortByButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="OK" />
 
 </LinearLayout>

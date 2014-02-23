@@ -1,7 +1,9 @@
 package com.thundersnacks.virtualpantry;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.thundersnacks.virtualpantry.R;
@@ -36,6 +38,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	String[] foodString;
 	private ShoppingList shoppingList;
 	View view;
+	static List<String> foodItems;
 
 	public ShoppingListFragment() {
 		this.shoppingList = new ShoppingList();
@@ -81,6 +84,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	public void createShoppingList() {
 		 Map<FoodItem, Boolean> food = ShoppingList.getItems();
 	        final String[] foodString = new String[food.size()];
+	        foodItems=Arrays.asList(foodString);
 	        int ipos = 0;
 	        for (Map.Entry<FoodItem, Boolean> e : food.entrySet())
 	            foodString[ipos++] = e.getKey().getName();

@@ -1,5 +1,7 @@
 package com.thundersnacks.virtualpantry;
 
+import java.util.Collections;
+
 import com.thundersnacks.virtualpantry.R;
 
 import android.os.Bundle;
@@ -14,14 +16,23 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
+	
+	RadioGroup sortByMenu;
+	Button sortByOkButton;
+	RadioButton sortByRadioButton;
+	
+	
 	
 	public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	    private Fragment mFragment;
@@ -205,13 +216,13 @@ public class MainActivity extends Activity {
             	sortDialog.setContentView(R.layout.sortby_popup);
             	sortDialog.setTitle("Sorting Method");
             	sortDialog.show();
-            	//sortByRadioButtonListener();
+            	sortByRadioButtonListener(sortDialog);
             	return true;
             default:
                 return super.onOptionsItemSelected(item);
         
         }
-    } //
+    } // :)
     
     public void updateSearch() {
     	SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -220,4 +231,61 @@ public class MainActivity extends Activity {
         else if (getActionBar().getSelectedTab().getPosition() == 1)
         	searchView.setQueryHint("Search Shopping List");
     }
+    
+    
+    //////////////////////////////////////////////////////////////
+    
+ public void sortByRadioButtonListener(final Dialog sortDialog){
+    	
+    	sortByMenu = (RadioGroup) sortDialog.findViewById(R.id.sortByRadioGroup);
+    	 sortByOkButton =(Button) sortDialog.findViewById(R.id.SortByButton);
+    	
+    	sortByOkButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				int sortById = sortByMenu.getCheckedRadioButtonId();
+			//	sortByRadioButton = (RadioButton) findViewById(sortById);
+				
+				if(getActionBar().getSelectedTab().getPosition() == 0){
+					if(sortById==R.id.alphabetical){
+						//Collections.sort(ShoppingListFragment.foodItems);
+					}
+					else if(sortById==R.id.categoryCode){
+						
+					}
+					else if(sortById==R.id.expirationDate){
+						
+					}
+				}
+				else if(getActionBar().getSelectedTab().getPosition() == 1){
+					if(sortById==R.id.alphabetical){
+						
+					}
+					else if(sortById==R.id.categoryCode){
+						
+					}
+				}
+				sortDialog.dismiss();
+			}
+
+    	
+    				
+    
+    
+    	});
+    }
+    
+    
+    
+    
+    ///////////////////////////////////////////////////////////
+    
+    
+    
+    
+    
+    
+    
 }
