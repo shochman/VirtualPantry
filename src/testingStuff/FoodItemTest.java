@@ -1,25 +1,31 @@
 package testingStuff;
 
+import java.util.Date;
+import com.thundersnacks.virtualpantrymodel.*;
+
 import junit.framework.TestCase;
 
 public class FoodItemTest extends TestCase {
-
-	public void testFoodItem() {
+	private Date myDate=new Date();
+	private FoodItem testFood = new StandardFoodItem("food", 42,myDate,"1 pound","pic",FoodItemCategory.OTHER);
+	 
+	/*public void testFoodItem() {
 		fail("Not yet implemented");
-	}
+	}*/
 
 	public void testGetName() {
-		fail("Not yet implemented");
+		assertEquals("Name must be food", "food", testFood.getName());
 	}
 
 	public void testSetName() {
-		fail("Not yet implemented");
+		testFood.setName("food1");
+		assertEquals("Name must be food1", "food1", testFood.getName());
 	}
 
 	public void testGetDatabaseId() {
-		fail("Not yet implemented");
+		assertEquals("DatabadeId must equal 42", 42, testFood.getDatabaseId());
 	}
-
+/*
 	public void testGetExperiationDate() {
 		fail("Not yet implemented");
 	}
@@ -51,5 +57,5 @@ public class FoodItemTest extends TestCase {
 	public void testSetCategory() {
 		fail("Not yet implemented");
 	}
-
+*/
 }
