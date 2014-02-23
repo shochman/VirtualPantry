@@ -29,5 +29,6 @@
         <item>Other</item>
     </string-array>
      <string name="category_prompt">Select Category</string>
+     <string name="action_register">Register</string>
 
 </resources>
