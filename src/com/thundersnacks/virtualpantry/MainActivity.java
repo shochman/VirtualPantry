@@ -211,7 +211,7 @@ public class MainActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         
         }
-    } // :)
+    } //
     
     public void updateSearch() {
     	SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
