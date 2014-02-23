@@ -25,7 +25,7 @@
         <item>Sweet</item>
         <item>Snack</item>
         <item>Grain</item>
-        <item>Fat</item>
+        <item>Fat</item> 
         <item>Other</item>
     </string-array>
      <string name="category_prompt">Select Category</string>
