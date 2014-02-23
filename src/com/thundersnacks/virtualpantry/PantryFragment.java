@@ -24,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
  
@@ -39,6 +40,7 @@ public class PantryFragment extends Fragment {
 	private Pantry pantry;
 	View view;
 	FoodItem food;
+	ExpandableListView elv;
 	
 	public PantryFragment() {
 		this.pantry = null;
@@ -94,7 +96,7 @@ public class PantryFragment extends Fragment {
     }
 	
 	public void createPantry() {
-		ExpandableListView elv = (ExpandableListView) view.findViewById(R.id.list);
+		elv = (ExpandableListView) view.findViewById(R.id.list);
         elv.setAdapter(new SavedTabsListAdapter());
 	}
 	
@@ -255,6 +257,34 @@ public class PantryFragment extends Fragment {
             });
      
             item.setText(foodItem);
+         // Create a ListView-specific touch listener. ListViews are given special treatment because
+            // by default they handle touches for their list items... i.e. they're in charge of drawing
+            // the pressed state (the list selector), handling list item clicks, etc.
+            SwipeDismissListViewTouchListener touchListener =
+                    new SwipeDismissListViewTouchListener(
+                            elv,
+                            new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                                @Override
+                                public boolean canDismiss(int position) {
+                                    return true;
+                                }
+
+                                @Override
+                                public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                    for (int position : reverseSortedPositions) {
+                                    	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
+                                    		FoodItem test = it.next();
+                                    		if (test.getName().equals(elv.getAdapter().getItem(position))) {
+                                    			food = test;
+                                    			break;
+                                    		}
+                                    	}
+                                        pantry.removeItem(food);
+                                        createPantry();
+                                    }
+                                }
+                            });
+            convertView.setOnTouchListener(touchListener);
             return convertView;
         }
  
