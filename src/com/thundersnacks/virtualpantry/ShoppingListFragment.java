@@ -3,6 +3,7 @@ package com.thundersnacks.virtualpantry;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.*;
@@ -79,10 +80,12 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     }
 	
 	public void createShoppingList() {
-		 Map<FoodItem, Boolean> food = ShoppingList.getItems();
+		// Map<FoodItem, Boolean> food = ShoppingList.getItems();
+		Map<FoodItem, Boolean> food = shoppingList.sortByComparator(shoppingList.getItems());
 	        final String[] foodString = new String[food.size()];
 	        int ipos = 0;
-	        for (Map.Entry<FoodItem, Boolean> e : food.entrySet())
+	        
+	        for (TreeMap.Entry<FoodItem, Boolean> e : food.entrySet())
 	            foodString[ipos++] = e.getKey().getName();
 	        
 	       
@@ -111,12 +114,14 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		    		SparseBooleanArray checked=((AbsListView) parent).getCheckedItemPositions();
 		    		if (position < len)
 		    			 if (checked.get(position)) {
+		    				 //Object sitem =  parent.getSelectedItem();
+		    				// String item = sitem.toString();
 		    			  String item = foodString[position];
 		    			  s=item;
 		    			  /* do whatever you want with the checked item */
 		    			 }
 		    		
-		    		((AbsListView) parent).setItemChecked(position, false); // remove when the update button is added
+		    		//((AbsListView) parent).setItemChecked(position, false); // remove when the update button is added
 		    		//parent.updateViewLayout(view, ViewGroup new ViewGroup());
 		    		if(s != "")
 		    		{
@@ -126,10 +131,9 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		    			 */
 		    			FoodItem foodItem = shoppingList.getItem(s);
 		    			shoppingList.setItemMapValue(foodItem, false);
-		    			updatePantry(); // remove when the update button is added
 		    			
 		    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
-		    			createShoppingList(); 
+		    			
 		    		}
 		    		
 	        	}
@@ -168,7 +172,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 				
 				@Override
 				public void onClick(View v) {
-					
+					updatePantry();
 				}
 			});
 	}
@@ -191,9 +195,11 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     public void updatePantry()
     {
     	PantryFragment pantryFrag = (PantryFragment) this.getActivity().getFragmentManager().findFragmentByTag("Pantry");
-    		StandardFoodItem itemToAdd;
-    		while( (itemToAdd = (StandardFoodItem) shoppingList.getCheckedFoodItem()) != null)
-    			pantryFrag.getPantry().addItem(itemToAdd);
+		StandardFoodItem itemToAdd;
+		while( (itemToAdd = (StandardFoodItem) shoppingList.getCheckedFoodItem()) != null)
+			pantryFrag.getPantry().addItem(itemToAdd);
+		
+		createShoppingList(); 
     }
     
 }
