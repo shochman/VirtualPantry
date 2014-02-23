@@ -98,6 +98,7 @@ import java.util.List;
     private int mDownPosition;
     private View mDownView;
     private boolean mPaused;
+    private boolean mAllowClick;
 
     /**
      * The callback interface used by {@link SwipeDismissListViewTouchListener} to inform its client
@@ -146,6 +147,14 @@ import java.util.List;
     public void setEnabled(boolean enabled) {
         mPaused = !enabled;
     }
+    
+    public boolean getSwiping() {
+    	return mSwiping;
+    }
+    
+    public boolean getAllowClick() {
+    	return mAllowClick;
+    }
 
     /**
      * Returns an {@link AbsListView.OnScrollListener} to be added to the {@link
@@ -177,6 +186,7 @@ import java.util.List;
 
         switch (motionEvent.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
+            	mAllowClick = true;
                 if (mPaused) {
                     return false;
                 }
@@ -215,6 +225,7 @@ import java.util.List;
             }
 
             case MotionEvent.ACTION_CANCEL: {
+            	mAllowClick = false;
                 if (mVelocityTracker == null) {
                     break;
                 }
@@ -238,6 +249,7 @@ import java.util.List;
             }
 
             case MotionEvent.ACTION_UP: {
+            	mAllowClick = false;
                 if (mVelocityTracker == null) {
                     break;
                 }
@@ -258,6 +270,8 @@ import java.util.List;
                     // dismiss only if flinging in the same direction as dragging
                     dismiss = (velocityX < 0) == (deltaX < 0);
                     dismissRight = mVelocityTracker.getXVelocity() > 0;
+                } else if (Math.abs(deltaX) < mViewWidth / 10){
+                	mAllowClick = true;
                 }
                 if (dismiss && mDownPosition != ListView.INVALID_POSITION) {
                     // dismiss
@@ -293,6 +307,7 @@ import java.util.List;
             }
 
             case MotionEvent.ACTION_MOVE: {
+            	mAllowClick = false;
                 if (mVelocityTracker == null || mPaused) {
                     break;
                 }

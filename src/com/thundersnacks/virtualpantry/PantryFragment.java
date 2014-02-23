@@ -177,38 +177,69 @@ public class PantryFragment extends Fragment {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.child_item, null);
             }
+            
+            // Create a ListView-specific touch listener. ListViews are given special treatment because
+            // by default they handle touches for their list items... i.e. they're in charge of drawing
+            // the pressed state (the list selector), handling list item clicks, etc.
+            final SwipeDismissListViewTouchListener touchListener =
+                    new SwipeDismissListViewTouchListener(
+                            elv,
+                            new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                                @Override
+                                public boolean canDismiss(int position) {
+                                    return true;
+                                }
+
+                                @Override
+                                public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                    for (int position : reverseSortedPositions) {
+                                    	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
+                                    		FoodItem test = it.next();
+                                    		if (test.getName().equals(elv.getAdapter().getItem(position))) {
+                                    			food = test;
+                                    			break;
+                                    		}
+                                    	}
+                                        pantry.removeItem(food);
+                                        createPantry();
+                                    }
+                                }
+                            });
+            convertView.setOnTouchListener(touchListener);
      
             TextView item = (TextView) convertView.findViewById(R.id.item);
             
             convertView.setOnClickListener(new OnClickListener() {
             	public void onClick(View v) {
-            		final Dialog viewDialog = new Dialog(PantryFragment.this.getActivity());
-            		viewDialog.setContentView(R.layout.display_popup);
-            		viewDialog.setTitle("View Item");
-            		EditText nameText = (EditText) viewDialog.findViewById(R.id.nameEdit);
-                	EditText quantityText = (EditText) viewDialog.findViewById(R.id.quantityEdit);
-                	Spinner categoryText = (Spinner) viewDialog.findViewById(R.id.category_spinner);
-                	DatePicker expirationDate = (DatePicker) viewDialog.findViewById(R.id.dpResult);
-                	FoodItem food = null;
-                	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                		FoodItem test = it.next();
-                		if (test.getName() == foodItem) {
-                			food = test;
-                			break;
+            		if (touchListener.getAllowClick()) {
+            			final Dialog viewDialog = new Dialog(PantryFragment.this.getActivity());
+            			viewDialog.setContentView(R.layout.display_popup);
+            			viewDialog.setTitle("View Item");
+            			EditText nameText = (EditText) viewDialog.findViewById(R.id.nameEdit);
+                		EditText quantityText = (EditText) viewDialog.findViewById(R.id.quantityEdit);
+                		Spinner categoryText = (Spinner) viewDialog.findViewById(R.id.category_spinner);
+                		DatePicker expirationDate = (DatePicker) viewDialog.findViewById(R.id.dpResult);
+                		FoodItem food = null;
+                		for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
+                			FoodItem test = it.next();
+                			if (test.getName() == foodItem) {
+                				food = test;
+                				break;
+                			}
                 		}
-                	}
-                	nameText.setText(food.getName());
-                	quantityText.setText(food.getAmount());
-                	int numberOfCat = 0;
-                	for (FoodItemCategory fic : FoodItemCategory.values()) {
-                		if (fic == food.getCategory()) {
-                			categoryText.setSelection(numberOfCat);
-                			break;
+                		nameText.setText(food.getName());
+                		quantityText.setText(food.getAmount());
+                		int numberOfCat = 0;
+                		for (FoodItemCategory fic : FoodItemCategory.values()) {
+                			if (fic == food.getCategory()) {
+                				categoryText.setSelection(numberOfCat);
+                				break;
+                			}
+                			numberOfCat++;
                 		}
-                		numberOfCat++;
-                	}
-                	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
-            		viewDialog.show();
+                		expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
+            			viewDialog.show();
+            		}
             	}
             });
      
@@ -257,34 +288,6 @@ public class PantryFragment extends Fragment {
             });
      
             item.setText(foodItem);
-         // Create a ListView-specific touch listener. ListViews are given special treatment because
-            // by default they handle touches for their list items... i.e. they're in charge of drawing
-            // the pressed state (the list selector), handling list item clicks, etc.
-            SwipeDismissListViewTouchListener touchListener =
-                    new SwipeDismissListViewTouchListener(
-                            elv,
-                            new SwipeDismissListViewTouchListener.DismissCallbacks() {
-                                @Override
-                                public boolean canDismiss(int position) {
-                                    return true;
-                                }
-
-                                @Override
-                                public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                    for (int position : reverseSortedPositions) {
-                                    	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                                    		FoodItem test = it.next();
-                                    		if (test.getName().equals(elv.getAdapter().getItem(position))) {
-                                    			food = test;
-                                    			break;
-                                    		}
-                                    	}
-                                        pantry.removeItem(food);
-                                        createPantry();
-                                    }
-                                }
-                            });
-            convertView.setOnTouchListener(touchListener);
             return convertView;
         }
  
