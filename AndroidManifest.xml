@@ -3,11 +3,16 @@
     package="com.thundersnacks.virtualpantry"
     android:versionCode="1"
     android:versionName="1.0" >
+    
+<instrumentation android:name="android.test.InstrumentationTestRunner"
+    android:targetPackage="testingStuff.package"
+    android:label="your tests label" />
 
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher2"
@@ -52,6 +57,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.thundersnacks.virtualpantry.MainActivity" />
         </activity>
+        <uses-library android:name="android.test.runner" />
     </application>
 
 </manifest>
