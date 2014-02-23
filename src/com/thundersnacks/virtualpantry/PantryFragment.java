@@ -342,10 +342,6 @@ public class PantryFragment extends Fragment {
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.getSelectedItem().toString();
-    	/*
-    	 * Date date1= (Date) new Date
-   		(dpBirthDate.getYear(), dpBirthDate.getMonth(), dpBirthDate.getDayOfMonth());
-    	 */
     	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
     	for (FoodItemCategory fic : FoodItemCategory.values()) {
     		if (fic.toString().equals(category)) {
@@ -353,9 +349,8 @@ public class PantryFragment extends Fragment {
     			break;
     		}
     	}
+    	
         createPantry();
-    	// TODO: fix this 
-        // createShoppingList();
     }
     
     public void editItem(Dialog editDialog, FoodItem food)
@@ -367,10 +362,6 @@ public class PantryFragment extends Fragment {
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.getSelectedItem().toString();
-    	/*
-    	 * Date date1= (Date) new Date
-   		(dpBirthDate.getYear(), dpBirthDate.getMonth(), dpBirthDate.getDayOfMonth());
-    	 */
     	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth()); 
     	food.setName(name);
     	food.setAmount(quantity);
