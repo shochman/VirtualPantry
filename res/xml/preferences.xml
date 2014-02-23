@@ -9,13 +9,12 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="Username" android:dialogMessage="In the future this will allow the user to change his username on the database."/>
-<com.thundersnacks.virtualpantry.HelpDialog 
-        android:dialogTitle="Sign Out" 
-        android:title="Sign Out" 
-        android:dialogMessage="Are you sure you want to sign out? (This doesn't work yet)" />
+	<Preference 
+	    android:title="Sign Out"
+       	android:key="signout"
+        android:summary=""/>
     <com.thundersnacks.virtualpantry.HelpDialog 
         android:dialogTitle="Help" 
         android:title="Help" 
         android:dialogMessage="For questions or help please contact the developers at: dev.virtualpantry@gmail.com" />
-
 </PreferenceScreen>

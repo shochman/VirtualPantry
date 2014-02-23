@@ -2,6 +2,7 @@ package com.thundersnacks.virtualpantry;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -16,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.support.v4.app.NavUtils;
 
 import java.util.List;
@@ -44,6 +46,13 @@ public class SettingsActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setupActionBar();
+		Preference signout = (Preference)findPreference("signout");
+		/*signout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() { 
+		                @Override															
+		                public boolean onPreferenceClick(Preference preference) {
+		                    return true;
+		                }
+		            });*/
 	}
 
 	/**
@@ -293,4 +302,5 @@ public class SettingsActivity extends PreferenceActivity {
 			bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 		}
 	}
+	
 }
