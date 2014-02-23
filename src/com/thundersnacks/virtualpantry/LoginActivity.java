@@ -1,5 +1,11 @@
 package com.thundersnacks.virtualpantry;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
+import com.thundersnacks.virtualpantrymodel.Registration;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -14,21 +20,23 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-//DELETE ME
 public class LoginActivity extends Activity {
+	
 	/**
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
 	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
+	private static ArrayList<String> DUMMY_CREDENTIALS = new ArrayList<String>();
 
 	/**
 	 * The default email to populate the email field with.
@@ -43,6 +51,9 @@ public class LoginActivity extends Activity {
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
 	private String mPassword;
+	
+	// Value for registration attempt
+	private Registration registration;
 
 	// UI references.
 	private EditText mEmailView;
@@ -58,6 +69,8 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		// Set up the login form.
+		DUMMY_CREDENTIALS.add("bar@example.com:world");
+		DUMMY_CREDENTIALS.add("foo@example.com:hello");
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
@@ -218,6 +231,7 @@ public class LoginActivity extends Activity {
 				}
 			}
 
+			
 			// TODO: register the new account here.
 			//return true;
 			return false;
@@ -237,8 +251,19 @@ public class LoginActivity extends Activity {
 	        	registerDialog.setContentView(R.layout.register_popup);
 	        	registerDialog.setTitle("Registration");
 	        	registerDialog.show();
+	        	Button registerButton = (Button) registerDialog.findViewById(R.id.registerButton);
+                registerButton.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						
+						if (registerUser(registerDialog, registration)) 
+							registerDialog.dismiss();
+					}
+				});
+                
 				//mPasswordView
-					//	.setError(getString(R.string.error_incorrect_password));
+				//	.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
 			}
 		}
@@ -247,6 +272,29 @@ public class LoginActivity extends Activity {
 		protected void onCancelled() {
 			mAuthTask = null;
 			showProgress(false);
+		}
+		
+		public boolean registerUser(Dialog registerDialog, Registration r) {
+			
+			EditText usernameText = (EditText) registerDialog.findViewById(R.id.registerUsernameEdit);
+			EditText emailText = (EditText) registerDialog.findViewById(R.id.registerEmailEdit);
+			EditText passwordText = (EditText) registerDialog.findViewById(R.id.registerPasswordEdit);
+			EditText confirmText = (EditText) registerDialog.findViewById(R.id.registerPassword2Edit);
+			
+			String username = usernameText.getText().toString();
+			String email = emailText.getText().toString();
+			String password = passwordText.getText().toString();
+			String confirm = confirmText.getText().toString();
+			
+			r = new Registration(username, email, password, confirm);
+			
+			if(!r.validEmail() || !r.matchingPasswords() || !r.validPassword())
+				return false;
+			else
+				DUMMY_CREDENTIALS.add(email+":"+password);
+			
+			return true;
+			
 		}
 	}
 }
