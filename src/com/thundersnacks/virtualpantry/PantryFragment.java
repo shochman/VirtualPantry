@@ -60,40 +60,19 @@ public class PantryFragment extends Fragment {
 		super.onCreate(savedInstanceState);
         pantry = new Pantry("My Pantry", 0);
         
-        Date d1 = new Date();
-        d1.setDate(28);
-        d1.setMonth(2);
-        d1.setYear(2014);
+        Date d1 = new Date(2014,2,28);
         
-        Date d2 = new Date();
-        d1.setDate(2);
-        d1.setMonth(3);
-        d1.setYear(2014);
+        Date d2 = new Date(2014, 4, 2);
         
-        Date d3 = new Date();
-        d1.setDate(15);
-        d1.setMonth(3);
-        d1.setYear(2014);
+        Date d3 = new Date(2014, 7, 15);
         
-        Date d4 = new Date();
-        d1.setDate(2);
-        d1.setMonth(25);
-        d1.setYear(2014);
+        Date d4 = new Date(2014, 9, 25);
         
-        Date d5 = new Date();
-        d1.setDate(6);
-        d1.setMonth(30);
-        d1.setYear(2015);
+        Date d5 = new Date(2014, 11, 6 );
         
-        Date d6 = new Date();
-        d1.setDate(10);
-        d1.setMonth(3);
-        d1.setYear(2015);
+        Date d6 = new Date(2015, 10, 10);
         
-        Date d7 = new Date();
-        d1.setDate(1);
-        d1.setMonth(4);
-        d1.setYear(2014);
+        Date d7 = new Date(2014, 0, 1);
         
         pantry.addItem(new StandardFoodItem("Coke", 0, d5, "6 cans", "", FoodItemCategory.BEVERAGE));
         pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , "4 cans", "", FoodItemCategory.BEVERAGE));
