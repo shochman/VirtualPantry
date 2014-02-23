@@ -155,7 +155,7 @@ public class PantryFragment extends Fragment {
         		for( int j = 0; j < items.size(); j++ ) {
         			children[i][j] = items.get(j).getName();
         		}
-            }
+            } 
         }
         
         @Override
