@@ -196,8 +196,20 @@ public class MainActivity extends Activity {
             	 * if the Server is not up and running.
             	 */
             	return true;
+           // default:
+             //   return super.onOptionsItemSelected(item);
+                
+                
+            case R.id.action_sort:
+            	final Dialog sortDialog = new Dialog(this);
+            	sortDialog.setContentView(R.layout.sortby_popup);
+            	sortDialog.setTitle("Sorting Method");
+            	sortDialog.show();
+            	//sortByRadioButtonListener();
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
+        
         }
     }
     
