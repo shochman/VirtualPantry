@@ -66,12 +66,12 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         shoppingList = new ShoppingList();
-        shoppingList.addItem(new StandardFoodItem("Cheese",0,new Date(),"r","y", FoodItemCategory.DAIRY));
-        shoppingList.addItem(new StandardFoodItem("Milk",1,new Date(),"","", FoodItemCategory.DAIRY));
-        shoppingList.addItem(new StandardFoodItem("Cereal",2,new Date(),"","", FoodItemCategory.GRAIN));
-        shoppingList.addItem(new StandardFoodItem("Cookies",3,new Date(),"","", FoodItemCategory.SWEET));
-        shoppingList.addItem(new StandardFoodItem("Ice Cream",4,new Date(),"","", FoodItemCategory.FROZEN));
-        shoppingList.addItem(new StandardFoodItem("Butter",5,new Date(),"","", FoodItemCategory.FAT)); 
+        shoppingList.addItem(new StandardFoodItem("Cheddar Cheese",0,new Date(),"1oz","y", FoodItemCategory.DAIRY));
+        shoppingList.addItem(new StandardFoodItem("Strawberry Milk",1,new Date(),"16oz"," ", FoodItemCategory.DAIRY));
+        shoppingList.addItem(new StandardFoodItem("Oatmeal",2,new Date(),"6oz"," ", FoodItemCategory.GRAIN));
+        shoppingList.addItem(new StandardFoodItem("M&M's",3,new Date(),"3.37lb"," ", FoodItemCategory.SWEET));
+        shoppingList.addItem(new StandardFoodItem("Frozen yogurt",4,new Date(),"4.2oz"," ", FoodItemCategory.FROZEN));
+        shoppingList.addItem(new StandardFoodItem("Avacados",5,new Date(),"5oz"," ", FoodItemCategory.FAT)); 
     }
 	
 	@Override
