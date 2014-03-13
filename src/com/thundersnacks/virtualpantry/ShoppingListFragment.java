@@ -84,17 +84,13 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     }
 	
 	public void createShoppingList() {
-		// Map<FoodItem, Boolean> food = ShoppingList.getItems();
 		Map<FoodItem, Boolean> food = shoppingList.sortByComparator(shoppingList.getItems());
 	        final String[] foodString = new String[food.size()];
 	        foodItems=Arrays.asList(foodString);
 	        int ipos = 0;
-	        
 	        for (TreeMap.Entry<FoodItem, Boolean> e : food.entrySet())
 	            foodString[ipos++] = e.getKey().getName();
 	        
-	       
-	        //String[] foodString = {"Cheese", "Milk", "Cereal", "Cookies", "Ice Cream", "Milk", "Butter"};
 	        // The checkbox for the each item is specified by the layout android.R.layout.simple_list_item_multiple_choice
 	        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, foodString);
 	        adapter.sort(new Comparator<String>(){
@@ -107,7 +103,6 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        listView.setTextFilterEnabled(true);
 	        // Setting adapter to the listview
 	        listView.setAdapter(adapter);
-	        //AbsListView chec = ((AbsListView) ((AdapterView<?>) adapter).findFocus();
 	        /*
 	         * Find a way to get the AdapterView to our desired method
 	         *///
@@ -121,16 +116,12 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		    		
 		    		if (position < len)
 		    			 if (checked.get(position)) {
-		    				 //Object sitem =  parent.getSelectedItem();
-		    				// String item = sitem.toString();
 		    			  String item = foodString[position];
 		    			  s=item;
 		    			  /*
 			    			 * The checked Item will be updated to the Item attribute so that it can be 
 			    			 * added to the pantry and removed from the shoppingList.
 			    			 */
-			    			//FoodItem foodItem = shoppingList.getItem(s);
-			    			//shoppingList.setItemMapValue(foodItem, false);
 		    			 }
 		    		if(s != "")
 		    		{
@@ -156,9 +147,6 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	                            @Override
 	                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
 	                                for (int position : reverseSortedPositions) {
-	                                	
-	                                	//String foo = (String)listView.getAdapter().getItem(position);
-	                                	//shoppingList.removeItemByName(foo);
 	                                    shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
 	                                    createShoppingList();
 	                                }
@@ -178,9 +166,11 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 					SparseBooleanArray checked = itemListView.getCheckedItemPositions();
 					int len = itemListView.getCheckedItemCount();
 					int position = 0;
-					while (position < len){
-		    			 if (checked.get(position)) {
-		    			  String item = foodString[position];
+					int key = 0;
+					while (position < len){ 
+						 key = checked.keyAt(position);
+		    			 if (checked.get(key)) {
+		    			  String item = foodString[key];
 		    			  s=item;
 		    			  /*
 			    			 * The checked Item will be updated to the Item attribute so that it can be 
