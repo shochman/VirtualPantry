@@ -3,8 +3,10 @@ package com.thundersnacks.virtualpantry;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.thundersnacks.virtualpantry.R;
@@ -39,13 +41,17 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	String[] foodString;
 	private ShoppingList shoppingList;
 	View view;
+	FoodItem food;
+	ListView itemListView;
 	static List<String> foodItems;
+	public PantryFragment pf;
 
 	public ShoppingListFragment() {
 		this.shoppingList = new ShoppingList();
 	}
-	  @Override
-	  public void onItemClick(
+	
+	@Override
+	public void onItemClick(
 	    		AdapterView<?> parent, View v, int position, long id)
 	    		{
 	    		//---toggle the check displayed next to the item---
@@ -78,22 +84,19 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.shopping_list, container, false);
+        pf = (PantryFragment) getActivity().getFragmentManager().findFragmentByTag("Pantry");
         createShoppingList();
         return view;
     }
 	
 	public void createShoppingList() {
-		// Map<FoodItem, Boolean> food = ShoppingList.getItems();
-		Map<FoodItem, Boolean> food = shoppingList.sortByComparator(shoppingList.getItems());
-	        final String[] foodString = new String[food.size()];
+			final Map<FoodItem, Boolean> foodMap = shoppingList.sortByComparator(shoppingList.getItems());
+	        final String[] foodString = new String[foodMap.size()];
 	        foodItems=Arrays.asList(foodString);
 	        int ipos = 0;
-	        
-	        for (TreeMap.Entry<FoodItem, Boolean> e : food.entrySet())
+	        for (TreeMap.Entry<FoodItem, Boolean> e : foodMap.entrySet())
 	            foodString[ipos++] = e.getKey().getName();
 	        
-	       
-	        //String[] foodString = {"Cheese", "Milk", "Cereal", "Cookies", "Ice Cream", "Milk", "Butter"};
 	        // The checkbox for the each item is specified by the layout android.R.layout.simple_list_item_multiple_choice
 	        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, foodString);
 	        adapter.sort(new Comparator<String>(){
@@ -106,36 +109,28 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        listView.setTextFilterEnabled(true);
 	        // Setting adapter to the listview
 	        listView.setAdapter(adapter);
-	        //AbsListView chec = ((AbsListView) ((AdapterView<?>) adapter).findFocus();
 	        /*
 	         * Find a way to get the AdapterView to our desired method
-	         */
+	         *///
 	        listView.setOnItemClickListener(new OnItemClickListener(){
 	        	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 	        		//---toggle the check displayed next to the item---
 		    	    String s="";
 		    		int len =parent.getCount();
 		    		SparseBooleanArray checked=((AbsListView) parent).getCheckedItemPositions();
+		    		((AbsListView) parent).getCheckedItemCount();
+		    		
 		    		if (position < len)
 		    			 if (checked.get(position)) {
-		    				 //Object sitem =  parent.getSelectedItem();
-		    				// String item = sitem.toString();
 		    			  String item = foodString[position];
 		    			  s=item;
-		    			  /* do whatever you want with the checked item */
+		    			  /*
+			    			 * The checked Item will be updated to the Item attribute so that it can be 
+			    			 * added to the pantry and removed from the shoppingList.
+			    			 */
 		    			 }
-		    		
-		    		//((AbsListView) parent).setItemChecked(position, false); // remove when the update button is added
-		    		//parent.updateViewLayout(view, ViewGroup new ViewGroup());
 		    		if(s != "")
 		    		{
-		    			/*
-		    			 * The checked Item with be updated to the Item so that it can be 
-		    			 * added to the pantry and removed from the shoppingList.
-		    			 */
-		    			FoodItem foodItem = shoppingList.getItem(s);
-		    			shoppingList.setItemMapValue(foodItem, false);
-		    			
 		    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
 		    			
 		    		}
@@ -156,12 +151,21 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	                            }
 
 	                            @Override
-	                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+	                            public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
 	                                for (int position : reverseSortedPositions) {
-	                                	
-	                                	//String foo = (String)listView.getAdapter().getItem(position);
-	                                	//shoppingList.removeItemByName(foo);
-	                                    shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
+	                                	for (Iterator<Map.Entry<FoodItem, Boolean>> it = foodMap.entrySet().iterator(); it.hasNext(); ) {
+	                                		Entry entry = (Entry)it.next();
+                                    		FoodItem test = (FoodItem)entry.getKey();
+                                    		if (test.getName().equals(itemListView.getAdapter().getItem(position))) {
+                                    			food = test;
+                                    			break;
+                                    		}
+                                    	}
+	                                	if (dismissRight) {
+	                                		shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
+	                                	} else {
+	                                		pf.addNewItem(food);
+	                                	}
 	                                    createShoppingList();
 	                                }
 	                            }
@@ -176,24 +180,41 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 				
 				@Override
 				public void onClick(View v) {
+					String s="";
+					SparseBooleanArray checked = itemListView.getCheckedItemPositions();
+					int len = itemListView.getCheckedItemCount();
+					int position = 0;
+					int key = 0;
+					while (position < len){ 
+						 key = checked.keyAt(position);
+		    			 if (checked.get(key)) {
+		    			  String item = foodString[key];
+		    			  s=item;
+		    			  /*
+			    			 * The checked Item will be updated to the Item attribute so that it can be 
+			    			 * added to the pantry and removed from the shoppingList.
+			    			 */
+		    			  if(s != "")
+		    			  	{
+				    			FoodItem foodItem = shoppingList.getItem(s);
+				    			shoppingList.setItemMapValue(foodItem, false);
+			    			}
+		    			 }
+		    			 position++;
+					}
 					updatePantry();
 				}
 			});
+	        itemListView = listView;
 	}
     
-    public void addNewItem(Dialog addDialog)
+    public void addNewItem(FoodItem fi)
     {
-    	EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
-    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
-    	String name = nameText.getText().toString();
-    	String quantity = quantityText.getText().toString();
-    	String category = categoryText.toString();
-    	if( !(name.equals("") || quantity.equals("")) )
+    	if( !(fi.getName().equals("") || fi.getAmount().equals("")) )
         {
-    		shoppingList.addItem(new StandardFoodItem(name,0,new Date(),quantity,"y", FoodItemCategory.BEVERAGE ));
+    		shoppingList.addItem(fi);
     		createShoppingList();
-        }
+        } 
     }
     
     public void updatePantry()
