@@ -3,6 +3,8 @@ package com.thundersnacks.virtualpantry;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -33,7 +35,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	/**
 	 * Determines whether to always show the simplified settings UI, where
 	 * settings are presented in a single list. When false, settings are shown
@@ -131,6 +133,8 @@ public class SettingsActivity extends PreferenceActivity {
 		bindPreferenceSummaryToValue(findPreference("example_list"));
 		bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
 		bindPreferenceSummaryToValue(findPreference("sync_frequency"));*/
+		
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 	}
 
 	/** {@inheritDoc} */
@@ -303,4 +307,13 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 	}
 	
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		// TODO Auto-generated method stub
+		if (key.equals("auto_add"))
+		{
+			
+		}
+		
+	}
 }

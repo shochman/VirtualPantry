@@ -8,6 +8,7 @@ import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -16,6 +17,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -131,6 +133,10 @@ public class MainActivity extends Activity {
             case R.id.action_settings:
             	Intent intent = new Intent(this, SettingsActivity.class);
             	startActivity(intent);
+            	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            	boolean defValue = false;
+            	boolean checkedAuto = sharedPref.getBoolean("auto_add", defValue);
+            	
                 return true;
             case R.id.action_new:
             	final Dialog addDialog = new Dialog(this);
