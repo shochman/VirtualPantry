@@ -1,8 +1,11 @@
 package com.thundersnacks.virtualpantry;
 
 import java.util.Collections;
+import java.util.Date;
 
 import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
+import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
@@ -19,11 +22,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
+import android.widget.Spinner;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
@@ -99,6 +105,8 @@ public class MainActivity extends Activity {
 
         Tab shoppingListTab = actionBar.newTab().setText(R.string.title_activity_shopping_list).setTabListener(new TabListener<ShoppingListFragment>(this, "Shopping List", ShoppingListFragment.class));
         actionBar.addTab(shoppingListTab);
+        actionBar.setSelectedNavigationItem(1);
+        actionBar.setSelectedNavigationItem(0);
     }
 
 
@@ -137,7 +145,20 @@ public class MainActivity extends Activity {
 						public void onClick(View v) {
 							
 							PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
-							pf.addNewItem(addDialog);
+							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+					    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+					    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+					    	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
+					    	String name = nameText.getText().toString();
+					    	String quantity = quantityText.getText().toString();
+					    	String category = categoryText.getSelectedItem().toString();
+					    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+					    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+					    		if (fic.toString().equals(category)) {
+					    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, "y", fic));
+					    			break;
+					    		}
+					    	}
 							addDialog.dismiss();
 						}
 					});
@@ -162,7 +183,18 @@ public class MainActivity extends Activity {
 									public void onClick(View v) {
 										
 										ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
-										slf.addNewItem(addDialog);
+										EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+								    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+								    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+								    	String name = nameText.getText().toString();
+								    	String quantity = quantityText.getText().toString();
+								    	String category = categoryText.getSelectedItem().toString();
+								    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+								    		if (fic.toString().equals(category)) {
+								    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, "y", fic ));
+								    			break;
+								    		}
+								    	}
 										addDialog.dismiss();
 									}
 								});

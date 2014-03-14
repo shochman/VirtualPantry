@@ -9,6 +9,7 @@ import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.Pantry;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -41,6 +42,7 @@ public class PantryFragment extends Fragment {
 	View view;
 	FoodItem food;
 	ExpandableListView elv;
+	public ShoppingListFragment slf;
 	
 	public PantryFragment() {
 		this.pantry = null;
@@ -126,6 +128,7 @@ public class PantryFragment extends Fragment {
         view = inflater.inflate(R.layout.saved_tab, null); 
         elv = (ExpandableListView) view.findViewById(R.id.list);
         elv.setAdapter(new SavedTabsListAdapter());
+        slf = (ShoppingListFragment) getActivity().getFragmentManager().findFragmentByTag("Shopping List");
         return view;
     }
  
@@ -213,7 +216,7 @@ public class PantryFragment extends Fragment {
                                 }
 
                                 @Override
-                                public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
                                     for (int position : reverseSortedPositions) {
                                     	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
                                     		FoodItem test = it.next();
@@ -222,7 +225,11 @@ public class PantryFragment extends Fragment {
                                     			break;
                                     		}
                                     	}
-                                        pantry.removeItem(food);
+                                    	if (dismissRight) {
+    										slf.addNewItem(food);
+                                    	} else {
+                                    		pantry.removeItem(food);
+                                    	}
                                         createPantry();
                                     }
                                 }
@@ -320,24 +327,10 @@ public class PantryFragment extends Fragment {
  
     }
     
-    public void addNewItem(Dialog addDialog)
+    public void addNewItem(FoodItem fi)
     {
-    	EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
-    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
-    	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
-    	String name = nameText.getText().toString();
-    	String quantity = quantityText.getText().toString();
-    	String category = categoryText.getSelectedItem().toString();
-    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
-    	for (FoodItemCategory fic : FoodItemCategory.values()) {
-    		if (fic.toString().equals(category)) {
-    			pantry.addItem(new StandardFoodItem( name, 0, expDate, quantity, "y", fic ));
-    			break;
-    		}
-    	}
-    	
-        createPantry();
+    	pantry.addItem(fi);
+		createPantry();
     }
     
     public void editItem(Dialog editDialog, FoodItem food)

@@ -3,8 +3,10 @@ package com.thundersnacks.virtualpantry;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.thundersnacks.virtualpantry.R;
@@ -39,14 +41,17 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	String[] foodString;
 	private ShoppingList shoppingList;
 	View view;
+	FoodItem food;
 	ListView itemListView;
 	static List<String> foodItems;
+	public PantryFragment pf;
 
 	public ShoppingListFragment() {
 		this.shoppingList = new ShoppingList();
 	}
-	  @Override
-	  public void onItemClick(
+	
+	@Override
+	public void onItemClick(
 	    		AdapterView<?> parent, View v, int position, long id)
 	    		{
 	    		//---toggle the check displayed next to the item---
@@ -79,16 +84,17 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.shopping_list, container, false);
+        pf = (PantryFragment) getActivity().getFragmentManager().findFragmentByTag("Pantry");
         createShoppingList();
         return view;
     }
 	
 	public void createShoppingList() {
-		Map<FoodItem, Boolean> food = shoppingList.sortByComparator(shoppingList.getItems());
-	        final String[] foodString = new String[food.size()];
+			final Map<FoodItem, Boolean> foodMap = shoppingList.sortByComparator(shoppingList.getItems());
+	        final String[] foodString = new String[foodMap.size()];
 	        foodItems=Arrays.asList(foodString);
 	        int ipos = 0;
-	        for (TreeMap.Entry<FoodItem, Boolean> e : food.entrySet())
+	        for (TreeMap.Entry<FoodItem, Boolean> e : foodMap.entrySet())
 	            foodString[ipos++] = e.getKey().getName();
 	        
 	        // The checkbox for the each item is specified by the layout android.R.layout.simple_list_item_multiple_choice
@@ -145,9 +151,21 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	                            }
 
 	                            @Override
-	                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+	                            public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
 	                                for (int position : reverseSortedPositions) {
-	                                    shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
+	                                	for (Iterator<Map.Entry<FoodItem, Boolean>> it = foodMap.entrySet().iterator(); it.hasNext(); ) {
+	                                		Entry entry = (Entry)it.next();
+                                    		FoodItem test = (FoodItem)entry.getKey();
+                                    		if (test.getName().equals(itemListView.getAdapter().getItem(position))) {
+                                    			food = test;
+                                    			break;
+                                    		}
+                                    	}
+	                                	if (dismissRight) {
+	                                		shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
+	                                	} else {
+	                                		pf.addNewItem(food);
+	                                	}
 	                                    createShoppingList();
 	                                }
 	                            }
@@ -190,17 +208,11 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        itemListView = listView;
 	}
     
-    public void addNewItem(Dialog addDialog)
+    public void addNewItem(FoodItem fi)
     {
-    	EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
-    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
-    	String name = nameText.getText().toString();
-    	String quantity = quantityText.getText().toString();
-    	String category = categoryText.toString();
-    	if( !(name.equals("") || quantity.equals("")) )
+    	if( !(fi.getName().equals("") || fi.getAmount().equals("")) )
         {
-    		shoppingList.addItem(new StandardFoodItem(name,0,new Date(),quantity,"y", FoodItemCategory.BEVERAGE ));
+    		shoppingList.addItem(fi);
     		createShoppingList();
         } 
     }
