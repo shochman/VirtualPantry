@@ -1,6 +1,7 @@
 package com.thundersnacks.virtualpantrymodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -57,6 +58,18 @@ public class Pantry implements Iterable<FoodItem> {
 		}
 		
 		return categorized;
+	}
+	
+	public void alphabeticalSort() {
+		Collections.sort(foodItems, FoodItem.getAlphabeticalComparator());
+	}
+	
+	public void expirationSort() {
+		Collections.sort(foodItems, FoodItem.getExpirationComparator());
+	}
+	
+	public void categorySort() {
+		Collections.sort(foodItems, FoodItem.getCategoryComparator());
 	}
 	
 }

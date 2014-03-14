@@ -1,6 +1,7 @@
 package com.thundersnacks.virtualpantrymodel;
 
 import java.util.Date;
+import java.util.Comparator;
 
 public abstract class FoodItem {
 	
@@ -64,4 +65,33 @@ public abstract class FoodItem {
 		this.category = cat;
 	}
 
+	static Comparator<FoodItem> getAlphabeticalComparator() {
+		return new Comparator<FoodItem>() {
+			public int compare(FoodItem a, FoodItem b)
+			{
+				return a.getName().compareTo(b.getName());
+			}
+		};
+	}
+
+	static Comparator<FoodItem> getExpirationComparator() {
+	return new Comparator<FoodItem>() {
+			public int compare(FoodItem a, FoodItem b)
+			{
+				return a.getExperiationDate().compareTo(b.getExperiationDate());
+			}
+		};
+	}
+
+	static Comparator<FoodItem> getCategoryComparator() {
+		return new Comparator<FoodItem>() {
+			public int compare(FoodItem a, FoodItem b)
+			{
+				int comp = a.getCategory().compareTo(b.getCategory());
+				if (comp == 0)
+					return a.getName().compareTo(b.getName());
+				else return comp;
+			}
+		};
+	}
 }

@@ -276,19 +276,20 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
 				// TODO Auto-generated method stub
 				int sortById = sortByMenu.getCheckedRadioButtonId();
 			//	sortByRadioButton = (RadioButton) findViewById(sortById);
 				
 				if(getActionBar().getSelectedTab().getPosition() == 0){
 					if(sortById==R.id.alphabetical){
-						//Collections.sort(ShoppingListFragment.foodItems);
+						pf.getPantry().alphabeticalSort();
 					}
 					else if(sortById==R.id.categoryCode){
-						
+						pf.getPantry().categorySort();
 					}
 					else if(sortById==R.id.expirationDate){
-						
+						pf.getPantry().expirationSort();
 					}
 				}
 				else if(getActionBar().getSelectedTab().getPosition() == 1){
