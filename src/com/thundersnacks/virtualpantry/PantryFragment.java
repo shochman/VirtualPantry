@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
  
 /**
  * Pieced together from:
@@ -225,11 +227,7 @@ public class PantryFragment extends Fragment {
                                     			break;
                                     		}
                                     	}
-                                    	if (dismissRight) {
-    										slf.addNewItem(food);
-                                    	} else {
-                                    		pantry.removeItem(food);
-                                    	}
+                                    	pantry.removeItem(food);
                                         createPantry();
                                     }
                                 }
@@ -241,48 +239,64 @@ public class PantryFragment extends Fragment {
             convertView.setOnClickListener(new OnClickListener() {
             	public void onClick(View v) {
             		if (touchListener.getAllowClick()) {
-            			final Dialog viewDialog = new Dialog(PantryFragment.this.getActivity());
-            			viewDialog.setContentView(R.layout.display_popup);
-            			viewDialog.setTitle("View Item");
-            			EditText nameText = (EditText) viewDialog.findViewById(R.id.nameEdit);
-                		EditText quantityText = (EditText) viewDialog.findViewById(R.id.quantityEdit);
-                		Spinner categoryText = (Spinner) viewDialog.findViewById(R.id.category_spinner);
-                		DatePicker expirationDate = (DatePicker) viewDialog.findViewById(R.id.dpResult);
-                		FoodItem food = null;
-                		for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                			FoodItem test = it.next();
-                			if (test.getName() == foodItem) {
-                				food = test;
-                				break;
-                			}
-                		}
-                		nameText.setText(food.getName());
-                		quantityText.setText(food.getAmount());
-                		int numberOfCat = 0;
-                		for (FoodItemCategory fic : FoodItemCategory.values()) {
-                			if (fic == food.getCategory()) {
-                				categoryText.setSelection(numberOfCat);
-                				break;
-                			}
-                			numberOfCat++;
-                		}
-                		expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
-            			viewDialog.show();
+            			final Dialog editDialog = new Dialog(PantryFragment.this.getActivity());
+                        editDialog.setContentView(R.layout.edit_popup);
+                        editDialog.setTitle("Edit Item");
+                        EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+                    	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+                    	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+                    	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+                    	food = null;
+                    	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
+                    		FoodItem test = it.next();
+                    		if (test.getName() == foodItem) {
+                    			food = test;
+                    			break;
+                    		}
+                    	}
+                    	nameText.setText(food.getName());
+                    	quantityText.setText(food.getAmount());
+                    	int numberOfCat = 0;
+                    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+                    		if (fic == food.getCategory()) {
+                    			categoryText.setSelection(numberOfCat);
+                    			break;
+                    		}
+                    		numberOfCat++;
+                    	}
+                    	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
+                        editDialog.show();
+                        Button addButton = (Button) editDialog.findViewById(R.id.editButton);
+                        addButton.setOnClickListener(new View.OnClickListener() {
+    						
+    						@Override
+    						public void onClick(View v) {
+    							
+    							editItem(editDialog, food);
+    							editDialog.dismiss();
+    						}
+                        });
             		}
             	}
             });
      
-            ImageView edit = (ImageView) convertView.findViewById(R.id.edit);
-            edit.setOnClickListener(new OnClickListener() {
+            food = null;
+        	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
+        		FoodItem test = it.next();
+        		if (test.getName() == foodItem) {
+        			food = test;
+        			break;
+        		}
+        	}
+            ImageView addToShoppingList = (ImageView) convertView.findViewById(R.id.add_to_shopping_list);
+        	if(slf.isInShoppingList(food)) {
+            	addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart_green));
+            } else {
+            	addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart));
+            }
+            addToShoppingList.setOnClickListener(new OnClickListener() {
      
                 public void onClick(View v) {
-                	final Dialog editDialog = new Dialog(PantryFragment.this.getActivity());
-                    editDialog.setContentView(R.layout.edit_popup);
-                    editDialog.setTitle("Edit Item");
-                    EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
-                	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
-                	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
-                	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
                 	food = null;
                 	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
                 		FoodItem test = it.next();
@@ -291,31 +305,11 @@ public class PantryFragment extends Fragment {
                 			break;
                 		}
                 	}
-                	nameText.setText(food.getName());
-                	quantityText.setText(food.getAmount());
-                	int numberOfCat = 0;
-                	for (FoodItemCategory fic : FoodItemCategory.values()) {
-                		if (fic == food.getCategory()) {
-                			categoryText.setSelection(numberOfCat);
-                			break;
-                		}
-                		numberOfCat++;
-                	}
-                	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
-                    editDialog.show();
-                    Button addButton = (Button) editDialog.findViewById(R.id.editButton);
-                    addButton.setOnClickListener(new View.OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							
-							editItem(editDialog, food);
-							editDialog.dismiss();
-						}
-					});
+                	slf.addNewItem(food);
+                	Toast.makeText(PantryFragment.this.getActivity(),food.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
+                	createPantry();
                 }
             });
-     
             item.setText(foodItem);
             return convertView;
         }

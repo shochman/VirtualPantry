@@ -161,11 +161,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
                                     			break;
                                     		}
                                     	}
-	                                	if (dismissRight) {
-	                                		shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
-	                                	} else {
-	                                		pf.addNewItem(food);
-	                                	}
+	                                	shoppingList.removeItemByName((String)listView.getAdapter().getItem(position));
 	                                    createShoppingList();
 	                                }
 	                            }
@@ -223,8 +219,10 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		StandardFoodItem itemToAdd;
 		while( (itemToAdd = (StandardFoodItem) shoppingList.getCheckedFoodItem()) != null)
 			pantryFrag.getPantry().addItem(itemToAdd);
-		
 		createShoppingList(); 
     }
     
+    public boolean isInShoppingList(FoodItem food) {
+    	return shoppingList.isInShoppingList(food);
+    }
 }
