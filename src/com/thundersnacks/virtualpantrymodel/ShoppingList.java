@@ -29,7 +29,9 @@ public class ShoppingList{
             return s1.getName().substring(1, 2).compareTo(s2.getName().substring(1, 2));
         }           
     };
-	
+    public Iterator<FoodItem> iterator() {
+		return items.keySet().iterator();
+	}
 	public ShoppingList(Map<FoodItem, Boolean> items, Pantry pantry)
 	{
 		this.items  = items;

@@ -136,6 +136,11 @@ public class MainActivity extends Activity {
             	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             	boolean defValue = false;
             	boolean checkedAuto = sharedPref.getBoolean("auto_add", defValue);
+            	/*
+            	 * TODO: Add or update information about Pantry foodItem by checking Expiration dates
+            	 * 		 and updating the shopping cart to green showing the user its added to the 
+            	 * 		 shoppingList.
+            	 */
             	
                 return true;
             case R.id.action_new:
