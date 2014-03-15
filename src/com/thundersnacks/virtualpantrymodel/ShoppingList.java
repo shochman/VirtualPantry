@@ -145,4 +145,15 @@ public class ShoppingList{
 		}
 		return sortedMap;
 	}
+	
+	public boolean isInShoppingList(FoodItem food) {
+		for (Iterator<Map.Entry<FoodItem, Boolean>> it = items.entrySet().iterator(); it.hasNext(); ) {
+    		Entry entry = (Entry)it.next();
+    		FoodItem test = (FoodItem)entry.getKey();
+    		if (test.getName().equals(food.getName())) {
+    			return true;
+    		}
+    	}
+		return false;
+	}
 }
