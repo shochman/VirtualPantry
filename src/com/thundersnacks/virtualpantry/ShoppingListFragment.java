@@ -1,6 +1,7 @@
 package com.thundersnacks.virtualpantry;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
@@ -50,6 +51,10 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 		this.shoppingList = new ShoppingList();
 	}
 	
+	public ShoppingList getShoppingList() {
+		return this.shoppingList;
+	}
+	
 	@Override
 	public void onItemClick(
 	    		AdapterView<?> parent, View v, int position, long id)
@@ -78,19 +83,22 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
         shoppingList.addItem(new StandardFoodItem("M&M's",3,new Date(),"3.37lb"," ", FoodItemCategory.SWEET));
         shoppingList.addItem(new StandardFoodItem("Frozen yogurt",4,new Date(),"4.2oz"," ", FoodItemCategory.FROZEN));
         shoppingList.addItem(new StandardFoodItem("Avacados",5,new Date(),"5oz"," ", FoodItemCategory.FAT)); 
-    }
+        // Sort items in the shoppingList alphabetically by default.
+        shoppingList.alphabeticalSort();
+        }
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.shopping_list, container, false);
         pf = (PantryFragment) getActivity().getFragmentManager().findFragmentByTag("Pantry");
+        
         createShoppingList();
         return view;
     }
 	
 	public void createShoppingList() {
-			final Map<FoodItem, Boolean> foodMap = shoppingList.sortByComparator(shoppingList.getItems());
+			final Map<FoodItem, Boolean> foodMap = ShoppingList.getItems();
 	        final String[] foodString = new String[foodMap.size()];
 	        foodItems=Arrays.asList(foodString);
 	        int ipos = 0;
@@ -99,11 +107,6 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        
 	        // The checkbox for the each item is specified by the layout android.R.layout.simple_list_item_multiple_choice
 	        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, foodString);
-	        adapter.sort(new Comparator<String>(){
-	        	public int compare(String object1,String object2) {
-	        		return object1.compareToIgnoreCase(object2);
-	        	};
-	        });
 	        // Getting the reference to the listview object of the layout
 	        ListView listView = (ListView) view.findViewById(R.id.listview);
 	        listView.setTextFilterEnabled(true);
@@ -154,7 +157,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	                            public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
 	                                for (int position : reverseSortedPositions) {
 	                                	for (Iterator<Map.Entry<FoodItem, Boolean>> it = foodMap.entrySet().iterator(); it.hasNext(); ) {
-	                                		Entry entry = (Entry)it.next();
+	                                		Entry<FoodItem, Boolean> entry = (Entry<FoodItem, Boolean>)it.next();
                                     		FoodItem test = (FoodItem)entry.getKey();
                                     		if (test.getName().equals(itemListView.getAdapter().getItem(position))) {
                                     			food = test;

@@ -302,22 +302,21 @@ public class MainActivity extends Activity {
 					else if(sortById==R.id.expirationDate){
 						pf.getPantry().expirationSort();
 					}
+					pf.createPantry();
 				}
 				else if(getActionBar().getSelectedTab().getPosition() == 1){
+					ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 					if(sortById==R.id.alphabetical){
-						
+						slf.getShoppingList().alphabeticalSort();
+						slf.createShoppingList();
 					}
 					else if(sortById==R.id.categoryCode){
-						
+						slf.getShoppingList().categorySort();
+						slf.createShoppingList();
 					}
 				}
 				sortDialog.dismiss();
 			}
-
-    	
-    				
-    
-    
     	});
     }
     

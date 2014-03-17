@@ -21,7 +21,7 @@ public class ShoppingList{
 	public ShoppingList()
 	{
 		this.databaseId = 0;
-		this.items = new HashMap<FoodItem, Boolean>();
+		items = new HashMap<FoodItem, Boolean>();
 	}
 	
 	Comparator<FoodItem> secondCharComparator = new Comparator<FoodItem>() {
@@ -34,7 +34,7 @@ public class ShoppingList{
 	}
 	public ShoppingList(Map<FoodItem, Boolean> items, Pantry pantry)
 	{
-		this.items  = items;
+		ShoppingList.items  = items;
 		this.pantry = pantry;
 	}
 	
@@ -112,35 +112,11 @@ public class ShoppingList{
 		items.put(key, value);
 	}
 	
-	public static Map<FoodItem,Boolean> sortByComparator(Map<FoodItem,Boolean> unsortMap) {
-		 
-		LinkedList<Entry<FoodItem, Boolean>> list = new LinkedList<Entry<FoodItem, Boolean>>(unsortMap.entrySet());
-		// sort list based on comparator
-		Collections.sort(list, new Comparator<Entry<FoodItem, Boolean>>() {
-			
-			@Override
-			public int compare(Entry<FoodItem, Boolean> o1,
-					Entry<FoodItem, Boolean> o2) {
-				// TODO Auto-generated method stub
-				/*
-				 * return ((Comparable) ( (Map.Entry) (o1)).getKey() )
-                 *       .compareTo(((Map.Entry) (o2)).getKey());
-				 */
-				return (( (String) (o1.getKey().getName())))
-                        .compareTo(( (String) (o2.getKey().getName())));
-			}
-		});
-			Comparator<FoodItem> secondCharComparator = new Comparator<FoodItem>() {
-		        @Override public int compare(FoodItem s1, FoodItem s2) {
-		            return s1.getName().substring(1, 2).compareTo(s2.getName().substring(1, 2));
-		        }           
-		    };
-
-		// put sorted list into map again
-                //LinkedHashMap make sure order in which keys were inserted
-		Map sortedMap = new LinkedHashMap();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
+	private static Map<FoodItem,Boolean> sortedMap(LinkedList<Entry<FoodItem, Boolean>> list) {
+		
+		Map<FoodItem, Boolean> sortedMap = new LinkedHashMap<FoodItem, Boolean>();
+		for (Iterator<Entry<FoodItem, Boolean>> it = list.iterator(); it.hasNext();) {
+			Map.Entry<FoodItem, Boolean> entry = (Map.Entry<FoodItem, Boolean>) it.next();
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
 		return sortedMap;
@@ -148,12 +124,48 @@ public class ShoppingList{
 	
 	public boolean isInShoppingList(FoodItem food) {
 		for (Iterator<Map.Entry<FoodItem, Boolean>> it = items.entrySet().iterator(); it.hasNext(); ) {
-    		Entry entry = (Entry)it.next();
+    		Entry<FoodItem, Boolean> entry = (Entry<FoodItem, Boolean>)it.next();
     		FoodItem test = (FoodItem)entry.getKey();
     		if (test.getName().equals(food.getName())) {
     			return true;
     		}
     	}
 		return false;
+	}
+	
+	private static Comparator<Entry<FoodItem, Boolean>> getAlphabeticalComparator() {
+		return new Comparator<Entry<FoodItem, Boolean>>() {
+			public int compare(Entry<FoodItem, Boolean> o1,
+					Entry<FoodItem, Boolean> o2) {
+				return (( (String) (o1.getKey().getName())))
+                        .compareTo(( (String) (o2.getKey().getName())));
+			}
+		};
+	}
+	
+	private static Comparator<Entry<FoodItem, Boolean>> getCategoryComparator() {
+		return new Comparator<Entry<FoodItem, Boolean>>() {
+			public int compare(Entry<FoodItem, Boolean> o1,
+					Entry<FoodItem, Boolean> o2) {
+				int comp = (( (String) (o1.getKey().getCategory().toString())))
+							.compareTo(( (String) (o2.getKey().getCategory().toString())));
+				if (comp == 0)
+					return (( (String) (o1.getKey().getName())))
+	                        .compareTo(( (String) (o2.getKey().getName())));
+				else return comp;
+			}
+		};
+	}
+	
+	public void alphabeticalSort() {
+		LinkedList<Entry<FoodItem, Boolean>> list =  new LinkedList<Entry<FoodItem, Boolean>>(items.entrySet());
+		Collections.sort(list, getAlphabeticalComparator());
+		items = sortedMap(list);
+	}
+	
+	public void categorySort() {
+		LinkedList<Entry<FoodItem, Boolean>> list =  new LinkedList<Entry<FoodItem, Boolean>>(items.entrySet());
+		Collections.sort(list, getCategoryComparator());
+		items = sortedMap(list);
 	}
 }
