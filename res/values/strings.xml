@@ -28,7 +28,18 @@
         <item>Fat</item> 
         <item>Other</item>
     </string-array>
-     <string name="category_prompt">Select Category</string>
-     <string name="action_register">Register</string>
-
+    <string name="category_prompt">Select Category</string>
+    <string name="action_register">Register</string>
+    <string name="pantry_sort_preference">Default Pantry Sorting</string>
+    <string-array name="pantry_sort_preferences_entries">
+        <item>Alphabetical</item>
+        <item>By Category</item>
+        <item>By Expiration Date</item>
+    </string-array>
+	<string-array name="pantry_sort_preferences_values">
+        <item>alphabetical</item>
+        <item>category</item>
+        <item>expiration date</item>
+    </string-array>
+    <string name="pantry_sort_preferences_default">category</string>
 </resources>
