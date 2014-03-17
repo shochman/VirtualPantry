@@ -19,7 +19,7 @@
         android:dialogMessage="For questions or help please contact the developers at: dev.virtualpantry@gmail.com" />
     <CheckBoxPreference
         android:key="auto_add"
-        android:title="Auto Add"
+        android:title="Auto Add" 
         android:summary="Automatically add food item to shopping list when the food item expires"
         android:defaultValue="false" android:fragment="@string/title_activity_settings" android:enabled="true" android:selectable="true"/>
     <ListPreference
