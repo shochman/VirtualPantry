@@ -28,5 +28,5 @@
         android:dialogTitle="@string/pantry_sort_preference"
         android:entries="@array/pantry_sort_preferences_entries"
         android:entryValues="@array/pantry_sort_preferences_values" 
-        android:defaultValue="@string/pantry_sort_preferences_default"/>
+        android:defaultValue="@string/pantry_sort_preferences_default"/> 
 </PreferenceScreen>
