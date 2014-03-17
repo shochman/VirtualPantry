@@ -142,6 +142,7 @@ public class MainActivity extends Activity {
             	 * 		 shoppingList.
             	 */
             	
+            	
                 return true;
             case R.id.action_new:
             	final Dialog addDialog = new Dialog(this);
