@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
-import com.thundersnacks.virtualpantrymodel.Registration;
+import com.thundersnacks.virtualpantrymodel.User;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -54,7 +54,7 @@ public class LoginActivity extends Activity {
 	private String mPassword;
 	
 	// Value for registration attempt
-	private Registration registration;
+	private User registration;
 
 	// UI references.
 	private EditText mEmailView;
@@ -202,7 +202,7 @@ public class LoginActivity extends Activity {
 		mPasswordView.requestFocus();
 	}
 	
-	private boolean registerUser(Dialog registerDialog, Registration r) {
+	private boolean registerUser(Dialog registerDialog, User r) {
 		
 		EditText usernameText = (EditText) registerDialog.findViewById(R.id.registerUsernameEdit);
 		EditText emailText = (EditText) registerDialog.findViewById(R.id.registerEmailEdit);
@@ -220,7 +220,7 @@ public class LoginActivity extends Activity {
 		String password = passwordText.getText().toString();
 		String confirm = confirmText.getText().toString();
 		
-		r = new Registration(username, email, password, confirm);
+		r = new User(username, email, password, confirm);
 		boolean valid = true;
 		
 		if(r.getUsername().isEmpty()) {
