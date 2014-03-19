@@ -1,5 +1,7 @@
 package com.thundersnacks.virtualpantry;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -64,19 +66,28 @@ public class PantryFragment extends Fragment {
 		super.onCreate(savedInstanceState);
         pantry = new Pantry("My Pantry", 0);
         
-        Date d1 = new Date(2014,2,28);
+        Calendar cal = GregorianCalendar.getInstance();
         
-        Date d2 = new Date(2014, 4, 2);
+        cal.set(2014, 2, 28);
+        Date d1 = cal.getTime();
         
-        Date d3 = new Date(2014, 7, 15);
+        cal.set(2014, 4, 2);
+        Date d2 =  cal.getTime();
         
-        Date d4 = new Date(2014, 9, 25);
+        cal.set(2014, 7, 17);
+        Date d3 = cal.getTime();
         
-        Date d5 = new Date(2014, 11, 6 );
+        cal.set(2014, 4, 25);
+        Date d4 = cal.getTime();
         
-        Date d6 = new Date(2015, 10, 10);
+        cal.set(2014, 11, 6);
+        Date d5 = cal.getTime();
         
-        Date d7 = new Date(2014, 0, 1);
+        cal.set(2014, 10, 10);
+        Date d6 = cal.getTime();
+        
+        cal.set(2014, 0, 1);
+        Date d7 = cal.getTime();
         
         pantry.addItem(new StandardFoodItem("Coke", 0, d5, "6 cans", "", FoodItemCategory.BEVERAGE));
         pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , "4 cans", "", FoodItemCategory.BEVERAGE));
@@ -336,7 +347,9 @@ public class PantryFragment extends Fragment {
     	String name = nameText.getText().toString();
     	String quantity = quantityText.getText().toString();
     	String category = categoryText.getSelectedItem().toString();
-    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth()); 
+    	Calendar cal = GregorianCalendar.getInstance();
+        cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+    	Date expDate = cal.getTime(); 
     	food.setName(name);
     	food.setAmount(quantity);
     	for (FoodItemCategory fic : FoodItemCategory.values()) {

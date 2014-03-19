@@ -1,9 +1,12 @@
 package com.thundersnacks.virtualpantry;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
@@ -136,6 +139,23 @@ public class MainActivity extends Activity {
             	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             	boolean defValue = false;
             	boolean checkedAuto = sharedPref.getBoolean("auto_add", defValue);
+            	if(checkedAuto)
+            	{
+					PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+					ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+					FoodItemCategory[] categoryList = FoodItemCategory.values();
+					int position = 0;
+					Date testDate = new Date();
+					while (position < categoryList.length)
+					{
+						List<FoodItem> categorized = pf.getPantry().getItemsByCategory(categoryList[position]);
+						for(FoodItem Item: categorized) {
+							if(Item.getExperiationDate().before(new Date()))
+								slf.getShoppingList().addItem(Item);
+						}
+						position++;
+					}
+            	}
             	/*
             	 * TODO: Add or update information about Pantry foodItem by checking Expiration dates
             	 * 		 and updating the shopping cart to green showing the user its added to the 
