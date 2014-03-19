@@ -11,6 +11,7 @@ public class Pantry implements Iterable<FoodItem> {
 	private int databaseId;
 	private List<FoodItem> foodItems;
 	private ShoppingList shoppingList;
+	private int howSorted;
 	
 	public Pantry( String pantryName, int databaseId ) {
 		this.name = pantryName;
@@ -62,14 +63,25 @@ public class Pantry implements Iterable<FoodItem> {
 	
 	public void alphabeticalSort() {
 		Collections.sort(foodItems, FoodItem.getAlphabeticalComparator());
+		howSorted = 0;
 	}
 	
 	public void expirationSort() {
 		Collections.sort(foodItems, FoodItem.getExpirationComparator());
+		howSorted = 1;
 	}
 	
 	public void categorySort() {
 		Collections.sort(foodItems, FoodItem.getCategoryComparator());
+		howSorted = 2;
 	}
 	
+	public int getHowSorted() {
+		return howSorted;
+	}
+	
+	public List<FoodItem> getFoodItems() {
+		return foodItems;
+	}
+
 }

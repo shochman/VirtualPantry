@@ -94,4 +94,8 @@ public abstract class FoodItem {
 			}
 		};
 	}
+	
+	public String toString() {
+		return name;
+	}
 }
