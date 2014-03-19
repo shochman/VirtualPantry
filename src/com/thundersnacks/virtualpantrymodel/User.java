@@ -1,6 +1,6 @@
 package com.thundersnacks.virtualpantrymodel;
 
-public class Registration {
+public class User {
 	
 	private String username;
 	
@@ -10,7 +10,7 @@ public class Registration {
 	
 	private String confirmPassword;
 	
-	public Registration (String username, String email, String pswd, String cfmPswd) {
+	public User (String username, String email, String pswd, String cfmPswd) {
 		this.username = username;
 		this.email = email;
 		this.password = pswd;
