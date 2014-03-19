@@ -42,12 +42,4 @@ public class PantryTest extends TestCase {
 		assertTrue("The remove function must return true", tester.removeItem(testFood1));
 	}
 
-	/*public void testIterator() {
-		fail("Not yet implemented");
-	}
-
-	public void testGetItemsByCategory() {
-		fail("Not yet implemented");
-	}
-	 */
 }
