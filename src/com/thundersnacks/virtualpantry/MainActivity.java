@@ -174,72 +174,34 @@ public class MainActivity extends Activity {
 							addDialog.dismiss();
 						}
 					});
-            	}
-                else if (getActionBar().getSelectedTab().getPosition() == 1) {
-                	View menuItemView = findViewById(R.id.action_new);
-                	PopupMenu popupMenu = new PopupMenu(this, menuItemView);
-                	popupMenu.inflate(R.menu.shoppinglist_add_options);
-                	popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-						
-						@Override
-						public boolean onMenuItemClick(MenuItem item) {
-							switch(item.getItemId()) {
-                			case R.id.action_new_item:
-                				addDialog.setContentView(R.layout.add_popup_shoppinglist);
-                				addDialog.setTitle("Add New Item");
-                                addDialog.show();
-                                Button addButton = (Button) addDialog.findViewById(R.id.addButton);
-                                addButton.setOnClickListener(new View.OnClickListener() {
+            	} else if (getActionBar().getSelectedTab().getPosition() == 1) {
+            		addDialog.setContentView(R.layout.add_popup_shoppinglist);
+                	addDialog.setTitle("Add New Item");
+                    addDialog.show();
+                    Button addButton = (Button) addDialog.findViewById(R.id.addButton);
+                    addButton.setOnClickListener(new View.OnClickListener() {
 									
-									@Override
-									public void onClick(View v) {
+                    	@Override
+						public void onClick(View v) {
 										
-										ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
-										EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-								    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
-								    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
-								    	String name = nameText.getText().toString();
-								    	String quantity = quantityText.getText().toString();
-								    	String category = categoryText.getSelectedItem().toString();
-								    	for (FoodItemCategory fic : FoodItemCategory.values()) {
-								    		if (fic.toString().equals(category)) {
-								    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, "y", fic ));
-								    			break;
-								    		}
-								    	}
-										addDialog.dismiss();
-									}
-								});
-
-                                return true;
-                			case R.id.action_add_from_pantry:
-                				addDialog.setContentView(R.layout.add_popup_shoppinglist_frompantry);
-                				addDialog.setTitle("Add Item(s) From Pantry");
-                				PantryFragment pantryFrag = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
-                				PantryFragment.SavedTabsListAdapter savedTabs = pantryFrag.new SavedTabsListAdapter();
-                				
-                				String[] pantryString = new String[savedTabs.getGroupCount()];
-                				for(int i = 0; i < pantryString.length; i++)
-                					pantryString[i] = (String) savedTabs.getGroup(i);
-                				
-                				ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_multiple_choice, pantryString);
-                		        
-                		        // Getting the reference to the listview object of the layout
-                		        ListView listView = (ListView) addDialog.findViewById(R.id.PopupListView);
-                		        listView.setTextFilterEnabled(true);
-                		        // Setting adapter to the listview
-                		        listView.setAdapter(adapter);
-                		        
-                                addDialog.show();
-                                return true;
-                			}
-							return false;
-						}
-                	});
-                	popupMenu.show();
+							ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+							EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+							Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+							String name = nameText.getText().toString();
+							String quantity = quantityText.getText().toString();
+							String category = categoryText.getSelectedItem().toString();
+							for (FoodItemCategory fic : FoodItemCategory.values()) {
+								   if (fic.toString().equals(category)) {
+								    	slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, "y", fic ));
+								    	break;
+								    }
+							}
+							addDialog.dismiss();
+                    	}
+					});
                 }
-            	
-    		    return true;
+            	return true;
             case R.id.action_share:
             	final Dialog shareDialog = new Dialog(this);
             	shareDialog.setContentView(R.layout.share_popup);
