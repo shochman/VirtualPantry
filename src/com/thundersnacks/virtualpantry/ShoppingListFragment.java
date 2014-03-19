@@ -20,12 +20,15 @@ import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -114,37 +117,13 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        listView.setAdapter(adapter);
 	        /*
 	         * Find a way to get the AdapterView to our desired method
-	         *///
-	        listView.setOnItemClickListener(new OnItemClickListener(){
-	        	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-	        		//---toggle the check displayed next to the item---
-		    	    String s="";
-		    		int len =parent.getCount();
-		    		SparseBooleanArray checked=((AbsListView) parent).getCheckedItemPositions();
-		    		((AbsListView) parent).getCheckedItemCount();
-		    		
-		    		if (position < len)
-		    			 if (checked.get(position)) {
-		    			  String item = foodString[position];
-		    			  s=item;
-		    			  /*
-			    			 * The checked Item will be updated to the Item attribute so that it can be 
-			    			 * added to the pantry and removed from the shoppingList.
-			    			 */
-		    			 }
-		    		if(s != "")
-		    		{
-		    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
-		    			
-		    		}
-		    		
-	        	}
-	        });
+	         *///	        	
+	        
 	        
 	     // Create a ListView-specific touch listener. ListViews are given special treatment because
 	        // by default they handle touches for their list items... i.e. they're in charge of drawing
 	        // the pressed state (the list selector), handling list item clicks, etc.
-	        SwipeDismissListViewTouchListener touchListener =
+	        final SwipeDismissListViewTouchListener touchListener =
 	                new SwipeDismissListViewTouchListener(
 	                        listView,
 	                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
@@ -172,6 +151,79 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        listView.setOnTouchListener(touchListener);
 	        // Setting this scroll listener is required to ensure that during ListView scrolling,
 	        // we don't look for swipes.
+	        listView.setOnItemLongClickListener(new OnItemLongClickListener(){
+	        	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
+	        		
+	    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Function Called!!",Toast.LENGTH_SHORT).show();
+
+            			final Dialog editDialog = new Dialog(ShoppingListFragment.this.getActivity());
+                        editDialog.setContentView(R.layout.edit_popup);
+                        editDialog.setTitle("Edit Item");
+                        EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+                    	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+                    	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+                    	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+                    	food = null;
+                    	for (Iterator<FoodItem> it = shoppingList.iterator(); it.hasNext(); ) {
+                    		FoodItem test = it.next();
+                    		if (test.getName() == itemListView.getAdapter().getItem(position)) { //TODO
+                    			food = test;
+                    			break;
+                    		}
+                    	}
+                    	nameText.setText(food.getName());
+                    	quantityText.setText(food.getAmount());
+                    	int numberOfCat = 0;
+                    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+                    		if (fic == food.getCategory()) {
+                    			categoryText.setSelection(numberOfCat);
+                    			break;
+                    		}
+                    		numberOfCat++;
+                    	}
+                    	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
+                        editDialog.show();
+                        Button addButton = (Button) editDialog.findViewById(R.id.editButton);
+                        addButton.setOnClickListener(new View.OnClickListener() {
+    						
+    						@Override
+    						public void onClick(View v) {
+    							
+    							editItem(editDialog, food);
+    							editDialog.dismiss();
+    						}
+                        });
+                        return true;
+				}
+	        });
+	        
+	        listView.setOnItemClickListener(new OnItemClickListener(){
+	        	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+	        		if (touchListener.getAllowClick()){
+		        		//---toggle the check displayed next to the item---
+			    	    String s="";
+			    		int len =parent.getCount();
+			    		SparseBooleanArray checked=((AbsListView) parent).getCheckedItemPositions();
+			    		((AbsListView) parent).getCheckedItemCount();
+			    		
+			    		if (position < len)
+			    			 if (checked.get(position)) {
+			    			  String item = foodString[position];
+			    			  s=item;
+			    			  /*
+				    			 * The checked Item will be updated to the Item attribute so that it can be 
+				    			 * added to the pantry and removed from the shoppingList.
+				    			 */
+			    			 }
+			    		if(s != "")
+			    		{
+			    			Toast.makeText(ShoppingListFragment.this.getActivity(),"Selected Items- " + s,Toast.LENGTH_SHORT).show();
+			    			
+			    		}
+	        		}
+		    		
+	        	}
+	        });
 	        listView.setOnScrollListener(touchListener.makeScrollListener());
 	        
 	        Button addToPantryButton = (Button) view.findViewById(R.id.addToPantryButton);
@@ -207,6 +259,28 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
 	        itemListView = listView;
 	}
     
+public void editItem(Dialog editDialog, FoodItem food)
+{
+	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+	String name = nameText.getText().toString();
+	String quantity = quantityText.getText().toString();
+	String category = categoryText.getSelectedItem().toString();
+	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth()); 
+	food.setName(name);
+	food.setAmount(quantity);
+	for (FoodItemCategory fic : FoodItemCategory.values()) {
+		if (fic.toString().equals(category)) {
+			food.setCategory(fic);
+			break;
+		}
+	}
+	food.setExperiationDate(expDate);
+	createShoppingList();
+}
+
     public void addNewItem(FoodItem fi)
     {
     	if( !(fi.getName().equals("") || fi.getAmount().equals("")) )

@@ -19,7 +19,21 @@
         android:dialogMessage="For questions or help please contact the developers at: dev.virtualpantry@gmail.com" />
     <CheckBoxPreference
         android:key="auto_add"
-        android:title="Auto Add"
+        android:title="Auto Add" 
         android:summary="Automatically add food item to shopping list when the food item expires"
         android:defaultValue="false" android:fragment="@string/title_activity_settings" android:enabled="true" android:selectable="true"/>
+    <ListPreference
+        android:key="pantry_sort_preference"
+        android:title="@string/pantry_sort_preference"
+        android:dialogTitle="@string/pantry_sort_preference"
+        android:entries="@array/pantry_sort_preferences_entries"
+        android:entryValues="@array/pantry_sort_preferences_values" 
+        android:defaultValue="@string/pantry_sort_preferences_default"/> 
+	<ListPreference
+        android:key="shopping_list_sort_preference"
+        android:title="@string/shopping_list_sort_preference"
+        android:dialogTitle="@string/shopping_list_sort_preference"
+        android:entries="@array/shopping_list_sort_preferences_entries"
+        android:entryValues="@array/shopping_list_sort_preferences_values" 
+        android:defaultValue="@string/shopping_list_sort_preferences_default"/> 
 </PreferenceScreen>
