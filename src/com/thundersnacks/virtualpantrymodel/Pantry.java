@@ -63,17 +63,17 @@ public class Pantry implements Iterable<FoodItem> {
 	
 	public void alphabeticalSort() {
 		Collections.sort(foodItems, FoodItem.getAlphabeticalComparator());
-		howSorted = 0;
+		howSorted = 1;
 	}
 	
 	public void expirationSort() {
 		Collections.sort(foodItems, FoodItem.getExpirationComparator());
-		howSorted = 1;
+		howSorted = 2;
 	}
 	
 	public void categorySort() {
 		Collections.sort(foodItems, FoodItem.getCategoryComparator());
-		howSorted = 2;
+		howSorted = 0;
 	}
 	
 	public int getHowSorted() {

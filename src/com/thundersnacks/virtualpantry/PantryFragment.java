@@ -1,9 +1,12 @@
 package com.thundersnacks.virtualpantry;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
@@ -15,6 +18,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -45,9 +50,8 @@ public class PantryFragment extends Fragment {
 	
 	private Pantry pantry;
 	View view;
-	FoodItem food;
 	ExpandableListView elv;
-	ListView lv;
+	ListView lv;;
 	public ShoppingListFragment slf;
 	
 	public PantryFragment() {
@@ -67,7 +71,6 @@ public class PantryFragment extends Fragment {
         
 		super.onCreate(savedInstanceState);
         pantry = new Pantry("My Pantry", 0);
-        
         Calendar cal = GregorianCalendar.getInstance();
         
         cal.set(2014, 2, 28);
@@ -128,22 +131,14 @@ public class PantryFragment extends Fragment {
     }
 	
 	public void createPantry() {
-		if (pantry.getHowSorted() == 2) {
-			Boolean[] openedTab = new Boolean[((ExpandableListView)elv).getExpandableListAdapter().getGroupCount()];
-			for (int i = 0; i < ((ExpandableListView)elv).getExpandableListAdapter().getGroupCount(); i++) {
-				openedTab[i] = ((ExpandableListView)elv).isGroupExpanded(i);
-			}
+		if (pantry.getHowSorted() == 0) {
 			lv.setVisibility(View.INVISIBLE);
-			elv.setAdapter(new SavedTabsListAdapter());
 			elv.setVisibility(View.VISIBLE);
-        	for (int i = 0; i < ((ExpandableListView)elv).getExpandableListAdapter().getGroupCount(); i++) {
-        		if (openedTab[i]) ((ExpandableListView)elv).expandGroup(i);
-			}
+			elv.invalidateViews();
 		} else {
-			FoodItemsAdapter adapter = new FoodItemsAdapter(getActivity(), pantry.getFoodItems());
 			elv.setVisibility(View.INVISIBLE);
-			lv.setAdapter(adapter);
 			lv.setVisibility(View.VISIBLE);
+			lv.invalidateViews();
 		}
 	}
 	
@@ -152,10 +147,9 @@ public class PantryFragment extends Fragment {
         view = inflater.inflate(R.layout.saved_tab, null);
         slf = (ShoppingListFragment) getActivity().getFragmentManager().findFragmentByTag("Shopping List");
 		elv = (ExpandableListView) view.findViewById(R.id.expandable_list);
-		elv.setAdapter(new SavedTabsListAdapter());
+		elv.setAdapter(new ExpandableListAdapter(getActivity(), pantry.getFoodItems()));
         lv = (ListView) view.findViewById(R.id.list);
-        FoodItemsAdapter adapter = new FoodItemsAdapter(getActivity(), pantry.getFoodItems());
-        lv.setAdapter(adapter);
+        lv.setAdapter(new FoodItemsAdapter(getActivity(), pantry.getFoodItems()));
         createPantry();
         return view;
     }
@@ -174,7 +168,7 @@ public class PantryFragment extends Fragment {
               convertView = LayoutInflater.from(getContext()).inflate(R.layout.child_item, null);
            }
           
-        // Create a ListView-specific touch listener. ListViews are given special treatment because
+           // Create a ListView-specific touch listener. ListViews are given special treatment because
            // by default they handle touches for their list items... i.e. they're in charge of drawing
            // the pressed state (the list selector), handling list item clicks, etc.
            final SwipeDismissListViewTouchListener touchListener =
@@ -189,167 +183,130 @@ public class PantryFragment extends Fragment {
                                @Override
                                public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
                                    for (int position : reverseSortedPositions) {
-                                   	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                                   		FoodItem test = it.next();
-                                   		if (test.getName().equals(((FoodItem)lv.getAdapter().getItem(position)).getName())) {
-                                   			System.out.println(position);
-                                   			food = test;
-                                   			break;
-                                   		}
+                                   		FoodItem foodToRemove = ((FoodItem)lv.getAdapter().getItem(position));
+                                   		pantry.removeItem(foodToRemove);
+                                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
+                                   		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+                                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
                                    	}
-                                   	pantry.removeItem(food);
-                                    createPantry();
-                                   }
-                               }
+                               	}
                            });
            convertView.setOnTouchListener(touchListener);
     
            TextView item = (TextView) convertView.findViewById(R.id.item);
            
            convertView.setOnClickListener(new OnClickListener() {
-           	public void onClick(View v) {
-           		if (touchListener.getAllowClick()) {
-           			final Dialog editDialog = new Dialog(PantryFragment.this.getActivity());
-                       editDialog.setContentView(R.layout.edit_popup);
-                       editDialog.setTitle("Edit Item");
-                       EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
-                   	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
-                   	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
-                   	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
-                   	food = null;
-                   	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                   		FoodItem test = it.next();
-                   		if (test.getName() == foodItem.getName()) {
-                   			food = test;
-                   			break;
-                   		}
-                   	}
-                   	nameText.setText(food.getName());
-                   	quantityText.setText(food.getAmount());
-                   	int numberOfCat = 0;
-                   	for (FoodItemCategory fic : FoodItemCategory.values()) {
-                   		if (fic == food.getCategory()) {
-                   			categoryText.setSelection(numberOfCat);
-                   			break;
-                   		}
-                   		numberOfCat++;
-                   	}
-                   	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
-                       editDialog.show();
-                       Button addButton = (Button) editDialog.findViewById(R.id.editButton);
-                       addButton.setOnClickListener(new View.OnClickListener() {
+           		public void onClick(View v) {
+           			if (touchListener.getAllowClick()) {
+           				final Dialog editDialog = new Dialog(PantryFragment.this.getActivity());
+           				editDialog.setContentView(R.layout.edit_popup);
+           				editDialog.setTitle("Edit Item");
+           				EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+           				EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+           				Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+           				DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+           				nameText.setText(foodItem.getName());
+           				quantityText.setText(foodItem.getAmount());
+           				int numberOfCat = 0;
+           				for (FoodItemCategory fic : FoodItemCategory.values()) {
+           					if (fic == foodItem.getCategory()) {
+           						categoryText.setSelection(numberOfCat);
+           						break;
+           					}
+           					numberOfCat++;
+           				}
+           				expirationDate.updateDate(foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
+           				editDialog.show();
+           				Button addButton = (Button) editDialog.findViewById(R.id.editButton);
+                       	addButton.setOnClickListener(new View.OnClickListener() {
    						
    						@Override
    						public void onClick(View v) {
    							
-   							editItem(editDialog, food);
+   							editItem(editDialog, foodItem);
    							editDialog.dismiss();
    						}
                        });
            		}
            	}
-           });
-    
-           food = null;
-       	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-       		FoodItem test = it.next();
-       		if (test.getName() == foodItem.getName()) {
-       			food = test;
-       			break;
+           	});
+           
+       		ImageView addToShoppingList = (ImageView) convertView.findViewById(R.id.add_to_shopping_list);
+       		if(slf.isInShoppingList(foodItem)) {
+       			addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart_green));
+       		} else {
+       			addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart));
        		}
-       	}
-           ImageView addToShoppingList = (ImageView) convertView.findViewById(R.id.add_to_shopping_list);
-       	if(slf.isInShoppingList(food)) {
-           	addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart_green));
-           } else {
-           	addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart));
-           }
-           addToShoppingList.setOnClickListener(new OnClickListener() {
-    
-               public void onClick(View v) {
-               	food = null;
-               	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-               		FoodItem test = it.next();
-               		if (test.getName() == foodItem.getName()) {
-               			food = test;
-               			break;
-               		}
-               	}
-               	slf.addNewItem(food);
-               	Toast.makeText(PantryFragment.this.getActivity(),food.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
-               	createPantry();
-               }
-           });
-           item.setText(foodItem.getName());
-           return convertView;
-       }
-    }
+       		addToShoppingList.setOnClickListener(new OnClickListener() {
+       			public void onClick(View v) {
+       				slf.addNewItem(foodItem);
+       				Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
+       				lv.invalidateViews();
+       			}
+       		});
+       		item.setText(foodItem.getName());
+       		return convertView;
+        }
+	}
  
-    public class SavedTabsListAdapter extends BaseExpandableListAdapter {
-    	 
-        private String[] groups = new String[FoodItemCategory.values().length];
-        private String[][] children = new String[FoodItemCategory.values().length][]; 
-    	
-        public SavedTabsListAdapter() {
-        	for( int i = 0; i < FoodItemCategory.values().length; i ++) {
-        		groups[i] = FoodItemCategory.values()[i].toString();
-        		List<FoodItem> items = pantry.getItemsByCategory(FoodItemCategory.values()[i]);
-        		children[i] = new String[items.size()];
-        		for( int j = 0; j < items.size(); j++ ) {
-        			children[i][j] = items.get(j).getName();
-        		}
-            } 
+	public class ExpandableListAdapter extends BaseExpandableListAdapter {
+		private Context context;
+	    private List<String> categories = new ArrayList<String>();
+        private Map<String, List<FoodItem>> foodMap = new HashMap<String, List<FoodItem>>();
+	    public ExpandableListAdapter(Context context, List<FoodItem> foodItems) {
+	    	this.context = context;
+	    	for(int i = 0; i < FoodItemCategory.values().length; i++) {
+	    		categories.add(FoodItemCategory.values()[i].toString());
+	    		List<FoodItem> categoryItems = new ArrayList<FoodItem>();
+	    		for (int j = 0; j < pantry.getFoodItems().size(); j++) {
+	    			if (pantry.getFoodItems().get(j).getCategory().equals(FoodItemCategory.values()[i]))
+	    				categoryItems.add(pantry.getFoodItems().get(j));
+	    		}
+	    		foodMap.put(FoodItemCategory.values()[i].toString(), categoryItems);
+	        }
+	    }
+	    
+	    @Override
+	    public int getGroupCount() {
+	        return categories.size();
+	    }
+	    
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return foodMap.get(categories.get(groupPosition)).size();
+        }
+ 
+        @Override
+        public Object getGroup(int groupPosition) {
+            return categories.get(groupPosition);
         }
         
         @Override
-        public int getGroupCount() {
-            return groups.length;
+        public Object getChild(int groupPosition, int childPosition) {
+            return foodMap.get(categories.get(groupPosition)).get(childPosition);
         }
  
         @Override
-        public int getChildrenCount(int i) {
-            return children[i].length;
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
         }
  
         @Override
-        public Object getGroup(int i) {
-            return groups[i];
-        }
-        
-        @Override
-        public Object getChild(int i, int i1) {
-            return children[i][i1];
-        }
- 
-        @Override
-        public long getGroupId(int i) {
-            return i;
-        }
- 
-        @Override
-        public long getChildId(int i, int i1) {
-            return i1;
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
         }
  
         @Override
         public boolean hasStableIds() {
             return true;
         }
-        
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            String categoryName = (String) getGroup(groupPosition);
-            if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) PantryFragment.this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(R.layout.group_item, null);
-            }
-            TextView item = (TextView) convertView.findViewById(R.id.item);
-            item.setTypeface(null, Typeface.BOLD);
-            item.setText(categoryName);
-            return convertView;
-        }
-        
-        public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            final String foodItem = (String) getChild(groupPosition, childPosition);
+	 
+	    public boolean isChildSelectable(int groupPosition, int childPosition) {
+	        return true;
+	    }
+
+	    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            final FoodItem foodItem = (FoodItem) getChild(groupPosition, childPosition);
             LayoutInflater inflater = PantryFragment.this.getActivity().getLayoutInflater();
      
             if (convertView == null) {
@@ -370,16 +327,12 @@ public class PantryFragment extends Fragment {
 
                                 @Override
                                 public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
-                                    for (int position : reverseSortedPositions) {
-                                    	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                                    		FoodItem test = it.next();
-                                    		if (test.getName().equals(elv.getAdapter().getItem(position))) {
-                                    			food = test;
-                                    			break;
-                                    		}
-                                    	}
-                                    	pantry.removeItem(food);
-                                        createPantry();
+                                	for (int position : reverseSortedPositions) {
+                                    	FoodItem foodToRemove = (FoodItem)elv.getAdapter().getItem(position);
+                                    	pantry.removeItem(foodToRemove);
+                                    	((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
+                                    	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+                                    	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
                                     }
                                 }
                             });
@@ -397,25 +350,17 @@ public class PantryFragment extends Fragment {
                     	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
                     	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
                     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
-                    	food = null;
-                    	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                    		FoodItem test = it.next();
-                    		if (test.getName() == foodItem) {
-                    			food = test;
-                    			break;
-                    		}
-                    	}
-                    	nameText.setText(food.getName());
-                    	quantityText.setText(food.getAmount());
+                    	nameText.setText(foodItem.getName());
+                    	quantityText.setText(foodItem.getAmount());
                     	int numberOfCat = 0;
                     	for (FoodItemCategory fic : FoodItemCategory.values()) {
-                    		if (fic == food.getCategory()) {
+                    		if (fic == foodItem.getCategory()) {
                     			categoryText.setSelection(numberOfCat);
                     			break;
                     		}
                     		numberOfCat++;
                     	}
-                    	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
+                    	expirationDate.updateDate(foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
                         editDialog.show();
                         Button addButton = (Button) editDialog.findViewById(R.id.editButton);
                         addButton.setOnClickListener(new View.OnClickListener() {
@@ -423,24 +368,16 @@ public class PantryFragment extends Fragment {
     						@Override
     						public void onClick(View v) {
     							
-    							editItem(editDialog, food);
+    							editItem(editDialog, foodItem);
     							editDialog.dismiss();
     						}
                         });
             		}
             	}
             });
-     
-            food = null;
-        	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-        		FoodItem test = it.next();
-        		if (test.getName() == foodItem) {
-        			food = test;
-        			break;
-        		}
-        	}
+            
             ImageView addToShoppingList = (ImageView) convertView.findViewById(R.id.add_to_shopping_list);
-        	if(slf.isInShoppingList(food)) {
+        	if(slf.isInShoppingList(foodItem)) {
             	addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart_green));
             } else {
             	addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart));
@@ -448,38 +385,64 @@ public class PantryFragment extends Fragment {
             addToShoppingList.setOnClickListener(new OnClickListener() {
      
                 public void onClick(View v) {
-                	food = null;
-                	for (Iterator<FoodItem> it = pantry.iterator(); it.hasNext(); ) {
-                		FoodItem test = it.next();
-                		if (test.getName() == foodItem) {
-                			food = test;
-                			break;
-                		}
-                	}
-                	slf.addNewItem(food);
-                	Toast.makeText(PantryFragment.this.getActivity(),food.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
-                	createPantry();
+                	slf.addNewItem(foodItem);
+                	Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
+                	elv.invalidateViews();
                 }
             });
-            item.setText(foodItem);
+            item.setText(foodItem.getName());
             return convertView;
         }
- 
-        @Override
-        public boolean isChildSelectable(int i, int i1) {
-            return true;
+
+		@Override
+		 public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            String categoryName = (String) getGroup(groupPosition);
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) PantryFragment.this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.group_item, null);
+            }
+            TextView item = (TextView) convertView.findViewById(R.id.item);
+            item.setTypeface(null, Typeface.BOLD);
+            item.setText(categoryName);
+            return convertView;
         }
- 
-    }
+		
+		public void addFoodItem(FoodItem fi) {
+			for(int i = 0; i < getGroupCount(); i++) {
+				if (getGroup(i).equals(fi.getCategory().toString())) {
+					foodMap.get(getGroup(i)).add(fi);
+					break;
+				}
+			}
+		}
+		
+		public void removeFoodItem(FoodItem fi) {
+			for(int i = 0; i < getGroupCount(); i++) {
+				if(getGroup(i).equals(fi.getCategory().toString())) {
+					foodMap.get(getGroup(i)).remove(fi);
+				}
+			}
+		}
+	}
     
     public void addNewItem(FoodItem fi)
     {
     	pantry.addItem(fi);
-		createPantry();
+    	if (pantry.getHowSorted() == 0) {
+    		pantry.categorySort();
+    	} else if (pantry.getHowSorted() == 1) {
+    		pantry.alphabeticalSort();
+    	} else {
+    		pantry.expirationSort();
+    	}
+    	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+    	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(fi);
+    	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
     }
     
     public void editItem(Dialog editDialog, FoodItem food)
     {
+    	((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(food);
     	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
     	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
     	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
@@ -499,6 +462,8 @@ public class PantryFragment extends Fragment {
     		}
     	}
     	food.setExperiationDate(expDate);
-    	createPantry();
+    	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+    	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(food);
+    	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
     }
 }

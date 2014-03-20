@@ -17,6 +17,7 @@ public class ShoppingList{
 	private int databaseId;
 	private static Map<FoodItem, Boolean> items;
 	Pantry	pantry;
+	private int howSorted;
 	
 	public ShoppingList()
 	{
@@ -161,11 +162,17 @@ public class ShoppingList{
 		LinkedList<Entry<FoodItem, Boolean>> list =  new LinkedList<Entry<FoodItem, Boolean>>(items.entrySet());
 		Collections.sort(list, getAlphabeticalComparator());
 		items = sortedMap(list);
+		howSorted = 1;
 	}
 	
 	public void categorySort() {
 		LinkedList<Entry<FoodItem, Boolean>> list =  new LinkedList<Entry<FoodItem, Boolean>>(items.entrySet());
 		Collections.sort(list, getCategoryComparator());
 		items = sortedMap(list);
+		howSorted = 0;
+	}
+	
+	public int getHowSorted() {
+		return howSorted;
 	}
 }
