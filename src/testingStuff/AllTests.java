@@ -11,9 +11,9 @@ public class AllTests {
 		suite.addTestSuite(CustomFoodItemTest.class);
 		suite.addTestSuite(FoodItemTest.class);
 		suite.addTestSuite(PantryTest.class);
-		suite.addTestSuite(RegistrationTest.class);
 		suite.addTestSuite(ShoppingListTest.class);
 		suite.addTestSuite(StandardFoodItemTest.class);
+		suite.addTestSuite(UserTest.class);
 		//$JUnit-END$
 		return suite;
 	}
