@@ -10,23 +10,48 @@
     <string name="action_share">Share</string>
     <string name="action_sort">Sort by...</string>
     <string name="action_change_pantry">Change Pantry</string>
-    <string name="title_activity_main">My Pantry</string>
-    <string name="title_activity_display_message">Shopping List</string>
+    <string name="title_activity_pantry">My Pantry</string>
+    <string name="title_activity_shopping_list">Shopping List</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="editImage">Edit</string>
     <string-array name="category_array">
-        <item>Beverages</item>
+        <item>Beverage</item>
         <item>Protein</item>
-        <item>Vegetables</item>
         <item>Fruit</item>
+        <item>Vegetable</item>
         <item>Dairy</item>
         <item>Frozen</item>
-        <item>Condiments</item>
-        <item>Sweets</item>
-        <item>Snacks</item>
-        <item>Grains</item>
+        <item>Condiment</item>
+        <item>Sweet</item>
+        <item>Snack</item>
+        <item>Grain</item>
+        <item>Fat</item> 
         <item>Other</item>
     </string-array>
-     <string name="category_prompt">Select Category</string>
-
+    <string name="category_prompt">Select Category</string>
+    <string name="action_register">Register</string>
+    <string name="pantry_sort_preference">Default Pantry Sorting</string>
+    <string-array name="pantry_sort_preferences_entries">
+        <item>Alphabetical</item>
+        <item>By Category</item>
+        <item>By Expiration Date</item>
+    </string-array>
+	<string-array name="pantry_sort_preferences_values">
+        <item>alphabetical</item>
+        <item>category</item>
+        <item>expiration date</item>
+    </string-array>
+    <string name="pantry_sort_preferences_default">category</string>
+    <string name="shopping_list_sort_preference">Default Shopping List Sorting</string>
+    <string-array name="shopping_list_sort_preferences_entries">
+        <item>Alphabetical</item>
+        <item>By Category</item>
+        <item>By Expiration Date</item>
+    </string-array>
+	<string-array name="shopping_list_sort_preferences_values">
+        <item>alphabetical</item>
+        <item>category</item>
+        <item>expiration date</item>
+    </string-array>
+    <string name="shopping_list_sort_preferences_default">category</string>
 </resources>

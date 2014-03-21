@@ -1,5 +1,11 @@
 package com.thundersnacks.virtualpantry;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
+import com.thundersnacks.virtualpantrymodel.User;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -14,7 +20,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -22,12 +32,12 @@ import android.widget.TextView;
  * well.
  */
 public class LoginActivity extends Activity {
+	
 	/**
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
 	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
+	private static ArrayList<String> DUMMY_CREDENTIALS = new ArrayList<String>();
 
 	/**
 	 * The default email to populate the email field with.
@@ -42,6 +52,9 @@ public class LoginActivity extends Activity {
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
 	private String mPassword;
+	
+	// Value for registration attempt
+	private User registration;
 
 	// UI references.
 	private EditText mEmailView;
@@ -57,6 +70,8 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		// Set up the login form.
+		DUMMY_CREDENTIALS.add("bar@example.com:world");
+		DUMMY_CREDENTIALS.add("foo@example.com:hello");
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
@@ -74,16 +89,24 @@ public class LoginActivity extends Activity {
 						return false;
 					}
 				});
-
+		
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-
+		
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						attemptLogin();
+					}
+				});
+		
+		findViewById(R.id.register_button).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						attemptRegister();
 					}
 				});
 	}
@@ -152,6 +175,90 @@ public class LoginActivity extends Activity {
 		}
 	}
 
+	public void attemptRegister() {
+		
+		if (mAuthTask != null) {
+			return;
+		}
+		
+		final Dialog registerDialog = new Dialog(LoginActivity.this);
+		registerDialog.setContentView(R.layout.register_popup);
+    	registerDialog.setTitle("Registration");
+    	registerDialog.show();
+    	EditText emailText = (EditText) registerDialog.findViewById(R.id.registerEmailEdit);
+    	emailText.setText(mEmail);
+    	Button registerButton = (Button) registerDialog.findViewById(R.id.registerButton);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {					
+				if (registerUser(registerDialog, registration)) 
+					registerDialog.dismiss();
+			}
+		});
+        
+		//mPasswordView
+		//	.setError(getString(R.string.error_incorrect_password));
+		mPasswordView.requestFocus();
+	}
+	
+	private boolean registerUser(Dialog registerDialog, User r) {
+		
+		EditText usernameText = (EditText) registerDialog.findViewById(R.id.registerUsernameEdit);
+		EditText emailText = (EditText) registerDialog.findViewById(R.id.registerEmailEdit);
+		EditText passwordText = (EditText) registerDialog.findViewById(R.id.registerPasswordEdit);
+		EditText confirmText = (EditText) registerDialog.findViewById(R.id.registerPassword2Edit);
+		
+		// reset errors
+		usernameText.setError(null);
+		emailText.setError(null);
+		passwordText.setError(null);
+		confirmText.setError(null);
+		
+		String username = usernameText.getText().toString();
+		String email = emailText.getText().toString();
+		String password = passwordText.getText().toString();
+		String confirm = confirmText.getText().toString();
+		
+		r = new User(username, email, password, confirm);
+		boolean valid = true;
+		
+		if(r.getUsername().isEmpty()) {
+			usernameText.setError(getString(R.string.error_field_required));
+			valid = false;
+		}
+		
+		if(r.getEmail().isEmpty()) {
+			emailText.setError(getString(R.string.error_field_required));
+			valid = false;
+		} else if(!r.validEmail()) {
+			emailText.setError(getString(R.string.error_invalid_email));
+			valid = false;
+		}
+		
+		if(r.getPassword().isEmpty()) {
+			passwordText.setError(getString(R.string.error_field_required));
+			valid = false;
+		} else if(!r.validPassword()) {
+			passwordText.setError(getString(R.string.error_invalid_password));
+			valid = false;
+		}
+		
+		if(r.getConfirmPassword().isEmpty()) {
+			confirmText.setError(getString(R.string.error_field_required));
+			valid = false;
+		} else if(!r.matchingPasswords()) {
+			confirmText.setError("Passwords do not match");
+			valid = false;
+		}
+		
+		if(valid)
+			DUMMY_CREDENTIALS.add(email+":"+password);
+		
+		return valid;
+		
+	}
+	
 	/**
 	 * Shows the progress UI and hides the login form.
 	 */
@@ -217,6 +324,7 @@ public class LoginActivity extends Activity {
 				}
 			}
 
+			
 			// TODO: register the new account here.
 			//return true;
 			return false;
@@ -232,16 +340,11 @@ public class LoginActivity extends Activity {
 		    	startActivity(intent);
 				finish();
 			} else {
-				final Dialog registerDialog = new Dialog(LoginActivity.this);
-	        	registerDialog.setContentView(R.layout.register_popup);
-	        	registerDialog.setTitle("Registration");
-	        	registerDialog.show();
-				//mPasswordView
-					//	.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				mEmailView.setError("Credentials are invalid");
+				mAuthTask = null;
 			}
 		}
-
+		
 		@Override
 		protected void onCancelled() {
 			mAuthTask = null;

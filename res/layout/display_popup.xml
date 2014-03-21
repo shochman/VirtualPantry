@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<ScrollView android:id="@+id/ScrollView01" 
+            android:layout_width="fill_parent" 
+            android:layout_height="fill_parent" 
+            xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
@@ -46,7 +50,17 @@
               android:layout_height="wrap_content"
               android:text="Expiration Date" />
 		
-        <EditText
+		<DatePicker
+        	android:id="@+id/dpResult"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:calendarViewShown ="false"
+        	android:layout_gravity="center"
+        	android:clickable ="false"
+        	android:focusable="false"
+        	android:focusableInTouchMode="false"	/>
+		
+        <!-- <EditText
             android:id="@+id/expireEdit"
             android:hint="Enter expiration date"
             android:layout_width="fill_parent"
@@ -57,7 +71,7 @@
         	android:focusable="false" 
         	android:focusableInTouchMode="false" >
 
-        </EditText>
+        </EditText> -->
         
         <TextView android:id="@+id/categoryText"
               android:layout_width="wrap_content"
@@ -73,3 +87,4 @@
     		android:clickable="false" />
 
 </LinearLayout>
+</ScrollView>

@@ -1,8 +1,17 @@
 package com.thundersnacks.virtualpantry;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
 import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantrymodel.FoodItem;
+import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
+import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -10,35 +19,31 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.app.ExpandableListActivity;
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
-import android.widget.ExpandableListView;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.PopupWindow;
+import android.widget.PopupMenu;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
-
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
+	
+	RadioGroup sortByMenu;
+	Button sortByOkButton;
+	RadioButton sortByRadioButton;
+	
+	
 	
 	public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
 	    private Fragment mFragment;
@@ -69,6 +74,9 @@ public class MainActivity extends Activity {
 	            // If it exists, simply attach it in order to show it
 	            ft.attach(mFragment);
 	        }
+	        if (((MainActivity) mActivity).firstOpen == true) {
+	        	((MainActivity) mActivity).updateSearch();
+	        }
 	    }
 
 	    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
@@ -83,13 +91,11 @@ public class MainActivity extends Activity {
 	    }
 	}
 	
-	public final static String EXTRA_MESSAGE = "com.thundersnacks.virtualpantry.MESSAGE";
-
+	Menu menu;
+	boolean firstOpen = false;
+	
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        
+    protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         // Notice that setContentView() is not used, because we use the root
         // android.R.id.content as the container for each fragment
@@ -99,17 +105,13 @@ public class MainActivity extends Activity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        Tab tab = actionBar.newTab()
-                           .setText(R.string.title_activity_main)
-                           .setTabListener(new TabListener<SavedTabsFragment>(
-                                   this, "artist", SavedTabsFragment.class));
-        actionBar.addTab(tab);
+        Tab pantryTab = actionBar.newTab().setText(R.string.title_activity_pantry).setTabListener(new TabListener<PantryFragment>(this, "Pantry", PantryFragment.class));
+        actionBar.addTab(pantryTab);
 
-        tab = actionBar.newTab()
-                       .setText(R.string.title_activity_display_message)
-                       .setTabListener(new TabListener<ShoppingListFragment>(
-                               this, "album", ShoppingListFragment.class));
-        actionBar.addTab(tab);
+        Tab shoppingListTab = actionBar.newTab().setText(R.string.title_activity_shopping_list).setTabListener(new TabListener<ShoppingListFragment>(this, "Shopping List", ShoppingListFragment.class));
+        actionBar.addTab(shoppingListTab);
+        actionBar.setSelectedNavigationItem(1);
+        actionBar.setSelectedNavigationItem(0);
     }
 
 
@@ -119,6 +121,8 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setQueryHint("Search Pantry");
+        this.menu = menu;
+        firstOpen = true;
         return true;
     }
     
@@ -127,59 +131,187 @@ public class MainActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_search:
-                //openSearch();
+                //Handle search
                 return true;
             case R.id.action_settings:
             	Intent intent = new Intent(this, SettingsActivity.class);
             	startActivity(intent);
+            	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+            	boolean defValue = false;
+            	boolean checkedAuto = sharedPref.getBoolean("auto_add", defValue);
+            	if(checkedAuto)
+            	{
+					PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+					ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+					FoodItemCategory[] categoryList = FoodItemCategory.values();
+					int position = 0;
+					Date testDate = new Date();
+					while (position < categoryList.length)
+					{
+						List<FoodItem> categorized = pf.getPantry().getItemsByCategory(categoryList[position]);
+						for(FoodItem Item: categorized) {
+							if(Item.getExperiationDate().before(new Date()))
+								slf.getShoppingList().addItem(Item);
+						}
+						position++;
+					}
+            	}
+            	/*
+            	 * TODO: Add or update information about Pantry foodItem by checking Expiration dates
+            	 * 		 and updating the shopping cart to green showing the user its added to the 
+            	 * 		 shoppingList.
+            	 */
+            	
+            	
                 return true;
             case R.id.action_new:
             	final Dialog addDialog = new Dialog(this);
-
-                addDialog.setContentView(R.layout.add_popup);
-                addDialog.setTitle("Add New Item");
-
-                //final EditText editText=(EditText)dialog.findViewById(R.id.editText);
-                //Button save=(Button)dialog.findViewById(R.id.save);
-                //Button btnCancel=(Button)dialog.findViewById(R.id.cancel);
-                addDialog.show();
-    		    return true;
+            	if (getActionBar().getSelectedTab().getPosition() == 0) {
+            		addDialog.setTitle("Add New Item");
+            		addDialog.setContentView(R.layout.add_popup);
+            		addDialog.show();
+            		Button addButton = (Button) addDialog.findViewById(R.id.addButtonPantry);
+                    addButton.setOnClickListener(new View.OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							
+							PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+					    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+					    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+					    	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
+					    	String name = nameText.getText().toString();
+					    	String quantity = quantityText.getText().toString();
+					    	String category = categoryText.getSelectedItem().toString();
+					    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+					    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+					    		if (fic.toString().equals(category)) {
+					    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, "y", fic));
+					    			break;
+					    		}
+					    	}
+							addDialog.dismiss();
+						}
+					});
+            	} else if (getActionBar().getSelectedTab().getPosition() == 1) {
+            		addDialog.setContentView(R.layout.add_popup_shoppinglist);
+                	addDialog.setTitle("Add New Item");
+                    addDialog.show();
+                    Button addButton = (Button) addDialog.findViewById(R.id.addButton);
+                    addButton.setOnClickListener(new View.OnClickListener() {
+									
+                    	@Override
+						public void onClick(View v) {
+										
+							ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+							EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+							Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+							String name = nameText.getText().toString();
+							String quantity = quantityText.getText().toString();
+							String category = categoryText.getSelectedItem().toString();
+							for (FoodItemCategory fic : FoodItemCategory.values()) {
+								   if (fic.toString().equals(category)) {
+								    	slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, "y", fic ));
+								    	break;
+								    }
+							}
+							addDialog.dismiss();
+                    	}
+					});
+                }
+            	return true;
             case R.id.action_share:
             	final Dialog shareDialog = new Dialog(this);
             	shareDialog.setContentView(R.layout.share_popup);
             	shareDialog.setTitle("Share Your Pantry");
             	shareDialog.show();
+            	/*
+            	 * Add code to Emulate a pantry so we can
+            	 * test how the share pantry should work
+            	 * if the Server is not up and running.
+            	 */
+            	return true;
+           // default:
+             //   return super.onOptionsItemSelected(item);
+                
+                
+            case R.id.action_sort:
+            	final Dialog sortDialog = new Dialog(this);
+            	sortDialog.setContentView(R.layout.sortby_popup);
+            	sortDialog.setTitle("Sorting Method");
+            	sortDialog.show();
+            	sortByRadioButtonListener(sortDialog);
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
+        
         }
+    } // :)
+    
+    public void updateSearch() {
+    	SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        if (getActionBar().getSelectedTab().getPosition() == 0)
+        	searchView.setQueryHint("Search Pantry");
+        else if (getActionBar().getSelectedTab().getPosition() == 1)
+        	searchView.setQueryHint("Search Shopping List");
     }
     
-    public static class ExampleFragment1 extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.activity_main, container, false);
-        }
+    
+    //////////////////////////////////////////////////////////////
+    
+ public void sortByRadioButtonListener(final Dialog sortDialog){
+    	
+    	sortByMenu = (RadioGroup) sortDialog.findViewById(R.id.sortByRadioGroup);
+    	 sortByOkButton =(Button) sortDialog.findViewById(R.id.SortByButton);
+    	
+    	sortByOkButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+				// TODO Auto-generated method stub
+				int sortById = sortByMenu.getCheckedRadioButtonId();
+			//	sortByRadioButton = (RadioButton) findViewById(sortById);
+				
+				if(getActionBar().getSelectedTab().getPosition() == 0){
+					if(sortById==R.id.alphabetical){
+						pf.getPantry().alphabeticalSort();
+					}
+					else if(sortById==R.id.categoryCode){
+						pf.getPantry().categorySort();
+					}
+					else if(sortById==R.id.expirationDate){
+						pf.getPantry().expirationSort();
+					}
+					pf.createPantry();
+				}
+				else if(getActionBar().getSelectedTab().getPosition() == 1){
+					ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+					if(sortById==R.id.alphabetical){
+						slf.getShoppingList().alphabeticalSort();
+						slf.createShoppingList();
+					}
+					else if(sortById==R.id.categoryCode){
+						slf.getShoppingList().categorySort();
+						slf.createShoppingList();
+					}
+				}
+				sortDialog.dismiss();
+			}
+    	});
     }
     
-    public static class ShoppingListFragment extends Fragment {
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            View view = inflater.inflate(R.layout.shopping_list, container, false);
-            
-            String[] food = new String[]{"Cheese", "Milk", "Cereal", "Cookies", "Ice Cream", "Milk", "Butter"};
-         // The checkbox for the each item is specified by the layout android.R.layout.simple_list_item_multiple_choice
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_multiple_choice, food);
-       
-            // Getting the reference to the listview object of the layout
-            ListView listView = (ListView) view.findViewById(R.id.listview);
-     
-            // Setting adapter to the listview
-            listView.setAdapter(adapter);
-            return view;
-        }
-    }
+    
+    
+    
+    ///////////////////////////////////////////////////////////
+    
+    
+    
+    
+    
+    
+    
 }
