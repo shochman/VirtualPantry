@@ -11,6 +11,7 @@ import java.util.Map;
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
+import com.thundersnacks.virtualpantrymodel.FoodItemUnit;
 import com.thundersnacks.virtualpantrymodel.Pantry;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
@@ -95,38 +96,38 @@ public class PantryFragment extends Fragment {
         cal.set(2014, 0, 1);
         Date d7 = cal.getTime();
         
-        pantry.addItem(new StandardFoodItem("Coke", 0, d5, "6 cans", "", FoodItemCategory.BEVERAGE));
-        pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , "4 cans", "", FoodItemCategory.BEVERAGE));
+        pantry.addItem(new StandardFoodItem("Coke", 0, d5, 6, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE));
+        pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , 4, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE));
         
-        pantry.addItem(new StandardFoodItem("Ketchup", 0, d3, "1 bottle", "", FoodItemCategory.CONDIMENT));
-        pantry.addItem(new StandardFoodItem("Mustard", 0, d2, "1 bottle", "", FoodItemCategory.CONDIMENT));
+        pantry.addItem(new StandardFoodItem("Ketchup", 0, d3, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT));
+        pantry.addItem(new StandardFoodItem("Mustard", 0, d2, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT));
         
-        pantry.addItem(new StandardFoodItem("2% Milk", 0, d2, "1 gallon", "", FoodItemCategory.DAIRY));
-        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, d3, "1 bag", "", FoodItemCategory.DAIRY));
-        pantry.addItem(new StandardFoodItem("Yogurt", 0, d1, "3 cups", "", FoodItemCategory.DAIRY));
+        pantry.addItem(new StandardFoodItem("2% Milk", 0, d2, 1, FoodItemUnit.GALLONS, "", FoodItemCategory.DAIRY));
+        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.DAIRY));
+        pantry.addItem(new StandardFoodItem("Yogurt", 0, d1, 3, FoodItemUnit.CUPS, "", FoodItemCategory.DAIRY));
         
-        pantry.addItem(new StandardFoodItem("Butter", 0, d4, "1/2 stick", "", FoodItemCategory.FAT));
+        pantry.addItem(new StandardFoodItem("Butter", 0, d4, 0.5, FoodItemUnit.BOX, "", FoodItemCategory.FAT));
         
-        pantry.addItem(new StandardFoodItem("Ice Cream", 0, d3, "1 tub", "", FoodItemCategory.FROZEN));
+        pantry.addItem(new StandardFoodItem("Ice Cream", 0, d3, 1, FoodItemUnit.TUBS, "", FoodItemCategory.FROZEN));
         
-        pantry.addItem(new StandardFoodItem("Apple", 0, d2, "1", "", FoodItemCategory.FRUIT));
-        pantry.addItem(new StandardFoodItem("Pear", 0, d2, "1", "", FoodItemCategory.FRUIT));
+        pantry.addItem(new StandardFoodItem("Apple", 0, d2, 1, FoodItemUnit.UNITLESS, "", FoodItemCategory.FRUIT));
+        pantry.addItem(new StandardFoodItem("Pear", 0, d2, 1, FoodItemUnit.UNITLESS, "", FoodItemCategory.FRUIT));
         
-        pantry.addItem(new StandardFoodItem("Bread", 0, d1, "1/2 loaf", "", FoodItemCategory.GRAIN));
-        pantry.addItem(new StandardFoodItem("Cereal", 0, d3, "2 boxes", "", FoodItemCategory.GRAIN));
+        pantry.addItem(new StandardFoodItem("Bread", 0, d1, 0.5, FoodItemUnit.LOAF, "", FoodItemCategory.GRAIN));
+        pantry.addItem(new StandardFoodItem("Cereal", 0, d3, 2, FoodItemUnit.BOX, "", FoodItemCategory.GRAIN));
         
-        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, d2, "1 lb", "", FoodItemCategory.PROTEIN));
-        pantry.addItem(new StandardFoodItem("Ground Beef", 0, d4, "1/2 lb", "", FoodItemCategory.PROTEIN));
+        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, d2, 1, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN));
+        pantry.addItem(new StandardFoodItem("Ground Beef", 0, d4, 0.5, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN));
         
-        pantry.addItem(new StandardFoodItem("Potato Chips", 0, d3, "1 bag", "", FoodItemCategory.SNACK));
-        pantry.addItem(new StandardFoodItem("Pretzels", 0, d7, "1 bag", "", FoodItemCategory.SNACK));
+        pantry.addItem(new StandardFoodItem("Potato Chips", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK));
+        pantry.addItem(new StandardFoodItem("Pretzels", 0, d7, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK));
         
-        pantry.addItem(new StandardFoodItem("Chocolate", 0, d7, "2 bars", "", FoodItemCategory.SWEET));
-        pantry.addItem(new StandardFoodItem("Cookies", 0, d3, "1 bag", "", FoodItemCategory.SWEET));
+        pantry.addItem(new StandardFoodItem("Chocolate", 0, d7, 1, FoodItemUnit.POUNDS, "", FoodItemCategory.SWEET));
+        pantry.addItem(new StandardFoodItem("Cookies", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SWEET));
         
-        pantry.addItem(new StandardFoodItem("Carrots", 0, d1, "2 bags", "", FoodItemCategory.VEGETABLE));
-        pantry.addItem(new StandardFoodItem("Lettuce", 0, d4, "1 bag", "", FoodItemCategory.VEGETABLE));
-        pantry.addItem(new StandardFoodItem("Broccoli", 0, d2, "1 stalk", "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Carrots", 0, d1, 2, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Lettuce", 0, d4, 1, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE));
+        pantry.addItem(new StandardFoodItem("Broccoli", 0, d2, 0.5, FoodItemUnit.POUNDS, "", FoodItemCategory.VEGETABLE));
         
         pantry.categorySort();
     }
@@ -203,9 +204,18 @@ public class PantryFragment extends Fragment {
            				EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
            				EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
            				Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+                    	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);           				
            				DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
            				nameText.setText(foodItem.getName());
-           				quantityText.setText(foodItem.getAmount());
+           				quantityText.setText(Double.toString(foodItem.getAmount()));
+           				int numberOfUnit = 0;
+                    	for (FoodItemUnit fic : FoodItemUnit.values()) {
+                    		if (fic == foodItem.getUnit()) {
+                    			unitText.setSelection(numberOfUnit);
+                    			break;
+                    		}
+                    		numberOfUnit++;
+                    	}             
            				int numberOfCat = 0;
            				for (FoodItemCategory fic : FoodItemCategory.values()) {
            					if (fic == foodItem.getCategory()) {
@@ -357,9 +367,18 @@ public class PantryFragment extends Fragment {
                         EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
                     	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
                     	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+                    	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
                     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
                     	nameText.setText(foodItem.getName());
-                    	quantityText.setText(foodItem.getAmount());
+                    	quantityText.setText(Double.toString(foodItem.getAmount()));
+                    	int numberOfUnit = 0;
+                    	for (FoodItemUnit fic : FoodItemUnit.values()) {
+                    		if (fic == foodItem.getUnit()) {
+                    			unitText.setSelection(numberOfUnit);
+                    			break;
+                    		}
+                    		numberOfUnit++;
+                    	}                   
                     	int numberOfCat = 0;
                     	for (FoodItemCategory fic : FoodItemCategory.values()) {
                     		if (fic == foodItem.getCategory()) {
@@ -465,15 +484,23 @@ public class PantryFragment extends Fragment {
     	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
     	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
     	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+    	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
     	String name = nameText.getText().toString();
-    	String quantity = quantityText.getText().toString();
+    	double quantity = Double.parseDouble(quantityText.getText().toString());
+    	String unit = unitText.getSelectedItem().toString();
     	String category = categoryText.getSelectedItem().toString();
     	Calendar cal = GregorianCalendar.getInstance();
         cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
     	Date expDate = cal.getTime(); 
     	food.setName(name);
     	food.setAmount(quantity);
+    	for (FoodItemUnit fic : FoodItemUnit.values()) {
+    		if (fic.toString().equals(unit)) {
+    			food.setUnit(fic);
+    			break;
+    		}
+    	}    
     	for (FoodItemCategory fic : FoodItemCategory.values()) {
     		if (fic.toString().equals(category)) {
     			food.setCategory(fic);

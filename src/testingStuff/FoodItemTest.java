@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 public class FoodItemTest extends TestCase {
 	private Date myDate=new Date();
-	private FoodItem testFood = new StandardFoodItem("food", 42,myDate,"1 pound","pic",FoodItemCategory.OTHER);
+	private FoodItem testFood = new StandardFoodItem("food", 42,myDate,1, FoodItemUnit.UNITLESS,"pic",FoodItemCategory.OTHER);
 
 	public void testGetName() {
 		assertEquals("Name must be food", "food", testFood.getName());
@@ -33,12 +33,12 @@ public class FoodItemTest extends TestCase {
 	}
 
 	public void testGetAmount() {
-		assertEquals("Get amount failure", "1 pound", testFood.getAmount());
+		assertEquals("Get amount failure", 1, testFood.getAmount());
 	}
 
 	public void testSetAmount() {
-		testFood.setAmount("2 pounds");
-		assertEquals("Change amount failure", "2 pounds", testFood.getAmount());
+		testFood.setAmount(2);
+		assertEquals("Change amount failure", 2, testFood.getAmount());
 	}
 
 	public void testGetPicture() {

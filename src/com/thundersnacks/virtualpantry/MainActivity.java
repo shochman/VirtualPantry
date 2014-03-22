@@ -10,6 +10,7 @@ import java.util.List;
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
+import com.thundersnacks.virtualpantrymodel.FoodItemUnit;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.os.Bundle;
@@ -219,20 +220,24 @@ public class MainActivity extends Activity {
 							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
 					    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
 					    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+					    	Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
 					    	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
 					    	String name = nameText.getText().toString();
-					    	String quantity = quantityText.getText().toString();
+					    	double quantity = Double.parseDouble(quantityText.getText().toString());
 					    	String category = categoryText.getSelectedItem().toString();
-					    	
-					    	 Calendar cal = GregorianCalendar.getInstance();
-					         cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
-					    	Date expDate = cal.getTime();
+					    	String unit = unitText.getSelectedItem().toString();
+					    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
 					    	for (FoodItemCategory fic : FoodItemCategory.values()) {
 					    		if (fic.toString().equals(category)) {
-					    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, "y", fic));
-					    			break;
+					    			for (FoodItemUnit fic2 : FoodItemUnit.values()) {
+							    		if (fic.toString().equals(unit)) {
+							    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fic2, "y", fic));
+							    			break;
+							    		}
+							    	}
 					    		}
 					    	}
+					    					    		
 							addDialog.dismiss();
 						}
 					});
@@ -246,19 +251,25 @@ public class MainActivity extends Activity {
                     	@Override
 						public void onClick(View v) {
 										
-							ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+                    		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
 							EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
 							Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
+					    	Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
 							String name = nameText.getText().toString();
-							String quantity = quantityText.getText().toString();
+					    	double quantity = Double.parseDouble(quantityText.getText().toString());
 							String category = categoryText.getSelectedItem().toString();
+					    	String unit = unitText.getSelectedItem().toString();
 							for (FoodItemCategory fic : FoodItemCategory.values()) {
-								   if (fic.toString().equals(category)) {
-								    	slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, "y", fic ));
-								    	break;
-								    }
-							}
+					    		if (fic.toString().equals(category)) {
+					    			for (FoodItemUnit fic2 : FoodItemUnit.values()) {
+							    		if (fic.toString().equals(unit)) {
+							    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fic2, "y", fic));
+							    			break;
+							    		}
+							    	}
+					    		}
+					    	}
 							addDialog.dismiss();
                     	}
 					});

@@ -80,12 +80,12 @@ public class ShoppingListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {  
 		super.onCreate(savedInstanceState);
         shoppingList = new ShoppingList();
-        shoppingList.addItem(new StandardFoodItem("Cheddar Cheese",0,new Date(),"1oz","y", FoodItemCategory.DAIRY));
-        shoppingList.addItem(new StandardFoodItem("Strawberry Milk",1,new Date(),"16oz"," ", FoodItemCategory.DAIRY));
-        shoppingList.addItem(new StandardFoodItem("Oatmeal",2,new Date(),"6oz"," ", FoodItemCategory.GRAIN));
-        shoppingList.addItem(new StandardFoodItem("M&M's",3,new Date(),"3.37lb"," ", FoodItemCategory.SWEET));
-        shoppingList.addItem(new StandardFoodItem("Frozen yogurt",4,new Date(),"4.2oz"," ", FoodItemCategory.FROZEN));
-        shoppingList.addItem(new StandardFoodItem("Avacados",5,new Date(),"5oz"," ", FoodItemCategory.FAT));
+        shoppingList.addItem(new StandardFoodItem("Cheddar Cheese",0,new Date(),1,FoodItemUnit.POUNDS, "y", FoodItemCategory.DAIRY));
+        shoppingList.addItem(new StandardFoodItem("Strawberry Milk",1,new Date(),2,FoodItemUnit.GALLONS," ", FoodItemCategory.DAIRY));
+        shoppingList.addItem(new StandardFoodItem("Oatmeal",2,new Date(),1,FoodItemUnit.BOX," ", FoodItemCategory.GRAIN));
+        shoppingList.addItem(new StandardFoodItem("M&M's",3,new Date(),3.37,FoodItemUnit.POUNDS," ", FoodItemCategory.SWEET));
+        shoppingList.addItem(new StandardFoodItem("Frozen yogurt",4,new Date(),4.2,FoodItemUnit.GALLONS," ", FoodItemCategory.FROZEN));
+        shoppingList.addItem(new StandardFoodItem("Avacados",5,new Date(),3,FoodItemUnit.UNITLESS," ", FoodItemCategory.FAT)); 
         shoppingList.alphabeticalSort();
     }
 	
@@ -212,10 +212,19 @@ public class ShoppingListFragment extends Fragment {
                 EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
             	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
             	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+            	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
             	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
             	nameText.setText(foodItem.getName());
-            	quantityText.setText(foodItem.getAmount());
+            	double quantity = Double.parseDouble(quantityText.getText().toString());
             	int numberOfCat = 0;
+            	int numberOfUnit = 0;
+            	for (FoodItemUnit fic : FoodItemUnit.values()) {
+            		if (fic == foodItem.getUnit()) {
+            			unitText.setSelection(numberOfUnit);
+            			break;
+            		}
+            		numberOfUnit++;
+            	}   
             	for (FoodItemCategory fic : FoodItemCategory.values()) {
             		if (fic == foodItem.getCategory()) {
             			categoryText.setSelection(numberOfCat);
@@ -372,10 +381,19 @@ public class ShoppingListFragment extends Fragment {
      			EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
              	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
              	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
-             	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+             	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
+            	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
              	nameText.setText(foodItem.getName());
-             	quantityText.setText(foodItem.getAmount());
-             	int numberOfCat = 0;
+             	quantityText.setText(Double.toString(foodItem.getAmount()));
+             	int numberOfUnit = 0;
+            	for (FoodItemUnit fic : FoodItemUnit.values()) {
+            		if (fic == foodItem.getUnit()) {
+            			unitText.setSelection(numberOfUnit);
+            			break;
+            		}
+            		numberOfUnit++;
+            	}     
+            	int numberOfCat = 0;
              	for (FoodItemCategory fic : FoodItemCategory.values()) {
              		if (fic == foodItem.getCategory()) {
              			categoryText.setSelection(numberOfCat);
@@ -437,7 +455,7 @@ public class ShoppingListFragment extends Fragment {
 	}
 	
 	 public void addNewItem(FoodItem fi) {
-		 if( !(fi.getName().equals("") || fi.getAmount().equals("")) ) {
+		 if( !(fi.getName().equals("") || fi.getAmount() == 0) ) {	//TODO - correct second term?
      		shoppingList.addItem(fi);
      		if (shoppingList.getHowSorted() == 0) {
         		shoppingList.categorySort();
@@ -462,15 +480,23 @@ public class ShoppingListFragment extends Fragment {
      	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
      	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
      	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
-     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
-     	String name = nameText.getText().toString();
-     	String quantity = quantityText.getText().toString();
-     	String category = categoryText.getSelectedItem().toString();
+     	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
+    	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+    	String name = nameText.getText().toString();
+    	double quantity = Double.parseDouble(quantityText.getText().toString());
+    	String category = categoryText.getSelectedItem().toString();
+    	String unit = unitText.getSelectedItem().toString();
      	Calendar cal = GregorianCalendar.getInstance();
          cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
      	Date expDate = cal.getTime(); 
      	food.setName(name);
      	food.setAmount(quantity);
+    	for (FoodItemUnit fic : FoodItemUnit.values()) {
+    		if (fic.toString().equals(unit)) {
+    			food.setUnit(fic);
+    			break;
+    		}
+    	}  
      	for (FoodItemCategory fic : FoodItemCategory.values()) {
      		if (fic.toString().equals(category)) {
      			food.setCategory(fic);

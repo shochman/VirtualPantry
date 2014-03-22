@@ -29,7 +29,21 @@
         <item>Fat</item> 
         <item>Other</item>
     </string-array>
+    <string-array name="unit_array">
+        <item>Pound(s)</item>
+        <item>Can(s)</item>
+        <item>Bottle(s)</item>
+        <item>Gallon(s)</item>
+        <item>Cup(s)</item>
+        <item>Bag(s)</item>
+        <item>Tub(s)</item>
+        <item>Loaf</item>
+        <item>Box(es)</item>
+        <item>Unitless</item>
+        <item>Other</item>
+    </string-array>
     <string name="category_prompt">Select Category</string>
+    <string name="unit_prompt">Select Units</string>
     <string name="action_register">Register</string>
     <string name="pantry_sort_preference">Default Pantry Sorting</string>
     <string-array name="pantry_sort_preferences_entries">

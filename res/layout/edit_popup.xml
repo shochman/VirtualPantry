@@ -37,6 +37,18 @@
             android:layout_gravity="right" >
 
         </EditText>
+        
+        <TextView android:id="@+id/unitText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Units" />
+        
+        <Spinner
+    		android:id="@+id/unit_spinner"
+    		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:entries="@array/unit_array"
+    		android:prompt="@string/unit_prompt" />
             
 		<TextView android:id="@+id/expireText"
               android:layout_width="wrap_content"

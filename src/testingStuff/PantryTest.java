@@ -27,13 +27,13 @@ public class PantryTest extends TestCase {
 
 	public void testAddItem() {
 		Date myDate = new Date();
-		FoodItem testFood = new StandardFoodItem("name", 0,myDate,"1 pound","pic",FoodItemCategory.OTHER);
+		FoodItem testFood = new StandardFoodItem("name", 0,myDate,1, FoodItemUnit.POUNDS,"pic",FoodItemCategory.OTHER);
 		assertTrue("The add function must return true", tester.addItem(testFood));
 	}
 
 	public void testRemoveItem() {
 		Date myDate = new Date();
-		FoodItem testFood1 = new StandardFoodItem("name1", 1,myDate,"2 pounds","pic1",FoodItemCategory.OTHER);
+		FoodItem testFood1 = new StandardFoodItem("name1", 1,myDate, 2, FoodItemUnit.POUNDS,"pic1",FoodItemCategory.OTHER);
 		tester.addItem(testFood1);
 		assertTrue("The remove function must return true", tester.removeItem(testFood1));
 	}
