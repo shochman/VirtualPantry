@@ -19,7 +19,9 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -245,6 +247,14 @@ public class PantryFragment extends Fragment {
        		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText("x" + foodItem.getAmount());
+            ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, -3);
+            if(foodItem.getExperiationDate().after(cal.getTime()) && foodItem.getExperiationDate().before(new Date())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning));
+            } else {
+            	expirationWarning.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
        		return convertView;
         }
 	}
@@ -392,6 +402,14 @@ public class PantryFragment extends Fragment {
             item.setText(foodItem.getName());
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText("x" + foodItem.getAmount());
+            ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, 3);
+            if(foodItem.getExperiationDate().before(cal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning));
+            } else {
+            	expirationWarning.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
             return convertView;
         }
 
@@ -466,5 +484,7 @@ public class PantryFragment extends Fragment {
     	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
     	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(food);
     	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+    	lv.invalidateViews();
+    	elv.invalidateViews();
     }
 }
