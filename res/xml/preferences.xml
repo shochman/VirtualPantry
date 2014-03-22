@@ -14,10 +14,6 @@
        	android:key="signout"
        	android:selectable="true"
         android:summary=""/>
-    <com.thundersnacks.virtualpantry.HelpDialog 
-        android:dialogTitle="Help" 
-        android:title="Help" 
-        android:dialogMessage="For questions or help please contact the developers at: dev.virtualpantry@gmail.com" />
     <CheckBoxPreference
         android:key="auto_add"
         android:title="Auto Add" 

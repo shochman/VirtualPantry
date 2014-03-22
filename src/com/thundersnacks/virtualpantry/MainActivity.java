@@ -287,6 +287,11 @@ public class MainActivity extends Activity {
             	sortByRadioButtonListener(sortDialog);
             	return true;
             case R.id.action_help:
+            	final Dialog helpDialog = new Dialog(this);
+            	helpDialog.setContentView(R.layout.help_popup);
+            	helpDialog.setTitle("Help");
+            	helpDialog.show();
+            	return true;
             	
             default:
                 return super.onOptionsItemSelected(item);
