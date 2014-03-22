@@ -137,15 +137,15 @@ public class ShoppingListFragment extends Fragment {
     }
 	
 	public void createShoppingList() {
-		if (shoppingList.getHowSorted() == 0) {
+		/**if (shoppingList.getHowSorted() == 0) {
 			lv.setVisibility(View.INVISIBLE);
 			elv.setVisibility(View.VISIBLE);
 			elv.invalidateViews();
-		} else {
+		} else {*/
 			elv.setVisibility(View.INVISIBLE);
 			lv.setVisibility(View.VISIBLE);
 			lv.invalidateViews();
-		}
+		//}
 	}
 	
 	public class FoodItemsAdapter extends ArrayAdapter<FoodItem> {
