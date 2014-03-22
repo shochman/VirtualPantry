@@ -186,8 +186,6 @@ public class ShoppingListFragment extends Fragment {
                                	}
                            });
            convertView.setOnTouchListener(touchListener);
-    
-           TextView item = (TextView) convertView.findViewById(R.id.item);
            
            convertView.setOnClickListener(new OnClickListener(){
 				@Override
@@ -241,7 +239,10 @@ public class ShoppingListFragment extends Fragment {
 			}
         	   
            });
+           	TextView item = (TextView) convertView.findViewById(R.id.item);
        		item.setText(foodItem.getName());
+       		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
+            itemQuantity.setText("x" + foodItem.getAmount());
        		return convertView;
         }
 	}
@@ -310,11 +311,11 @@ public class ShoppingListFragment extends Fragment {
                 convertView = inflater.inflate(R.layout.shopping_list_item, null);
             }
             
-         // Create a ListView-specific touch listener. ListViews are given special treatment because
+            // Create a ListView-specific touch listener. ListViews are given special treatment because
             // by default they handle touches for their list items... i.e. they're in charge of drawing
             // the pressed state (the list selector), handling list item clicks, etc.
             final SwipeDismissListViewTouchListener touchListener =
-                    new SwipeDismissListViewTouchListener(
+            		new SwipeDismissListViewTouchListener(
                             elv,
                             new SwipeDismissListViewTouchListener.DismissCallbacks() {
                                 @Override
@@ -332,10 +333,9 @@ public class ShoppingListFragment extends Fragment {
                                     		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
                                     	}
                                 	}
-                            });
+                                });
             convertView.setOnTouchListener(touchListener);
-     
-            TextView item = (TextView) convertView.findViewById(R.id.item);
+            
             final CheckBox cb = (CheckBox) convertView.findViewById(R.id.shopping_list_checkbox);
             
             convertView.setOnClickListener(new OnClickListener(){
@@ -367,9 +367,9 @@ public class ShoppingListFragment extends Fragment {
  			@Override
  			public boolean onLongClick(View v) {
      			final Dialog editDialog = new Dialog(ShoppingListFragment.this.getActivity());
-                 editDialog.setContentView(R.layout.edit_popup);
-                 editDialog.setTitle("Edit Item");
-                 EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+     			editDialog.setContentView(R.layout.edit_popup);
+     			editDialog.setTitle("Edit Item");
+     			EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
              	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
              	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
              	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
@@ -384,9 +384,9 @@ public class ShoppingListFragment extends Fragment {
              		numberOfCat++;
              	}
              	expirationDate.updateDate(1900+foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
-                 editDialog.show();
-                 Button addButton = (Button) editDialog.findViewById(R.id.editButton);
-                 addButton.setOnClickListener(new View.OnClickListener() {
+             	editDialog.show();
+             	Button addButton = (Button) editDialog.findViewById(R.id.editButton);
+             	addButton.setOnClickListener(new View.OnClickListener() {
  					
  					@Override
  					public void onClick(View v) {
@@ -396,11 +396,13 @@ public class ShoppingListFragment extends Fragment {
  					}
                  });
                  return true;
- 			}
-         	   
-            });
-        		item.setText(foodItem.getName());
-        		return convertView;
+                 }
+ 			});
+            TextView item = (TextView) convertView.findViewById(R.id.item);
+            item.setText(foodItem.getName());
+            TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
+            itemQuantity.setText("x" + foodItem.getAmount());
+            return convertView;
         }
 
 		@Override
