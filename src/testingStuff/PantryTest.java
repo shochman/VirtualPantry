@@ -8,10 +8,6 @@ public class PantryTest extends TestCase {
 	
 	 private Pantry tester = new Pantry("TP", 69);
 	 
-	/*public void testPantry() {
-		fail("Not yet implemented");
-	}*/
-
 	public void testGetName() {
 		assertEquals("Name must be TP", "TP", tester.getName());
 	}

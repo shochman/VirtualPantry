@@ -1,8 +1,10 @@
 package com.thundersnacks.virtualpantry;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.thundersnacks.virtualpantry.R;
@@ -12,6 +14,7 @@ import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -19,6 +22,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Menu;
@@ -123,6 +130,58 @@ public class MainActivity extends Activity {
         searchView.setQueryHint("Search Pantry");
         this.menu = menu;
         firstOpen = true;
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean defValue = false;
+    	boolean checkedAuto = sharedPref.getBoolean("auto_add", defValue);
+    	String itemsUpdated = "Added items:";
+    	if(checkedAuto)
+    	{
+			PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+			ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+			FoodItemCategory[] categoryList = FoodItemCategory.values();
+			int position = 0;
+			Date testDate = new Date();
+			while (position < categoryList.length)
+			{
+				List<FoodItem> categorized = pf.getPantry().getItemsByCategory(categoryList[position]);
+				for(FoodItem Item: categorized) {
+					if(Item.getExperiationDate().before(new Date()))
+						{
+							slf.getShoppingList().addItem(Item);
+							itemsUpdated += " "+ Item.getName();
+						}
+				}
+				position++;
+			}
+    	}
+    	
+    	NotificationCompat.Builder mBuilder =
+    	        new NotificationCompat.Builder(this)
+    	        .setSmallIcon(R.drawable.shopping_cart_green)
+    	        .setContentTitle("Shopping List updated")
+    	        .setContentText(itemsUpdated);
+    	// Creates an explicit intent for an Activity in your app
+    	Intent resultIntent = new Intent(this, MainActivity.class);
+
+    	// The stack builder object will contain an artificial back stack for the
+    	// started Activity.
+    	// This ensures that navigating backward from the Activity leads out of
+    	// your application to the Home screen.
+    	TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+    	// Adds the back stack for the Intent (but not the Intent itself)
+    	stackBuilder.addParentStack(MainActivity.class);
+    	// Adds the Intent that starts the Activity to the top of the stack
+    	stackBuilder.addNextIntent(resultIntent);
+    	PendingIntent resultPendingIntent =
+    	        stackBuilder.getPendingIntent(
+    	            0,
+    	            PendingIntent.FLAG_UPDATE_CURRENT
+    	        );
+    	mBuilder.setContentIntent(resultPendingIntent);
+    	NotificationManager mNotificationManager =
+    	    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    	// mId allows you to update the notification later on.
+    	mNotificationManager.notify(RESULT_OK, mBuilder.build());
         return true;
     }
     
@@ -136,26 +195,7 @@ public class MainActivity extends Activity {
             case R.id.action_settings:
             	Intent intent = new Intent(this, SettingsActivity.class);
             	startActivity(intent);
-            	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-            	boolean defValue = false;
-            	boolean checkedAuto = sharedPref.getBoolean("auto_add", defValue);
-            	if(checkedAuto)
-            	{
-					PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
-					ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
-					FoodItemCategory[] categoryList = FoodItemCategory.values();
-					int position = 0;
-					Date testDate = new Date();
-					while (position < categoryList.length)
-					{
-						List<FoodItem> categorized = pf.getPantry().getItemsByCategory(categoryList[position]);
-						for(FoodItem Item: categorized) {
-							if(Item.getExperiationDate().before(new Date()))
-								slf.getShoppingList().addItem(Item);
-						}
-						position++;
-					}
-            	}
+            	
             	/*
             	 * TODO: Add or update information about Pantry foodItem by checking Expiration dates
             	 * 		 and updating the shopping cart to green showing the user its added to the 
@@ -174,7 +214,7 @@ public class MainActivity extends Activity {
                     addButton.setOnClickListener(new View.OnClickListener() {
 						
 						@Override
-						public void onClick(View v) {
+							public void onClick(View v) {
 							
 							PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
 							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
@@ -184,7 +224,10 @@ public class MainActivity extends Activity {
 					    	String name = nameText.getText().toString();
 					    	String quantity = quantityText.getText().toString();
 					    	String category = categoryText.getSelectedItem().toString();
-					    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+					    	
+					    	 Calendar cal = GregorianCalendar.getInstance();
+					         cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+					    	Date expDate = cal.getTime();
 					    	for (FoodItemCategory fic : FoodItemCategory.values()) {
 					    		if (fic.toString().equals(category)) {
 					    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, "y", fic));

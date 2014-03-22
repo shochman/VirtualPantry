@@ -1,9 +1,11 @@
 package com.thundersnacks.virtualpantry;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -181,7 +183,7 @@ public class ShoppingListFragment extends Fragment implements OnItemClickListene
                     		}
                     		numberOfCat++;
                     	}
-                    	expirationDate.updateDate(food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
+                    	expirationDate.updateDate(1900+food.getExperiationDate().getYear(), food.getExperiationDate().getMonth(), food.getExperiationDate().getDate());
                         editDialog.show();
                         Button addButton = (Button) editDialog.findViewById(R.id.editButton);
                         addButton.setOnClickListener(new View.OnClickListener() {
@@ -268,7 +270,9 @@ public void editItem(Dialog editDialog, FoodItem food)
 	String name = nameText.getText().toString();
 	String quantity = quantityText.getText().toString();
 	String category = categoryText.getSelectedItem().toString();
-	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth()); 
+	Calendar cal = GregorianCalendar.getInstance();
+    cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+	Date expDate = cal.getTime(); 
 	food.setName(name);
 	food.setAmount(quantity);
 	for (FoodItemCategory fic : FoodItemCategory.values()) {

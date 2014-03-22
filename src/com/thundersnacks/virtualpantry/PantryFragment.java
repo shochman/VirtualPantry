@@ -215,7 +215,7 @@ public class PantryFragment extends Fragment {
            					}
            					numberOfCat++;
            				}
-           				expirationDate.updateDate(foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
+           				expirationDate.updateDate(1900+foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
            				editDialog.show();
            				Button addButton = (Button) editDialog.findViewById(R.id.editButton);
                        	addButton.setOnClickListener(new View.OnClickListener() {
@@ -360,7 +360,7 @@ public class PantryFragment extends Fragment {
                     		}
                     		numberOfCat++;
                     	}
-                    	expirationDate.updateDate(foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
+                    	expirationDate.updateDate(1900+foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
                         editDialog.show();
                         Button addButton = (Button) editDialog.findViewById(R.id.editButton);
                         addButton.setOnClickListener(new View.OnClickListener() {

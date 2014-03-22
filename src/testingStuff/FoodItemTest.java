@@ -8,10 +8,6 @@ import junit.framework.TestCase;
 public class FoodItemTest extends TestCase {
 	private Date myDate=new Date();
 	private FoodItem testFood = new StandardFoodItem("food", 42,myDate,"1 pound","pic",FoodItemCategory.OTHER);
-	 
-	/*public void testFoodItem() {
-		fail("Not yet implemented");
-	}*/
 
 	public void testGetName() {
 		assertEquals("Name must be food", "food", testFood.getName());
@@ -25,37 +21,42 @@ public class FoodItemTest extends TestCase {
 	public void testGetDatabaseId() {
 		assertEquals("DatabadeId must equal 42", 42, testFood.getDatabaseId());
 	}
-/*
+
 	public void testGetExperiationDate() {
-		fail("Not yet implemented");
+		assertEquals("Get experiation date failure", myDate, testFood.getExperiationDate());
 	}
 
 	public void testSetExperiationDate() {
-		fail("Not yet implemented");
+		Date myDate1 = new Date();
+		testFood.setExperiationDate(myDate1);
+		assertEquals("Change experiation date failure", myDate1, testFood.getExperiationDate());
 	}
 
 	public void testGetAmount() {
-		fail("Not yet implemented");
+		assertEquals("Get amount failure", "1 pound", testFood.getAmount());
 	}
 
 	public void testSetAmount() {
-		fail("Not yet implemented");
+		testFood.setAmount("2 pounds");
+		assertEquals("Change amount failure", "2 pounds", testFood.getAmount());
 	}
 
 	public void testGetPicture() {
-		fail("Not yet implemented");
+		assertEquals("Get pic failure", "pic", testFood.getPicture());
 	}
 
 	public void testSetPicture() {
-		fail("Not yet implemented");
+		testFood.setPicture("picture");
+		assertEquals("Set pic failure", "picture", testFood.getPicture());
 	}
 
 	public void testGetCategory() {
-		fail("Not yet implemented");
+		assertEquals("Get  category failure", FoodItemCategory.OTHER, testFood.getCategory());
 	}
 
 	public void testSetCategory() {
-		fail("Not yet implemented");
+		testFood.setCategory(FoodItemCategory.BEVERAGE);
+		assertEquals("Set category failure", FoodItemCategory.BEVERAGE, testFood.getCategory());
 	}
-*/
+
 }
