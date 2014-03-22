@@ -19,12 +19,12 @@ import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 import junit.framework.TestCase;
 
 public class ShoppingListTest extends TestCase {
-
+/**
 	private Pantry testP = new Pantry("TP", 69);
 	private ShoppingList testS = new ShoppingList();
 	/*public void testShoppingList() {
 		fail("Not yet implemented");
-	}*/
+	}*//**
 
 	public void testAddItem() {
 		Date myDate = new Date();
@@ -120,5 +120,5 @@ public class ShoppingListTest extends TestCase {
 	}
 	
 	
-	
+	*/
 }

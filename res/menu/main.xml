@@ -26,6 +26,11 @@
         android:showAsAction="never"
         android:title="@string/action_sort" />
     
+    <item
+        android:id="@+id/action_help"
+        android:showAsAction="never"
+        android:title="@string/action_help" />
+        
     <!-- Change Pantry, should always be in the overflow -->
     <item
         android:id="@+id/action_change_pantry"

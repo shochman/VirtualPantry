@@ -51,11 +51,11 @@ public class PantryFragment extends Fragment {
 	private Pantry pantry;
 	View view;
 	ExpandableListView elv;
-	ListView lv;;
+	ListView lv;
 	public ShoppingListFragment slf;
 	
 	public PantryFragment() {
-		this.pantry = null;
+		pantry = null;
 	}
 
 	public void setPantry( Pantry pantry ) {
@@ -63,12 +63,11 @@ public class PantryFragment extends Fragment {
 	}
 	
 	public Pantry getPantry() {
-		return this.pantry;
+		return pantry;
 	}
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) { 
-        
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         pantry = new Pantry("My Pantry", 0);
         Calendar cal = GregorianCalendar.getInstance();
@@ -130,6 +129,18 @@ public class PantryFragment extends Fragment {
         pantry.categorySort();
     }
 	
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.pantry, null);
+        slf = (ShoppingListFragment) getActivity().getFragmentManager().findFragmentByTag("Shopping List");
+		elv = (ExpandableListView) view.findViewById(R.id.pantry_expandable_list);
+		elv.setAdapter(new ExpandableListAdapter(getActivity(), pantry.getFoodItems()));
+        lv = (ListView) view.findViewById(R.id.pantry_list);
+        lv.setAdapter(new FoodItemsAdapter(getActivity(), pantry.getFoodItems()));
+        createPantry();
+        return view;
+    }
+	
 	public void createPantry() {
 		if (pantry.getHowSorted() == 0) {
 			lv.setVisibility(View.INVISIBLE);
@@ -141,18 +152,6 @@ public class PantryFragment extends Fragment {
 			lv.invalidateViews();
 		}
 	}
-	
-	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.saved_tab, null);
-        slf = (ShoppingListFragment) getActivity().getFragmentManager().findFragmentByTag("Shopping List");
-		elv = (ExpandableListView) view.findViewById(R.id.expandable_list);
-		elv.setAdapter(new ExpandableListAdapter(getActivity(), pantry.getFoodItems()));
-        lv = (ListView) view.findViewById(R.id.list);
-        lv.setAdapter(new FoodItemsAdapter(getActivity(), pantry.getFoodItems()));
-        createPantry();
-        return view;
-    }
 	
 	public class FoodItemsAdapter extends ArrayAdapter<FoodItem> {
         public FoodItemsAdapter(Activity activity, List<FoodItem> list) {

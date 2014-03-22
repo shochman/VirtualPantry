@@ -202,7 +202,6 @@ public class MainActivity extends Activity {
             	 * 		 shoppingList.
             	 */
             	
-            	
                 return true;
             case R.id.action_new:
             	final Dialog addDialog = new Dialog(this);
@@ -287,6 +286,8 @@ public class MainActivity extends Activity {
             	sortDialog.show();
             	sortByRadioButtonListener(sortDialog);
             	return true;
+            case R.id.action_help:
+            	
             default:
                 return super.onOptionsItemSelected(item);
         

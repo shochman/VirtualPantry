@@ -49,12 +49,22 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		super.onCreate(savedInstanceState);
 		setupActionBar();
 		Preference signout = (Preference)findPreference("signout");
-		/*signout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() { 
-		                @Override															
-		                public boolean onPreferenceClick(Preference preference) {
-		                    return true;
-		                }
-		            });*/
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean defValue = false;
+    	boolean selectSignOut = sharedPref.getBoolean("signout", defValue);
+    	sharedPref.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() { 
+			@Override
+			public void onSharedPreferenceChanged(
+					SharedPreferences sharedPreferences, String key) {
+				// TODO Auto-generated method stub
+				if (key.equals("signout"))
+				{
+		        	boolean defValue = false;
+		        	boolean selectSignOut = sharedPreferences.getBoolean("signout", defValue);
+				}
+				
+			}
+        });
 	}
 
 	/**
@@ -313,6 +323,13 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		if (key.equals("auto_add"))
 		{
 			
+		}
+		if (key.equals("signout"))
+		{
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        	boolean defValue = false;
+        	boolean selectSignOut = sharedPref.getBoolean("signout", defValue);
+        	this.finishFromChild(getParent());
 		}
 		
 	}

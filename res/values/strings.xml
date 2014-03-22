@@ -9,6 +9,7 @@
     <string name="action_new">Add Item</string>
     <string name="action_share">Share</string>
     <string name="action_sort">Sort by...</string>
+    <string name="action_help">Help</string>
     <string name="action_change_pantry">Change Pantry</string>
     <string name="title_activity_pantry">My Pantry</string>
     <string name="title_activity_shopping_list">Shopping List</string>

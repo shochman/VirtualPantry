@@ -1,18 +1,6 @@
-<<<<<<< HEAD
 package com.thundersnacks.virtualpantrymodel;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Owner
- * Date: 2/5/14
- * Time: 2:11 PM
- * To change this template use File | Settings | File Templates.
- */
-public class ShoppingList {
-}
-=======
-package com.thundersnacks.virtualpantrymodel;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,166 +15,83 @@ import java.util.TreeMap;
 
 public class ShoppingList{
 	
+	private String name;
 	private int databaseId;
-	private static Map<FoodItem, Boolean> items;
+	private List<FoodItem> foodItems;
 	Pantry	pantry;
 	private int howSorted;
 	
-	public ShoppingList()
-	{
-		this.databaseId = 0;
-		items = new HashMap<FoodItem, Boolean>();
+	public ShoppingList() {
+		foodItems = new ArrayList<FoodItem>();	
 	}
 	
-	Comparator<FoodItem> secondCharComparator = new Comparator<FoodItem>() {
-        @Override public int compare(FoodItem s1, FoodItem s2) {
-            return s1.getName().substring(1, 2).compareTo(s2.getName().substring(1, 2));
-        }           
-    };
-    public Iterator<FoodItem> iterator() {
-		return items.keySet().iterator();
-	}
-	public ShoppingList(Map<FoodItem, Boolean> items, Pantry pantry)
-	{
-		ShoppingList.items  = items;
-		this.pantry = pantry;
+	public ShoppingList(String name, int databaseId) {
+		this.name = name;
+		this.databaseId = databaseId;
+		foodItems = new ArrayList<FoodItem>();
 	}
 	
-	public boolean addItem(FoodItem itemToAdd) 
-	{
-		items.put(itemToAdd,true);
-		return items.containsKey(itemToAdd);
+	public String getName() {		
+		return name;		
 	}
 	
-	public boolean removeItem(FoodItem itemToRemove) 
-	{
-		items.remove(itemToRemove);
-		return !items.containsKey(itemToRemove);
+	public void setName(String name)  {		
+		this.name = name;		
 	}
 	
-	public boolean removeItemByName(String name)
-	{
-		for (Map.Entry<FoodItem, Boolean> e : items.entrySet()) {
-			if (name.equals(e.getKey().getName())) {
-				removeItem(e.getKey());
-				break;
-			}
-		}
-		return true;
-	}
-
-	
-	public int getDatabaseId() 
-	{		
-		return this.databaseId;		
+	public int getDatabaseId() {		
+		return databaseId;		
 	}
 	
-	public Pantry getPantry()
-	{
-		return this.pantry;
+	public Pantry getPantry() {
+		return pantry;
 	}
 	
-	public void setPantry(Pantry pantry)
-	{
-		this.pantry = pantry;
+	public boolean addItem(FoodItem itemToAdd) {
+		// return true if insert is successful
+		// throws exception when item can't be added
+		return foodItems.add(itemToAdd);
 	}
 	
-	public static Map<FoodItem,Boolean> getItems()
-	{
-		return items;
+	public boolean removeItem(FoodItem itemToRemove) {
+		// return true if removal is successful
+		// return false if no item is removed
+		return foodItems.remove(itemToRemove);
 	}
 	
-	public FoodItem getItem(String name)
-	{
-		for ( FoodItem key : items.keySet() ) 
-		{
-			if( key.getName().equals(name) )
-				return key;
-		}
-		// Given name is not found or case sensitive to FoodItem keys in the set.
-		return null;
-	}
-	
-	public FoodItem getCheckedFoodItem()
-	{
-		for ( FoodItem key : items.keySet() ) 
-		{
-			if( items.get(key).equals(false) )
-				{
-					removeItem(key);
-					return key;
-				}
-		}
-		// Given name is not found or case sensitive to FoodItem keys in the set.
-		return null;
-	}
-	
-	public void setItemMapValue(FoodItem key, Boolean value)
-	{
-		items.put(key, value);
-	}
-	
-	private static Map<FoodItem,Boolean> sortedMap(LinkedList<Entry<FoodItem, Boolean>> list) {
-		
-		Map<FoodItem, Boolean> sortedMap = new LinkedHashMap<FoodItem, Boolean>();
-		for (Iterator<Entry<FoodItem, Boolean>> it = list.iterator(); it.hasNext();) {
-			Map.Entry<FoodItem, Boolean> entry = (Map.Entry<FoodItem, Boolean>) it.next();
-			sortedMap.put(entry.getKey(), entry.getValue());
-		}
-		return sortedMap;
-	}
-	
-	public boolean isInShoppingList(FoodItem food) {
-		for (Iterator<Map.Entry<FoodItem, Boolean>> it = items.entrySet().iterator(); it.hasNext(); ) {
-    		Entry<FoodItem, Boolean> entry = (Entry<FoodItem, Boolean>)it.next();
-    		FoodItem test = (FoodItem)entry.getKey();
-    		if (test.getName().equals(food.getName())) {
-    			return true;
-    		}
-    	}
-		return false;
-	}
-	
-	private static Comparator<Entry<FoodItem, Boolean>> getAlphabeticalComparator() {
-		return new Comparator<Entry<FoodItem, Boolean>>() {
-			public int compare(Entry<FoodItem, Boolean> o1,
-					Entry<FoodItem, Boolean> o2) {
-				return (( (String) (o1.getKey().getName())))
-                        .compareTo(( (String) (o2.getKey().getName())));
-			}
-		};
-	}
-	
-	private static Comparator<Entry<FoodItem, Boolean>> getCategoryComparator() {
-		return new Comparator<Entry<FoodItem, Boolean>>() {
-			public int compare(Entry<FoodItem, Boolean> o1,
-					Entry<FoodItem, Boolean> o2) {
-				int comp = (( (String) (o1.getKey().getCategory().toString())))
-							.compareTo(( (String) (o2.getKey().getCategory().toString())));
-				if (comp == 0)
-					return (( (String) (o1.getKey().getName())))
-	                        .compareTo(( (String) (o2.getKey().getName())));
-				else return comp;
-			}
-		};
+	public Iterator<FoodItem> iterator() {
+		return foodItems.iterator();
 	}
 	
 	public void alphabeticalSort() {
-		LinkedList<Entry<FoodItem, Boolean>> list =  new LinkedList<Entry<FoodItem, Boolean>>(items.entrySet());
-		Collections.sort(list, getAlphabeticalComparator());
-		items = sortedMap(list);
+		Collections.sort(foodItems, FoodItem.getAlphabeticalComparator());
 		howSorted = 1;
 	}
 	
+	public void expirationSort() {
+		Collections.sort(foodItems, FoodItem.getExpirationComparator());
+		howSorted = 2;
+	}
+	
 	public void categorySort() {
-		LinkedList<Entry<FoodItem, Boolean>> list =  new LinkedList<Entry<FoodItem, Boolean>>(items.entrySet());
-		Collections.sort(list, getCategoryComparator());
-		items = sortedMap(list);
+		Collections.sort(foodItems, FoodItem.getCategoryComparator());
 		howSorted = 0;
 	}
 	
 	public int getHowSorted() {
 		return howSorted;
 	}
+	
+	public List<FoodItem> getFoodItems() {
+		return foodItems;
+	}
+	
+	public boolean isInShoppingList(FoodItem food) {
+		for (int i = 0; i < foodItems.size(); i++) {
+    		if (foodItems.get(i).getName().equals(food.getName())) {
+    			return true;
+    		}
+    	}
+		return false;
+	}
 }
->>>>>>> d8427cccbe098bc19e19031876695251422b26bc
