@@ -435,10 +435,18 @@ public class ShoppingListFragment extends Fragment {
 	}
 	
 	 public void addNewItem(FoodItem fi) {
-     	if( !(fi.getName().equals("") || fi.getAmount().equals("")) )
-         {
+		 if( !(fi.getName().equals("") || fi.getAmount().equals("")) ) {
      		shoppingList.addItem(fi);
-     		createShoppingList();
+     		if (shoppingList.getHowSorted() == 0) {
+        		shoppingList.categorySort();
+        	} else if (shoppingList.getHowSorted() == 1) {
+        		shoppingList.alphabeticalSort();
+        	} else {
+        		shoppingList.expirationSort();
+        	}
+     		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+        	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(fi);
+        	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
          } 
      }
      
