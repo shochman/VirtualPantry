@@ -11,6 +11,7 @@ public enum FoodItemUnit {
 	TUBS,
 	LOAF,
 	BOX,
+	UNITLESS,
 	OTHER;
 
     public String toString() {
@@ -33,6 +34,8 @@ public enum FoodItemUnit {
 			return "Loaf";
 		case BOX:
 			return "Box(es)";
+		case UNITLESS:
+			return "No Unit";
 		default:
 			return "";
     	}
