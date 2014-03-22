@@ -11,7 +11,7 @@ import android.widget.Checkable;
 import android.widget.RelativeLayout;
 
 /**
- * Extension of a relative layout to provide a checkable behaviour
+ * Extension of a relative layout to provide a checkable behavior
  *
  * @author marvinlabs
  */

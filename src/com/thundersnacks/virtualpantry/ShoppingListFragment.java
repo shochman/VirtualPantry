@@ -251,7 +251,7 @@ public class ShoppingListFragment extends Fragment {
            	TextView item = (TextView) convertView.findViewById(R.id.item);
        		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
-            itemQuantity.setText("x" + foodItem.getAmount());
+            itemQuantity.setText("- " + foodItem.getAmount() + " " + foodItem.getUnit());
        		return convertView;
         }
 	}
@@ -419,7 +419,7 @@ public class ShoppingListFragment extends Fragment {
             TextView item = (TextView) convertView.findViewById(R.id.item);
             item.setText(foodItem.getName());
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
-            itemQuantity.setText("x" + foodItem.getAmount());
+            itemQuantity.setText("- " + foodItem.getAmount() + " " + foodItem.getUnit());
             return convertView;
         }
 
