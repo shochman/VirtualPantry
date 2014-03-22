@@ -35,7 +35,7 @@ public enum FoodItemUnit {
 		case BOX:
 			return "Box(es)";
 		case UNITLESS:
-			return "No Unit";
+			return "(No Unit)";
 		default:
 			return "";
     	}
