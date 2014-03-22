@@ -11,7 +11,15 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:paddingLeft="25dp" />
- 
+    
+    <TextView
+ 		android:id="@+id/item_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/item"
+        android:layout_centerVertical="true"
+        android:paddingLeft="5dp" />
+    
     <ImageView
         android:id="@+id/add_to_shopping_list"
         android:layout_width="wrap_content"

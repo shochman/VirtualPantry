@@ -155,7 +155,7 @@ public class PantryFragment extends Fragment {
 	
 	public class FoodItemsAdapter extends ArrayAdapter<FoodItem> {
         public FoodItemsAdapter(Activity activity, List<FoodItem> list) {
-           super(activity, R.layout.child_item, list);
+           super(activity, R.layout.pantry_item, list);
         }
 
         @Override
@@ -164,7 +164,7 @@ public class PantryFragment extends Fragment {
            final FoodItem foodItem = getItem(position);    
            // Check if an existing view is being reused, otherwise inflate the view
            if (convertView == null) {
-              convertView = LayoutInflater.from(getContext()).inflate(R.layout.child_item, null);
+              convertView = LayoutInflater.from(getContext()).inflate(R.layout.pantry_item, null);
            }
           
            // Create a ListView-specific touch listener. ListViews are given special treatment because
@@ -191,8 +191,6 @@ public class PantryFragment extends Fragment {
                                	}
                            });
            convertView.setOnTouchListener(touchListener);
-    
-           TextView item = (TextView) convertView.findViewById(R.id.item);
            
            convertView.setOnClickListener(new OnClickListener() {
            		public void onClick(View v) {
@@ -243,7 +241,10 @@ public class PantryFragment extends Fragment {
        				lv.invalidateViews();
        			}
        		});
+       		TextView item = (TextView) convertView.findViewById(R.id.item);
        		item.setText(foodItem.getName());
+       		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
+            itemQuantity.setText("x" + foodItem.getAmount());
        		return convertView;
         }
 	}
@@ -309,7 +310,7 @@ public class PantryFragment extends Fragment {
             LayoutInflater inflater = PantryFragment.this.getActivity().getLayoutInflater();
      
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.child_item, null);
+                convertView = inflater.inflate(R.layout.pantry_item, null);
             }
             
             // Create a ListView-specific touch listener. ListViews are given special treatment because
@@ -336,8 +337,6 @@ public class PantryFragment extends Fragment {
                                 }
                             });
             convertView.setOnTouchListener(touchListener);
-     
-            TextView item = (TextView) convertView.findViewById(R.id.item);
             
             convertView.setOnClickListener(new OnClickListener() {
             	public void onClick(View v) {
@@ -389,7 +388,10 @@ public class PantryFragment extends Fragment {
                 	elv.invalidateViews();
                 }
             });
+            TextView item = (TextView) convertView.findViewById(R.id.item);
             item.setText(foodItem.getName());
+            TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
+            itemQuantity.setText("x" + foodItem.getAmount());
             return convertView;
         }
 
