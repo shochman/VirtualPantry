@@ -1,27 +1,7 @@
-<<<<<<< HEAD
 package com.thundersnacks.virtualpantrymodel;
 
-import java.util.Date;
-
-/**
- * Created with IntelliJ IDEA.
- * User: Owner
- * Date: 2/5/14
- * Time: 2:03 PM
- * To change this template use File | Settings | File Templates.
- */
-public abstract class FoodItem {
-    private String name;
-    private int databaseId;
-    private Date expirationDate;
-    private String amount;
-    private String picture;
-}
-=======
-package com.thundersnacks.virtualpantrymodel;
-
-import java.util.Date;
 import java.util.Comparator;
+import java.util.Date;
 
 public abstract class FoodItem {
 	
@@ -119,4 +99,3 @@ public abstract class FoodItem {
 		return name;
 	}
 }
->>>>>>> d8427cccbe098bc19e19031876695251422b26bc
