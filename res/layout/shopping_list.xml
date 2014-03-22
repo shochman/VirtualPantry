@@ -5,18 +5,25 @@
     
     <Button
         android:id="@+id/addToPantryButton"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Selected Items to Pantry"
-        android:layout_alignParentBottom="true" 
-    />
- 
-    <ListView
-        android:id="@+id/listview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true" />
+    
+    <ExpandableListView 
+        android:id="@+id/shopping_list_expandable_list"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" 
+        android:choiceMode="multipleChoice"
+        android:layout_above="@id/addToPantryButton"
+        android:layout_alignParentTop="true" />
+    
+    <ListView 
+        android:id="@+id/shopping_list_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:choiceMode="multipleChoice"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/addToPantryButton"
-    />
+        android:layout_above="@id/addToPantryButton" />
+
 </RelativeLayout>

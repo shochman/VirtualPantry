@@ -13,14 +13,18 @@ public class Pantry implements Iterable<FoodItem> {
 	private ShoppingList shoppingList;
 	private int howSorted;
 	
-	public Pantry( String pantryName, int databaseId ) {
-		this.name = pantryName;
+	public Pantry() {
+		foodItems = new ArrayList<FoodItem>();
+	}
+	
+	public Pantry(String name, int databaseId) {
+		this.name = name;
 		this.databaseId = databaseId;
 		this.foodItems = new ArrayList<FoodItem>();
 	}
 	
 	public String getName() {		
-		return this.name;		
+		return name;		
 	}
 	
 	public void setName( String name ) {		
@@ -28,11 +32,11 @@ public class Pantry implements Iterable<FoodItem> {
 	}
 	
 	public int getDatabaseId() {		
-		return this.databaseId;		
+		return databaseId;		
 	}
 	
 	public ShoppingList getShoppingList() {
-		return this.shoppingList;
+		return shoppingList;
 	}
 	
 	public boolean addItem(FoodItem itemToAdd) {

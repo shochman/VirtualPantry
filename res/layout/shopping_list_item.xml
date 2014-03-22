@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.thundersnacks.virtualpantry.CheckableRelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+        
+    <TextView
+            android:id="@+id/item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="25dp"
+            android:focusable="false"
+            />
+
+   <!-- We dont want to be able to click the CheckBox -
+        android:clickable="false" added.
+        CheckableRelativeLayout takes care of the toggle when clicking the row -->
+    <CheckBox
+              android:id="@+id/shopping_list_checkbox"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:clickable="false"
+              android:focusable="false" 
+              android:layout_alignParentRight="true" />
+            
+</com.thundersnacks.virtualpantry.CheckableRelativeLayout>
