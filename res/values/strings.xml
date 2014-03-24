@@ -39,7 +39,7 @@
         <item>Tub(s)</item>
         <item>Loaf</item>
         <item>Box(es)</item>
-        <item>Unitless</item>
+        <item>(No Unit)</item>
         <item>Other</item>
     </string-array>
     <string name="category_prompt">Select Category</string>
