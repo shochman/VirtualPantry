@@ -23,32 +23,53 @@
 
             <requestFocus />
         </EditText>
+        
+        <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" 
+        android:weightSum="100" >
             
-		<TextView android:id="@+id/quantityText"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Quantity" />
-		
-        <EditText
-            android:id="@+id/quantityEdit"
-            android:hint="Enter quantity"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right" >
+			<TextView android:id="@+id/quantityText"
+	              android:layout_width="fill_parent"
+	              android:layout_height="wrap_content"
+	               android:layout_weight="50"
+	              android:text="Quantity" />
+			
+			<TextView android:id="@+id/unitText"
+	              android:layout_width="fill_parent"
+	              android:layout_height="wrap_content"
+	               android:layout_weight="50"
+	              android:text="Units" />
+			
+	        </LinearLayout>
+	        
+         <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" 
+        android:weightSum="100">
+       
+	        <EditText
+	            android:id="@+id/quantityEdit"
+	            android:hint="Enter quantity"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	             android:layout_weight="50"
+	            android:layout_gravity="right" >
 
-        </EditText>
-        
-        <TextView android:id="@+id/unitText"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Units" />
-        
-        <Spinner
-    		android:id="@+id/unit_spinner"
-    		android:layout_width="fill_parent"
-    		android:layout_height="wrap_content"
-    		android:entries="@array/unit_array"
-    		android:prompt="@string/unit_prompt" />
+	        </EditText>
+	        
+	        <Spinner
+	    		android:id="@+id/unit_spinner"
+	    		android:layout_width="fill_parent"
+	    		android:layout_height="wrap_content"
+	    		 android:layout_weight="50"
+	    		android:entries="@array/unit_array"
+	    		android:prompt="@string/unit_prompt" />
+	        
+		</LinearLayout>
+	    
             
 		<TextView android:id="@+id/expireText"
               android:layout_width="wrap_content"
