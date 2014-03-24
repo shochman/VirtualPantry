@@ -48,7 +48,16 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setupActionBar();
+		addPreferencesFromResource(R.xml.preferences);
 		Preference signout = (Preference)findPreference("signout");
+		signout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference arg0) { 
+            	setResult(RESULT_OK, null);
+	        	finish();   
+                return true;
+            }
+        });
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
     	boolean defValue = false;
     	boolean selectSignOut = sharedPref.getBoolean("signout", defValue);
@@ -117,7 +126,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		// In the simplified UI, fragments are not used at all and we instead
 		// use the older PreferenceActivity APIs.
 		
-		addPreferencesFromResource(R.xml.preferences);
+		//addPreferencesFromResource(R.xml.preferences);	does this in onCreate now
 		
 		bindPreferenceSummaryToValue(findPreference("username"));
 		/**
@@ -329,7 +338,8 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         	boolean defValue = false;
         	boolean selectSignOut = sharedPref.getBoolean("signout", defValue);
-        	this.finishFromChild(getParent());
+        	setResult(RESULT_OK, null);
+        	finish();
 		}
 		
 	}

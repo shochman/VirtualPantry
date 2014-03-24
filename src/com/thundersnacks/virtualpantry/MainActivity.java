@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 	RadioGroup sortByMenu;
 	Button sortByOkButton;
 	RadioButton sortByRadioButton;
+	static final int REQUEST_EXIT = 0;
 	
 	
 	
@@ -195,8 +196,7 @@ public class MainActivity extends Activity {
                 return true;
             case R.id.action_settings:
             	Intent intent = new Intent(this, SettingsActivity.class);
-            	startActivity(intent);
-            	
+            	startActivityForResult(intent, REQUEST_EXIT);
             	/*
             	 * TODO: Add or update information about Pantry foodItem by checking Expiration dates
             	 * 		 and updating the shopping cart to green showing the user its added to the 
@@ -362,6 +362,16 @@ public class MainActivity extends Activity {
 			}
     	});
     }
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if(requestCode == REQUEST_EXIT){
+			if (resultCode == RESULT_OK){
+				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+		    	startActivity(intent);
+				this.finish();
+			}
+		}
+	}
     
     
     
