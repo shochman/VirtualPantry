@@ -215,7 +215,7 @@ public class ShoppingListFragment extends Fragment {
             	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
             	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
             	nameText.setText(foodItem.getName());
-            	double quantity = Double.parseDouble(quantityText.getText().toString());
+            	quantityText.setText(Double.toString(foodItem.getAmount()));
             	int numberOfCat = 0;
             	int numberOfUnit = 0;
             	for (FoodItemUnit fic : FoodItemUnit.values()) {

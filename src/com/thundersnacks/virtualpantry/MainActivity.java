@@ -229,9 +229,9 @@ public class MainActivity extends Activity {
 					    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
 					    	for (FoodItemCategory fic : FoodItemCategory.values()) {
 					    		if (fic.toString().equals(category)) {
-					    			for (FoodItemUnit fic2 : FoodItemUnit.values()) {
-							    		if (fic.toString().equals(unit)) {
-							    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fic2, "y", fic));
+					    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
+							    		if (fiu.toString().equals(unit)) {
+							    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fiu, "y", fic));
 							    			break;
 							    		}
 							    	}
@@ -262,9 +262,9 @@ public class MainActivity extends Activity {
 					    	String unit = unitText.getSelectedItem().toString();
 							for (FoodItemCategory fic : FoodItemCategory.values()) {
 					    		if (fic.toString().equals(category)) {
-					    			for (FoodItemUnit fic2 : FoodItemUnit.values()) {
-							    		if (fic.toString().equals(unit)) {
-							    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fic2, "y", fic));
+					    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
+							    		if (fiu.toString().equals(unit)) {
+							    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic));
 							    			break;
 							    		}
 							    	}
