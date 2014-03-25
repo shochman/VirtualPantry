@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:paddingLeft="25dp" />
+        android:paddingLeft="25dp"
+        android:textStyle="bold" />
     
     <TextView
  		android:id="@+id/item_quantity"
@@ -32,13 +33,35 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/item"
         android:layout_centerVertical="true"
-        android:paddingLeft="5dp" />
+        android:paddingLeft="5dp"
+        android:textStyle="bold" />
     
-    <ImageView
-        android:id="@+id/add_to_shopping_list"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:orientation="horizontal" >
+        
+        <ImageView
+        	android:id="@+id/increment_quantity"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_centerVertical="true"
+        	android:src="@drawable/increment" />
+        
+        <ImageView
+        	android:id="@+id/decrement_quantity"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_centerVertical="true"
+        	android:src="@drawable/decrement" />
+    
+    	<ImageView
+       		android:id="@+id/add_to_shopping_list"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+       		android:layout_centerVertical="true" />
+    	
+    </LinearLayout>
  
 </RelativeLayout>

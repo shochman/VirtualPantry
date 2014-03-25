@@ -20,6 +20,7 @@
             android:layout_centerVertical="true"
             android:paddingLeft="25dp"
             android:focusable="false"
+            android:textStyle="bold"
             />
     
     <TextView
@@ -28,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/item"
         android:layout_centerVertical="true"
-        android:paddingLeft="5dp" />
+        android:paddingLeft="5dp"
+        android:textStyle="bold" />
 
    <!-- We dont want to be able to click the CheckBox -
         android:clickable="false" added.

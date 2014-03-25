@@ -253,6 +253,28 @@ public class PantryFragment extends Fragment {
        				lv.invalidateViews();
        			}
        		});
+       		
+       		ImageView increment = (ImageView) convertView.findViewById(R.id.increment_quantity);
+       		increment.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					foodItem.setAmount(foodItem.getAmount() + 1);
+					lv.invalidateViews();
+				}
+       			
+       		});
+       		ImageView decrement = (ImageView) convertView.findViewById(R.id.decrement_quantity);
+       		decrement.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					foodItem.setAmount(foodItem.getAmount() - 1);
+					lv.invalidateViews();
+				}
+       			
+       		});
+       		
        		ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
        		if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
        			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
@@ -285,8 +307,8 @@ public class PantryFragment extends Fragment {
             itemQuantity.setText("- " + foodItem.getAmount() + " " + foodItem.getUnit());
             ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, -3);
-            if(foodItem.getExperiationDate().after(cal.getTime()) && foodItem.getExperiationDate().before(new Date())) {
+            cal.add(Calendar.DATE, 3);
+            if(foodItem.getExperiationDate().before(cal.getTime())) {
             	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning));
             } else {
             	expirationWarning.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -443,6 +465,28 @@ public class PantryFragment extends Fragment {
                 	elv.invalidateViews();
                 }
             });
+            
+            ImageView increment = (ImageView) convertView.findViewById(R.id.increment_quantity);
+       		increment.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					foodItem.setAmount(foodItem.getAmount() + 1);
+					elv.invalidateViews();
+				}
+       			
+       		});
+       		ImageView decrement = (ImageView) convertView.findViewById(R.id.decrement_quantity);
+       		decrement.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					foodItem.setAmount(foodItem.getAmount() - 1);
+					elv.invalidateViews();
+				}
+       			
+       		});
+       		
             ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
        		if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
        			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
