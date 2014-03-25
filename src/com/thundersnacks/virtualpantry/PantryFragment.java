@@ -253,6 +253,32 @@ public class PantryFragment extends Fragment {
        				lv.invalidateViews();
        			}
        		});
+       		ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
+       		if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
+       		} else if (foodItem.getCategory() == FoodItemCategory.PROTEIN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.protein));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FRUIT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fruit));
+       		} else if (foodItem.getCategory() == FoodItemCategory.VEGETABLE) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.vegetable));
+       		} else if (foodItem.getCategory() == FoodItemCategory.DAIRY) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.dairy));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FROZEN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.frozen));
+       		} else if (foodItem.getCategory() == FoodItemCategory.CONDIMENT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.condiment));
+       		} else if (foodItem.getCategory() == FoodItemCategory.SWEET) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.sweet));
+       		} else if (foodItem.getCategory() == FoodItemCategory.SNACK) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.snack));
+       		} else if (foodItem.getCategory() == FoodItemCategory.GRAIN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.grain));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FAT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fat));
+       		} else if (foodItem.getCategory() == FoodItemCategory.OTHER) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
+       		} 
        		TextView item = (TextView) convertView.findViewById(R.id.item);
        		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
@@ -417,6 +443,32 @@ public class PantryFragment extends Fragment {
                 	elv.invalidateViews();
                 }
             });
+            ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
+       		if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
+       		} else if (foodItem.getCategory() == FoodItemCategory.PROTEIN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.protein));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FRUIT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fruit));
+       		} else if (foodItem.getCategory() == FoodItemCategory.VEGETABLE) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.vegetable));
+       		} else if (foodItem.getCategory() == FoodItemCategory.DAIRY) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.dairy));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FROZEN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.frozen));
+       		} else if (foodItem.getCategory() == FoodItemCategory.CONDIMENT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.condiment));
+       		} else if (foodItem.getCategory() == FoodItemCategory.SWEET) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.sweet));
+       		} else if (foodItem.getCategory() == FoodItemCategory.SNACK) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.snack));
+       		} else if (foodItem.getCategory() == FoodItemCategory.GRAIN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.grain));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FAT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fat));
+       		} else if (foodItem.getCategory() == FoodItemCategory.OTHER) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
+       		} 
             TextView item = (TextView) convertView.findViewById(R.id.item);
             item.setText(foodItem.getName());
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);

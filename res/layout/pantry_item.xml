@@ -5,13 +5,18 @@
     android:padding="10dp" >
     
     <ImageView
+        android:id="@+id/category_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
+    
+    <ImageView
         android:id="@+id/expiration_warning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:maxHeight="10dp"
-        android:maxWidth="10dp" />
+        android:layout_centerVertical="true" />
  
     <TextView
         android:id="@+id/item"
