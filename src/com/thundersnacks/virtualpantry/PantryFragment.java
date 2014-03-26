@@ -302,7 +302,7 @@ public class PantryFragment extends Fragment {
        			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
        		} 
        		TextView item = (TextView) convertView.findViewById(R.id.item);
-       		item.setText(foodItem.getName());
+       		item.setText("\t\t" + foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText("- " + foodItem.getAmount() + " " + foodItem.getUnit());
             ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
@@ -514,7 +514,7 @@ public class PantryFragment extends Fragment {
        			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
        		} 
             TextView item = (TextView) convertView.findViewById(R.id.item);
-            item.setText(foodItem.getName());
+            item.setText("\t\t" + foodItem.getName());
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText("- " + foodItem.getAmount() + " " + foodItem.getUnit());
             ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
