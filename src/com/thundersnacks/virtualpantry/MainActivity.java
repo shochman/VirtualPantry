@@ -142,7 +142,6 @@ public class MainActivity extends Activity {
 			ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 			FoodItemCategory[] categoryList = FoodItemCategory.values();
 			int position = 0;
-			Date testDate = new Date();
 			while (position < categoryList.length)
 			{
 				List<FoodItem> categorized = pf.getPantry().getItemsByCategory(categoryList[position]);
@@ -156,6 +155,30 @@ public class MainActivity extends Activity {
 				position++;
 			}
     	}
+    	
+    	String pantrySortPref = sharedPref.getString("pantry_sort_preference", "");
+    	if(pantrySortPref.equals("alphabetical")) {
+    		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+			pf.getPantry().alphabeticalSort();
+			pf.createPantry();
+    	}    	
+    	else if(pantrySortPref.equals("expiration date")) {
+    		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+			pf.getPantry().expirationSort();
+			pf.createPantry();
+    	}
+    	
+    	String shoppingListSortPref = sharedPref.getString("shopping_list_sort_preference", "");
+    	if(shoppingListSortPref.equals("alphabetical")) {
+    		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+    		slf.getShoppingList().alphabeticalSort();
+    		slf.createShoppingList();
+    	}    
+    	if(shoppingListSortPref.equals("category")) {
+    		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+    		slf.getShoppingList().categorySort();
+    		slf.createShoppingList();
+    	} 
     	
     	NotificationCompat.Builder mBuilder =
     	        new NotificationCompat.Builder(this)

@@ -70,8 +70,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				{
 		        	boolean defValue = false;
 		        	boolean selectSignOut = sharedPreferences.getBoolean("signout", defValue);
-				}
-				
+				}				
 			}
         });
 	}
@@ -129,6 +128,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		//addPreferencesFromResource(R.xml.preferences);	does this in onCreate now
 		
 		bindPreferenceSummaryToValue(findPreference("username"));
+		bindPreferenceSummaryToValue(findPreference("pantry_sort_preference"));
+		bindPreferenceSummaryToValue(findPreference("shopping_list_sort_preference"));
+		
 		/**
 		// Add 'general' preferences.
 		addPreferencesFromResource(R.xml.pref_general);
@@ -210,8 +212,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				// Set the summary to reflect the new value.
 				preference
 						.setSummary(index >= 0 ? listPreference.getEntries()[index]
-								: null);
-
+								: null);				
 			} else if (preference instanceof RingtonePreference) {
 				// For ringtone preferences, look up the correct display value
 				// using RingtoneManager.
@@ -340,6 +341,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         	boolean selectSignOut = sharedPref.getBoolean("signout", defValue);
         	setResult(RESULT_OK, null);
         	finish();
+		}
+		if(key.equals("pantry_sort_preference")) {
+			String pref = sharedPreferences.getString("pantry_sort_preference", "");
 		}
 		
 	}
