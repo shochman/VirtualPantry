@@ -12,6 +12,8 @@ import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.FoodItemUnit;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
+import com.thundersnacks.zxing.IntentIntegrator;
+import com.thundersnacks.zxing.IntentResult;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -43,6 +45,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class MainActivity extends Activity {
@@ -264,6 +267,16 @@ public class MainActivity extends Activity {
 							addDialog.dismiss();
 						}
 					});
+                    Button barcodeButton = (Button) addDialog.findViewById(R.id.barcodeButton);
+                    barcodeButton.setOnClickListener(new View.OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
+							scanIntegrator.initiateScan();
+						}
+                    	
+                    });
             	} else if (getActionBar().getSelectedTab().getPosition() == 1) {
             		addDialog.setContentView(R.layout.add_popup_shoppinglist);
                 	addDialog.setTitle("Add New Item");
@@ -296,6 +309,16 @@ public class MainActivity extends Activity {
 							addDialog.dismiss();
                     	}
 					});
+                    Button barcodeButton = (Button) addDialog.findViewById(R.id.barcodeButton);
+                    barcodeButton.setOnClickListener(new View.OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							IntentIntegrator scanIntegrator = new IntentIntegrator(MainActivity.this);
+							scanIntegrator.initiateScan();
+						}
+                    	
+                    });
                 }
             	return true;
             case R.id.action_share:
@@ -385,7 +408,7 @@ public class MainActivity extends Activity {
 			}
     	});
     }
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		if(requestCode == REQUEST_EXIT){
 			if (resultCode == RESULT_OK){
@@ -394,9 +417,17 @@ public class MainActivity extends Activity {
 				this.finish();
 			}
 		}
+		IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+		if (scanningResult != null) {
+			//we have a result
+			String scanContent = scanningResult.getContents();
+			String scanFormat = scanningResult.getFormatName();
+		} else {
+			Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
+			toast.show();
+		}
+		
 	}
-    
-    
     
     
     ///////////////////////////////////////////////////////////
