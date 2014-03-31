@@ -270,6 +270,12 @@ public class PantryFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					foodItem.setAmount(foodItem.getAmount() - 1);
+					if (foodItem.getAmount() <= 0){
+						pantry.removeItem(foodItem);
+                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
+                   		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+					}
 					lv.invalidateViews();
 				}
        			
@@ -482,6 +488,12 @@ public class PantryFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					foodItem.setAmount(foodItem.getAmount() - 1);
+					if (foodItem.getAmount() <= 0){
+						pantry.removeItem(foodItem);
+                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
+                   		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+					}
 					elv.invalidateViews();
 				}
        			
