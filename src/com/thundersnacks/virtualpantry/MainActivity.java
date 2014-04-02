@@ -1,13 +1,25 @@
 package com.thundersnacks.virtualpantry;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.xmlpull.v1.XmlPullParserException;
 
 import com.thundersnacks.virtualpantry.R;
+import com.thundersnacks.virtualpantrymodel.BarCodeParser;
+import com.thundersnacks.virtualpantrymodel.BarCodeParser.Table;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.FoodItemUnit;
@@ -15,6 +27,7 @@ import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 import com.thundersnacks.zxing.IntentIntegrator;
 import com.thundersnacks.zxing.IntentResult;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -53,8 +66,49 @@ public class MainActivity extends Activity {
 	RadioGroup sortByMenu;
 	Button sortByOkButton;
 	RadioButton sortByRadioButton;
+	String text;
 	static final int REQUEST_EXIT = 0;
 	
+	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
+	    private Dialog dialog;
+		@Override
+	    protected String doInBackground(String... urls) {
+	      String response = "";
+	      for (String url : urls) {
+	    	  //Exit if  cancel(boolean)  is called on this task
+	    	if(!this.isCancelled()){
+		        DefaultHttpClient client = new DefaultHttpClient();
+		        HttpGet httpGet = new HttpGet(url);
+		        try {
+		          HttpResponse execute = client.execute(httpGet);
+		          InputStream content = execute.getEntity().getContent();
+	
+		          BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+		          String s = "";
+		          while ((s = buffer.readLine()) != null) {
+		            response += s;
+		          }
+	
+		        } catch (Exception e) {
+		          e.printStackTrace();
+		        }
+		      }
+	      }
+	      return response;
+	    }
+	    @Override 
+	    protected void onPreExecute(){
+	    	this.dialog = new Dialog(MainActivity.this);
+	    	this.dialog.setTitle("Processing...");
+	    	this.dialog.show();
+	    }
+	    @Override
+	    protected void onPostExecute(String result) {
+	    	//super.onPostExecute(result);
+	    	text = result;
+	    	this.dialog.dismiss();
+	    }
+	  }
 	
 	
 	public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
@@ -422,6 +476,34 @@ public class MainActivity extends Activity {
 			//we have a result
 			String scanContent = scanningResult.getContents();
 			String scanFormat = scanningResult.getFormatName();
+			
+			BarCodeParser barCodeParser = new BarCodeParser();
+			Table table = null;
+			
+			DownloadWebPageTask task = new DownloadWebPageTask();
+	        String xmlText = null;
+			try {
+				xmlText = task.execute(new String[] { "http://www.upcdatabase.com/item/"+scanContent }).get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				if(xmlText != "" && xmlText != null)
+					table = barCodeParser.parse(xmlText);
+				
+			} catch (XmlPullParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Toast.makeText(getApplicationContext(), table != null ? table.description : "", Toast.LENGTH_SHORT).show();
 		} else {
 			Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
 			toast.show();
