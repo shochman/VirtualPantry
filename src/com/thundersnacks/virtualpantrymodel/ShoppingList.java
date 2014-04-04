@@ -56,7 +56,13 @@ public class ShoppingList{
 	public boolean removeItem(FoodItem itemToRemove) {
 		// return true if removal is successful
 		// return false if no item is removed
-		return foodItems.remove(itemToRemove);
+		for (int i = 0; i < foodItems.size(); i++) {
+    		if (foodItems.get(i).getName().equals(itemToRemove.getName())) {
+    			foodItems.remove(i);
+    			return true;
+    		}
+    	}
+		return false;
 	}
 	
 	public Iterator<FoodItem> iterator() {

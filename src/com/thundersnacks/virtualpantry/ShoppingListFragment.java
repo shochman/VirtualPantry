@@ -521,6 +521,13 @@ public class ShoppingListFragment extends Fragment {
         	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
          } 
      }
+	 
+	 public void removeItem(FoodItem foodToRemove) {
+		 ((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
+		 shoppingList.removeItem(foodToRemove);
+		 ((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+		 ((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+	 }
      
      public boolean isInShoppingList(FoodItem food) {
      	return shoppingList.isInShoppingList(food);
