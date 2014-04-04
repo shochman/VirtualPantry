@@ -248,9 +248,15 @@ public class PantryFragment extends Fragment {
        		}
        		addToShoppingList.setOnClickListener(new OnClickListener() {
        			public void onClick(View v) {
-       				slf.addNewItem(foodItem);
-       				Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
-       				lv.invalidateViews();
+       				if (slf.isInShoppingList(foodItem)) {
+       					slf.removeItem(foodItem);
+       					Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " removed from shopping list",Toast.LENGTH_SHORT).show();
+       					lv.invalidateViews();
+       				} else {
+       					slf.addNewItem(foodItem);
+       					Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
+       					lv.invalidateViews();
+       				}
        			}
        		});
        		
@@ -466,9 +472,15 @@ public class PantryFragment extends Fragment {
             addToShoppingList.setOnClickListener(new OnClickListener() {
      
                 public void onClick(View v) {
-                	slf.addNewItem(foodItem);
-                	Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
-                	elv.invalidateViews();
+                	if (slf.isInShoppingList(foodItem)) {
+       					slf.removeItem(foodItem);
+       					Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " removed from shopping list",Toast.LENGTH_SHORT).show();
+       					elv.invalidateViews();
+       				} else {
+       					slf.addNewItem(foodItem);
+       					Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
+       					elv.invalidateViews();
+       				}
                 }
             });
             
