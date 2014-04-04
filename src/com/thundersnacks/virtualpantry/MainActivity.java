@@ -198,19 +198,26 @@ public class MainActivity extends Activity {
 			PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
 			ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 			FoodItemCategory[] categoryList = FoodItemCategory.values();
-			int position = 0;
+			int position = 0, expired = 0;
 			while (position < categoryList.length)
 			{
 				List<FoodItem> categorized = pf.getPantry().getItemsByCategory(categoryList[position]);
 				for(FoodItem Item: categorized) {
 					if(Item.getExperiationDate().before(new Date()))
-						{
+						{	expired++;
 							slf.getShoppingList().addItem(Item);
+							if( expired > 1 )
+							{
+								itemsUpdated += ",";
+							}
 							itemsUpdated += " "+ Item.getName();
 						}
 				}
 				position++;
 			}
+			int addAnd = itemsUpdated.lastIndexOf(" ");
+			String lastItem = itemsUpdated.substring(addAnd);
+			itemsUpdated = itemsUpdated.substring(0, addAnd-1)+ " and"+ lastItem;
     	}
     	
     	String pantrySortPref = sharedPref.getString("pantry_sort_preference", "");
@@ -503,7 +510,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//Toast.makeText(getApplicationContext(), table != null ? table.description : "", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), table != null ? table.description : "", Toast.LENGTH_LONG).show();
 		} else {
 			Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
 			toast.show();
