@@ -275,9 +275,9 @@ public class ShoppingListFragment extends Fragment {
       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
       		} 
            	TextView item = (TextView) convertView.findViewById(R.id.item);
-       		item.setText("\t\t" + foodItem.getName());
+       		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
-            itemQuantity.setText("- " + foodItem.getAmount() + " " + foodItem.getUnit());
+            itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
        		return convertView;
         }
 	}
@@ -469,9 +469,9 @@ public class ShoppingListFragment extends Fragment {
        			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
        		} 
             TextView item = (TextView) convertView.findViewById(R.id.item);
-            item.setText("\t\t" + foodItem.getName());
+            item.setText(foodItem.getName());
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
-            itemQuantity.setText("- " + foodItem.getAmount() + " " + foodItem.getUnit());
+            itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
             return convertView;
         }
 
