@@ -32,7 +32,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             -->
+            
+            <meta-data android:name="android.app.searchable"
+            	android:resource="@xml/searchable" />
+            
+            
+            
+            
         </activity>
+        
+        
+        
+        <activity android:name="com.thundersnacks.virtualpantry.SearchResultsActivity">
+   			<intent-filter>
+        <action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+		</activity>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         <activity
             android:name="com.thundersnacks.virtualpantry.DisplayMessageActivity"
             android:label="@string/title_activity_shopping_list"
