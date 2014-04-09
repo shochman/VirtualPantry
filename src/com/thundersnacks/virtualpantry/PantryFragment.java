@@ -25,6 +25,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -233,7 +234,6 @@ public class PantryFragment extends Fragment {
    						public void onClick(View v) {
    							
    							editItem(editDialog, foodItem);
-   							editDialog.dismiss();
    						}
                        });
            		}
@@ -456,7 +456,6 @@ public class PantryFragment extends Fragment {
     						public void onClick(View v) {
     							
     							editItem(editDialog, foodItem);
-    							editDialog.dismiss();
     						}
                         });
             		}
@@ -606,32 +605,55 @@ public class PantryFragment extends Fragment {
     	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
     	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
-    	String name = nameText.getText().toString();
-    	double quantity = Double.parseDouble(quantityText.getText().toString());
-    	String unit = unitText.getSelectedItem().toString();
-    	String category = categoryText.getSelectedItem().toString();
-    	Calendar cal = GregorianCalendar.getInstance();
-        cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
-    	Date expDate = cal.getTime(); 
-    	food.setName(name);
-    	food.setAmount(quantity);
-    	for (FoodItemUnit fic : FoodItemUnit.values()) {
-    		if (fic.toString().equals(unit)) {
-    			food.setUnit(fic);
-    			break;
-    		}
-    	}    
-    	for (FoodItemCategory fic : FoodItemCategory.values()) {
-    		if (fic.toString().equals(category)) {
-    			food.setCategory(fic);
-    			break;
-    		}
-    	}
-    	food.setExperiationDate(expDate);
-    	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
-    	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(food);
-    	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
-    	lv.invalidateViews();
-    	elv.invalidateViews();
+    	View focusView = null;
+		boolean filled = false; 
+	    	
+		    
+		    if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
+		    	filled = true;
+		    
+		if (!filled){
+			if(TextUtils.isEmpty(nameText.getText().toString())){
+				nameText.setError(getString(R.string.error_field_required));
+				focusView = nameText;
+			}else if (TextUtils.isEmpty(quantityText.getText().toString())){
+				quantityText.setError(getString(R.string.error_field_required));
+				focusView = quantityText;									
+			}
+			
+			focusView.requestFocus();
+				
+		}else{		
+	    	String name = nameText.getText().toString();
+	    	double quantity = Double.parseDouble(quantityText.getText().toString());
+	    	String unit = unitText.getSelectedItem().toString();
+	    	String category = categoryText.getSelectedItem().toString();
+	    	Calendar cal = GregorianCalendar.getInstance();
+	        cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+	    	Date expDate = cal.getTime(); 
+	    	food.setName(name);
+	    	food.setAmount(quantity);
+	    	for (FoodItemUnit fic : FoodItemUnit.values()) {
+	    		if (fic.toString().equals(unit)) {
+	    			food.setUnit(fic);
+	    			break;
+	    		}
+	    	}    
+	    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+	    		if (fic.toString().equals(category)) {
+	    			food.setCategory(fic);
+	    			break;
+	    		}
+	    	}
+	    	food.setExperiationDate(expDate);
+	    	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+	    	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(food);
+	    	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+	    	lv.invalidateViews();
+	    	elv.invalidateViews();
+
+			editDialog.dismiss();
+		}
+    	
     }
 }

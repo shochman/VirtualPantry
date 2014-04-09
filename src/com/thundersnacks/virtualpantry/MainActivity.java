@@ -31,6 +31,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -308,30 +309,51 @@ public class MainActivity extends Activity {
 						
 						@Override
 							public void onClick(View v) {
-							
-							PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+							boolean filled = false;
+							 
 							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-					    	EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+						    EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);			
+							PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
 					    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
 					    	Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
 					    	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
-					    	String name = nameText.getText().toString();
-					    	double quantity = Double.parseDouble(quantityText.getText().toString());
-					    	String category = categoryText.getSelectedItem().toString();
-					    	String unit = unitText.getSelectedItem().toString();
-					    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
-					    	for (FoodItemCategory fic : FoodItemCategory.values()) {
-					    		if (fic.toString().equals(category)) {
-					    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
-							    		if (fiu.toString().equals(unit)) {
-							    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fiu, "y", fic));
-							    			break;
-							    		}
-							    	}
-					    		}
-					    	}
-					    					    		
-							addDialog.dismiss();
+						    View focusView = null;
+						    
+					    	
+						    
+						    if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
+						    	filled = true;
+						    
+							if (!filled){
+								if(TextUtils.isEmpty(nameText.getText().toString())){
+									nameText.setError(getString(R.string.error_field_required));
+									focusView = nameText;
+								}else if (TextUtils.isEmpty(quantityText.getText().toString())){
+									quantityText.setError(getString(R.string.error_field_required));
+									focusView = quantityText;									
+								}
+								
+								focusView.requestFocus();
+								
+							}else{		
+								String name = nameText.getText().toString();
+						    	double quantity = Double.parseDouble(quantityText.getText().toString());
+						    	String category = categoryText.getSelectedItem().toString();
+						    	String unit = unitText.getSelectedItem().toString();
+						    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+						    	for (FoodItemCategory fic : FoodItemCategory.values()) {
+						    		if (fic.toString().equals(category)) {
+						    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
+								    		if (fiu.toString().equals(unit)) {
+								    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fiu, "y", fic));
+								    			break;
+								    		}
+								    	}
+						    		}
+						    	}
+						    					    		
+								addDialog.dismiss();
+							}
 						}
 					});
                     Button barcodeButton = (Button) addDialog.findViewById(R.id.barcodeButton);
@@ -353,27 +375,46 @@ public class MainActivity extends Activity {
 									
                     	@Override
 						public void onClick(View v) {
-										
+							boolean filled = false;
+							
                     		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 							EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
 							EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
 							Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
 					    	Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
-							String name = nameText.getText().toString();
-					    	double quantity = Double.parseDouble(quantityText.getText().toString());
-							String category = categoryText.getSelectedItem().toString();
-					    	String unit = unitText.getSelectedItem().toString();
-							for (FoodItemCategory fic : FoodItemCategory.values()) {
-					    		if (fic.toString().equals(category)) {
-					    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
-							    		if (fiu.toString().equals(unit)) {
-							    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic));
-							    			break;
-							    		}
-							    	}
-					    		}
-					    	}
-							addDialog.dismiss();
+					    	View focusView = null;
+					    	
+					    	if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
+						    	filled = true;
+						    
+							if (!filled){
+								if(TextUtils.isEmpty(nameText.getText().toString())){
+									nameText.setError(getString(R.string.error_field_required));
+									focusView = nameText;
+								}else if (TextUtils.isEmpty(quantityText.getText().toString())){
+									quantityText.setError(getString(R.string.error_field_required));
+									focusView = quantityText;									
+								}
+								
+								focusView.requestFocus();
+								
+							}else{		
+								String name = nameText.getText().toString();
+						    	double quantity = Double.parseDouble(quantityText.getText().toString());
+								String category = categoryText.getSelectedItem().toString();
+						    	String unit = unitText.getSelectedItem().toString();
+								for (FoodItemCategory fic : FoodItemCategory.values()) {
+						    		if (fic.toString().equals(category)) {
+						    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
+								    		if (fiu.toString().equals(unit)) {
+								    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic));
+								    			break;
+								    		}
+								    	}
+						    		}
+						    	}
+								addDialog.dismiss();
+                    		}
                     	}
 					});
                     Button barcodeButton = (Button) addDialog.findViewById(R.id.barcodeButton);
