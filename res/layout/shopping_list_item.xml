@@ -11,27 +11,31 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true" />
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/category_image"
+        android:orientation="vertical" >
         
-    <TextView
+    	<TextView
             android:id="@+id/item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:paddingLeft="25dp"
+            android:paddingLeft="5dp"
             android:focusable="false"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
     
-    <TextView
- 		android:id="@+id/item_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/item"
-        android:layout_centerVertical="true"
-        android:paddingLeft="5dp"
-        android:textStyle="bold" />
+    	<TextView
+ 			android:id="@+id/item_quantity"
+       	 	android:layout_width="wrap_content"
+       	 	android:layout_height="wrap_content"
+        	android:paddingLeft="15dp"
+        	android:focusable="false"
+        	android:textStyle="bold" />
 
+    </LinearLayout>
+    	
    <!-- We dont want to be able to click the CheckBox -
         android:clickable="false" added.
         CheckableRelativeLayout takes care of the toggle when clicking the row -->
