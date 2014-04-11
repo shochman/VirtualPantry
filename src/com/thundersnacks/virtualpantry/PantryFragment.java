@@ -1,6 +1,7 @@
 package com.thundersnacks.virtualpantry;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -568,6 +569,7 @@ public class PantryFragment extends Fragment {
 			for(int i = 0; i < getGroupCount(); i++) {
 				if (getGroup(i).equals(fi.getCategory().toString())) {
 					foodMap.get(getGroup(i)).add(fi);
+					Collections.sort(foodMap.get(getGroup(i)), FoodItem.getCategoryComparator());
 					break;
 				}
 			}

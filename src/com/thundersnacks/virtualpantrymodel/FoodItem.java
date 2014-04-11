@@ -75,7 +75,7 @@ public abstract class FoodItem {
 		this.category = cat;
 	}
 
-	static Comparator<FoodItem> getAlphabeticalComparator() {
+	public static Comparator<FoodItem> getAlphabeticalComparator() {
 		return new Comparator<FoodItem>() {
 			public int compare(FoodItem a, FoodItem b)
 			{
@@ -84,7 +84,7 @@ public abstract class FoodItem {
 		};
 	}
 
-	static Comparator<FoodItem> getExpirationComparator() {
+	public static Comparator<FoodItem> getExpirationComparator() {
 	return new Comparator<FoodItem>() {
 			public int compare(FoodItem a, FoodItem b)
 			{
@@ -93,7 +93,7 @@ public abstract class FoodItem {
 		};
 	}
 
-	static Comparator<FoodItem> getCategoryComparator() {
+	public static Comparator<FoodItem> getCategoryComparator() {
 		return new Comparator<FoodItem>() {
 			public int compare(FoodItem a, FoodItem b)
 			{
