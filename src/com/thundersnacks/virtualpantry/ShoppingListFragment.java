@@ -118,7 +118,7 @@ public class ShoppingListFragment extends Fragment {
 							if (lv.getVisibility() == View.VISIBLE) {
 								foodToRemove = (FoodItem) lv.getAdapter().getItem(i);
 								lv.setItemChecked(i, false);
-								((CheckBox) lv.getChildAt(i).findViewById(R.id.shopping_list_checkbox)).toggle();
+								//((CheckBox) lv.getChildAt(i).findViewById(R.id.shopping_list_checkbox)).toggle();
 							} else {
  								foodToRemove = (FoodItem) elv.getAdapter().getItem(i);
 								elv.setItemChecked(i, false);
