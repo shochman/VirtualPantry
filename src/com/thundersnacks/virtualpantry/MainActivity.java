@@ -68,6 +68,7 @@ public class MainActivity extends Activity {
 	RadioGroup sortByMenu;
 	Button sortByOkButton;
 	RadioButton sortByRadioButton;
+	Dialog addDialog;
 	String text;
 	static final int REQUEST_EXIT = 0;
 	
@@ -299,7 +300,7 @@ public class MainActivity extends Activity {
             	
                 return true;
             case R.id.action_new:
-            	final Dialog addDialog = new Dialog(this);
+            	addDialog = new Dialog(this);
             	if (getActionBar().getSelectedTab().getPosition() == 0) {
             		addDialog.setTitle("Add New Item");
             		addDialog.setContentView(R.layout.add_popup);
@@ -558,6 +559,12 @@ public class MainActivity extends Activity {
 				e.printStackTrace();
 			}
 			Toast.makeText(getApplicationContext(), table != null ? table.description : "", Toast.LENGTH_LONG).show();
+			EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+			EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+			String description = table != null ? table.description : "null";
+			String size = table != null ? table.size : "0";
+			nameText.setText(table != null ? table.description : "null");
+			quantityText.setText(table != null ? table.size : "0");
 		} else {
 			Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
 			toast.show();
