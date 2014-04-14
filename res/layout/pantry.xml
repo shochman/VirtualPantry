@@ -13,5 +13,10 @@
               android:layout_height="match_parent"
               android:layout_width="match_parent"
               android:layout_alignParentTop="true" />
+    
+    <ListView android:id="@+id/search_pantry_list"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:layout_alignParentTop="true" />
  
 </RelativeLayout>
