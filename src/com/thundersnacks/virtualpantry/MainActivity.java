@@ -287,7 +287,22 @@ public class MainActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_search:
-                //Handle search
+              
+            	String query = getIntent().getStringExtra(SearchManager.QUERY);
+    			//use the query to search pantry data
+    		//	FoodItemCategory[] categoryList = FoodItemCategory.values();
+
+    			PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+
+    			List<FoodItem> foodItem = pf.getPantry().getFoodItems();
+    			List<FoodItem> foodResults = new ArrayList<FoodItem>();
+    			for(FoodItem food : foodItem){
+    				if (food.getName().equals(query))
+    				{	
+    					foodResults.add(food);
+    				}
+    			}
+            	
                 return true;
             case R.id.action_settings:
             	Intent intent = new Intent(this, SettingsActivity.class);
