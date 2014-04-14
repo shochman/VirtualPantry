@@ -316,7 +316,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public static class DataSyncPreferenceFragment extends PreferenceFragment {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
+			super.onCreate(savedInstanceState); 
 			addPreferencesFromResource(R.xml.pref_data_sync);
 
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -343,8 +343,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         	finish();
 		}
 		if(key.equals("pantry_sort_preference")) {
-			String pref = sharedPreferences.getString("pantry_sort_preference", "");
+			MainActivity.pantryFragment.createPantry();
 		}
-		
+		if(key.equals("shopping_list_sort_preference")) {
+			MainActivity.shoppingListFragment.createShoppingList();
+		}
 	}
 }
