@@ -316,7 +316,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public static class DataSyncPreferenceFragment extends PreferenceFragment {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
+			super.onCreate(savedInstanceState); 
 			addPreferencesFromResource(R.xml.pref_data_sync);
 
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
