@@ -343,8 +343,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         	finish();
 		}
 		if(key.equals("pantry_sort_preference")) {
-			String pref = sharedPreferences.getString("pantry_sort_preference", "");
+			MainActivity.pantryFragment.createPantry();
 		}
-		
+		if(key.equals("shopping_list_sort_preference")) {
+			MainActivity.shoppingListFragment.createShoppingList();
+		}
 	}
 }

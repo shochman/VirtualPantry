@@ -71,6 +71,8 @@ public class MainActivity extends Activity {
 	Dialog addDialog;
 	String text;
 	static final int REQUEST_EXIT = 0;
+	static PantryFragment pantryFragment;
+	static ShoppingListFragment shoppingListFragment;
 	
 	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
 	    private Dialog dialog;
@@ -201,10 +203,13 @@ public class MainActivity extends Activity {
     	boolean defValue = false;
     	boolean checkedAuto = sharedPref.getBoolean("auto_add", defValue);
     	String itemsUpdated = "Added items:";
+    	PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+		pantryFragment = pf;
+		shoppingListFragment = slf;
+		
     	if(checkedAuto)
-    	{
-			PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
-			ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+    	{			
 			FoodItemCategory[] categoryList = FoodItemCategory.values();
 			int position = 0, expired = 0;
 			while (position < categoryList.length)
@@ -230,24 +235,20 @@ public class MainActivity extends Activity {
     	
     	String pantrySortPref = sharedPref.getString("pantry_sort_preference", "");
     	if(pantrySortPref.equals("alphabetical")) {
-    		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
 			pf.getPantry().alphabeticalSort();
 			pf.createPantry();
     	}    	
     	else if(pantrySortPref.equals("expiration date")) {
-    		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
 			pf.getPantry().expirationSort();
 			pf.createPantry();
     	}
     	
     	String shoppingListSortPref = sharedPref.getString("shopping_list_sort_preference", "");
     	if(shoppingListSortPref.equals("alphabetical")) {
-    		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
     		slf.getShoppingList().alphabeticalSort();
     		slf.createShoppingList();
     	}    
     	if(shoppingListSortPref.equals("category")) {
-    		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
     		slf.getShoppingList().categorySort();
     		slf.createShoppingList();
     	} 
@@ -582,3 +583,4 @@ public class MainActivity extends Activity {
     
     
 }
+
