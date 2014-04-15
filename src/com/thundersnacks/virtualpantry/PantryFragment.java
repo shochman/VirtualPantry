@@ -638,6 +638,7 @@ public class PantryFragment extends Fragment {
                                    for (int position : reverseSortedPositions) {
                                    		FoodItem foodToRemove = ((FoodItem)slv.getAdapter().getItem(position));
                                    		pantry.removeItem(foodToRemove);
+                                   		searchFoodItems.remove(foodToRemove);
                                    		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
                                    		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
                                    		((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();

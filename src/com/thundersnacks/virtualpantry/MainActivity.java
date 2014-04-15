@@ -193,25 +193,39 @@ public class MainActivity extends Activity {
     @Override
 	protected void onNewIntent(Intent intent) {
     	if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-    		handleIntent(intent);
+    		handleSearch(intent);
     	}
 	}
     
-    private void handleIntent(Intent intent) {
+    private void handleSearch(Intent intent) {
     	String query = intent.getStringExtra(SearchManager.QUERY);
 		//use the query to search pantry data
 		//FoodItemCategory[] categoryList = FoodItemCategory.values();
-		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
-		List<FoodItem> foodItem = pf.getPantry().getFoodItems();
-		List<FoodItem> foodResults = new ArrayList<FoodItem>();
-		for(FoodItem food : foodItem) {
-			if (food.getName().equals(query)) {	
-				foodResults.add(food);
-			}
-		}
-		Collections.sort(foodResults, FoodItem.getAlphabeticalComparator());
-		pf.setSearchFoodItems(foodResults);
-		pf.createPantry(true);
+    	if (getActionBar().getSelectedTab().getPosition() == 0) {
+    		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+    		List<FoodItem> foodItem = pf.getPantry().getFoodItems();
+    		List<FoodItem> foodResults = new ArrayList<FoodItem>();
+    		for(FoodItem food : foodItem) {
+    			if (food.getName().equals(query)) {	
+    				foodResults.add(food);
+    			}
+    		}
+    		Collections.sort(foodResults, FoodItem.getAlphabeticalComparator());
+    		pf.setSearchFoodItems(foodResults);
+    		pf.createPantry(true);
+    	} else if (getActionBar().getSelectedTab().getPosition() == 1) {
+    		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+    		List<FoodItem> foodItem = slf.getShoppingList().getFoodItems();
+    		List<FoodItem> foodResults = new ArrayList<FoodItem>();
+    		for(FoodItem food : foodItem) {
+    			if(food.getName().equals(query)) {
+    				foodResults.add(food);
+    			}
+    		}
+    		Collections.sort(foodResults, FoodItem.getAlphabeticalComparator());
+    		slf.setSearchFoodItems(foodResults);
+    		slf.createShoppingList(true);
+    	}
     }
 
 
@@ -226,8 +240,13 @@ public class MainActivity extends Activity {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 // Do something when collapsed
-            	PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
-            	pf.createPantry(false);
+            	if (getActionBar().getSelectedTab().getPosition() == 0) {
+            		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+            		pf.createPantry(false);
+            	} else if (getActionBar().getSelectedTab().getPosition() == 1) {
+            		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+            		slf.createShoppingList(false);
+            	}
                 return true;       // Return true to collapse action view
             }
             @Override
@@ -288,11 +307,11 @@ public class MainActivity extends Activity {
     	String shoppingListSortPref = sharedPref.getString("shopping_list_sort_preference", "");
     	if(shoppingListSortPref.equals("alphabetical")) {
     		slf.getShoppingList().alphabeticalSort();
-    		slf.createShoppingList();
+    		slf.createShoppingList(false);
     	}    
     	if(shoppingListSortPref.equals("category")) {
     		slf.getShoppingList().categorySort();
-    		slf.createShoppingList();
+    		slf.createShoppingList(false);
     	} 
     	
     	NotificationCompat.Builder mBuilder =
@@ -564,11 +583,11 @@ public class MainActivity extends Activity {
 					ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 					if(sortById==R.id.alphabetical){
 						slf.getShoppingList().alphabeticalSort();
-						slf.createShoppingList();
+						slf.createShoppingList(false);
 					}
 					else if(sortById==R.id.categoryCode){
 						slf.getShoppingList().categorySort();
-						slf.createShoppingList();
+						slf.createShoppingList(false);
 					}
 				}
 				sortDialog.dismiss();
