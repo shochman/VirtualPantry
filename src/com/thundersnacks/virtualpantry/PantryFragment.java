@@ -342,10 +342,13 @@ public class PantryFragment extends Fragment {
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
             ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, 3);
-            if(foodItem.getExperiationDate().before(cal.getTime())) {
-            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning));
+            Calendar warningCal = Calendar.getInstance();
+            warningCal.add(Calendar.DATE, 3);
+            Calendar expireCal = Calendar.getInstance();
+            if (foodItem.getExperiationDate().before(expireCal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.expired));
+            } else if (foodItem.getExperiationDate().before(warningCal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning_yellow));
             } else {
             	expirationWarning.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
@@ -565,10 +568,13 @@ public class PantryFragment extends Fragment {
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
             ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, 3);
-            if(foodItem.getExperiationDate().before(cal.getTime())) {
-            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning));
+            Calendar warningCal = Calendar.getInstance();
+            warningCal.add(Calendar.DATE, 3);
+            Calendar expireCal = Calendar.getInstance();
+            if (foodItem.getExperiationDate().before(expireCal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.expired));
+            } else if (foodItem.getExperiationDate().before(warningCal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning_yellow));
             } else {
             	expirationWarning.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
@@ -771,10 +777,13 @@ public class PantryFragment extends Fragment {
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
             ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, 3);
-            if(foodItem.getExperiationDate().before(cal.getTime())) {
-            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning));
+            Calendar warningCal = Calendar.getInstance();
+            warningCal.add(Calendar.DATE, 3);
+            Calendar expireCal = Calendar.getInstance();
+            if (foodItem.getExperiationDate().before(expireCal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.expired));
+            } else if (foodItem.getExperiationDate().before(warningCal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning_yellow));
             } else {
             	expirationWarning.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
@@ -810,18 +819,18 @@ public class PantryFragment extends Fragment {
 		    if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
 		    	filled = true;
 		    
-		if (!filled){
-			if(TextUtils.isEmpty(nameText.getText().toString())){
+		if (!filled) {
+			if (TextUtils.isEmpty(nameText.getText().toString())) {
 				nameText.setError(getString(R.string.error_field_required));
 				focusView = nameText;
-			}else if (TextUtils.isEmpty(quantityText.getText().toString())){
+			} else if (TextUtils.isEmpty(quantityText.getText().toString())) {
 				quantityText.setError(getString(R.string.error_field_required));
 				focusView = quantityText;									
 			}
 			
 			focusView.requestFocus();
 				
-		}else{		
+		} else {		
 	    	String name = nameText.getText().toString();
 	    	double quantity = Double.parseDouble(quantityText.getText().toString());
 	    	String unit = unitText.getSelectedItem().toString();
