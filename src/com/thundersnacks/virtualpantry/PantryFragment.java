@@ -853,6 +853,13 @@ public class PantryFragment extends Fragment {
 	    		}
 	    	}
 	    	food.setExperiationDate(expDate);
+	    	if (pantry.getHowSorted() == 0) {
+	    		pantry.categorySort();
+	    	} else if (pantry.getHowSorted() == 1) {
+	    		pantry.alphabeticalSort();
+	    	} else if (pantry.getHowSorted() == 2) {
+	    		pantry.expirationSort();
+	    	}
 	    	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 	    	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(food);
 	    	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();

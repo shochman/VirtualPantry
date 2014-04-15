@@ -768,6 +768,11 @@ public class ShoppingListFragment extends Fragment {
      		}
      	}
      	food.setExperiationDate(expDate);
+     	if (shoppingList.getHowSorted() == 0) {
+    		shoppingList.categorySort();
+    	} else if (shoppingList.getHowSorted() == 1) {
+    		shoppingList.alphabeticalSort();
+    	}
      	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
      	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(food);
      	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
