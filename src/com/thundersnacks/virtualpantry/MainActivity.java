@@ -577,10 +577,12 @@ public class MainActivity extends Activity {
 			Toast.makeText(getApplicationContext(), table != null ? table.description : "", Toast.LENGTH_LONG).show();
 			EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
 			EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+			Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
 			String description = table != null ? table.description : "null";
 			String size = table != null ? table.size : "0";
 			nameText.setText(table != null ? table.description : "null");
 			quantityText.setText(table != null ? table.size : "0");
+			unitText.setSelection(table != null ? table.foodItemUnit.ordinal() : FoodItemUnit.UNITLESS.ordinal());
 		} else {
 			Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
 			toast.show();
