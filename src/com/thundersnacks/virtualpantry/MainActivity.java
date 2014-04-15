@@ -48,6 +48,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -154,6 +155,10 @@ public class MainActivity extends Activity {
 	        if (mFragment != null) {
 	            // Detach the fragment, because another one is being attached
 	            ft.detach(mFragment);
+	            if (((MainActivity) mActivity).firstOpen == true) {
+	            	MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+	            	searchMenuItem.collapseActionView();
+		        }
 	        }
 	    }
 
@@ -162,7 +167,7 @@ public class MainActivity extends Activity {
 	    }
 	}
 	
-	Menu menu;
+	static Menu menu;
 	boolean firstOpen = false;
 	
     @Override
@@ -184,6 +189,44 @@ public class MainActivity extends Activity {
         actionBar.setSelectedNavigationItem(1);
         actionBar.setSelectedNavigationItem(0);
     }
+    
+    @Override
+	protected void onNewIntent(Intent intent) {
+    	if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+    		handleSearch(intent);
+    	}
+	}
+    
+    private void handleSearch(Intent intent) {
+    	String query = intent.getStringExtra(SearchManager.QUERY);
+		//use the query to search pantry data
+		//FoodItemCategory[] categoryList = FoodItemCategory.values();
+    	if (getActionBar().getSelectedTab().getPosition() == 0) {
+    		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+    		List<FoodItem> foodItem = pf.getPantry().getFoodItems();
+    		List<FoodItem> foodResults = new ArrayList<FoodItem>();
+    		for(FoodItem food : foodItem) {
+    			if (food.getName().equals(query)) {	
+    				foodResults.add(food);
+    			}
+    		}
+    		Collections.sort(foodResults, FoodItem.getAlphabeticalComparator());
+    		pf.setSearchFoodItems(foodResults);
+    		pf.createPantry(true);
+    	} else if (getActionBar().getSelectedTab().getPosition() == 1) {
+    		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+    		List<FoodItem> foodItem = slf.getShoppingList().getFoodItems();
+    		List<FoodItem> foodResults = new ArrayList<FoodItem>();
+    		for(FoodItem food : foodItem) {
+    			if(food.getName().equals(query)) {
+    				foodResults.add(food);
+    			}
+    		}
+    		Collections.sort(foodResults, FoodItem.getAlphabeticalComparator());
+    		slf.setSearchFoodItems(foodResults);
+    		slf.createShoppingList(true);
+    	}
+    }
 
 
     @Override
@@ -191,11 +234,29 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-               (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        searchMenuItem.setOnActionExpandListener(new OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when collapsed
+            	if (getActionBar().getSelectedTab().getPosition() == 0) {
+            		PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+            		pf.createPantry(false);
+            	} else if (getActionBar().getSelectedTab().getPosition() == 1) {
+            		ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
+            		slf.createShoppingList(false);
+            	}
+                return true;       // Return true to collapse action view
+            }
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                return true;      // Return true to expand action view
+            }
+        });
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-        		searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search Pantry");
         this.menu = menu;
         firstOpen = true;
@@ -236,21 +297,21 @@ public class MainActivity extends Activity {
     	String pantrySortPref = sharedPref.getString("pantry_sort_preference", "");
     	if(pantrySortPref.equals("alphabetical")) {
 			pf.getPantry().alphabeticalSort();
-			pf.createPantry();
+			pf.createPantry(false);
     	}    	
     	else if(pantrySortPref.equals("expiration date")) {
 			pf.getPantry().expirationSort();
-			pf.createPantry();
+			pf.createPantry(false);
     	}
     	
     	String shoppingListSortPref = sharedPref.getString("shopping_list_sort_preference", "");
     	if(shoppingListSortPref.equals("alphabetical")) {
     		slf.getShoppingList().alphabeticalSort();
-    		slf.createShoppingList();
+    		slf.createShoppingList(false);
     	}    
     	if(shoppingListSortPref.equals("category")) {
     		slf.getShoppingList().categorySort();
-    		slf.createShoppingList();
+    		slf.createShoppingList(false);
     	} 
     	
     	NotificationCompat.Builder mBuilder =
@@ -516,17 +577,17 @@ public class MainActivity extends Activity {
 					else if(sortById==R.id.expirationDate){
 						pf.getPantry().expirationSort();
 					}
-					pf.createPantry();
+					pf.createPantry(false);
 				}
 				else if(getActionBar().getSelectedTab().getPosition() == 1){
 					ShoppingListFragment slf = (ShoppingListFragment) getFragmentManager().findFragmentByTag("Shopping List");
 					if(sortById==R.id.alphabetical){
 						slf.getShoppingList().alphabeticalSort();
-						slf.createShoppingList();
+						slf.createShoppingList(false);
 					}
 					else if(sortById==R.id.categoryCode){
 						slf.getShoppingList().categorySort();
-						slf.createShoppingList();
+						slf.createShoppingList(false);
 					}
 				}
 				sortDialog.dismiss();

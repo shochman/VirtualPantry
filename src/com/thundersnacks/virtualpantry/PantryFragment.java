@@ -57,6 +57,8 @@ public class PantryFragment extends Fragment {
 	View view;
 	ExpandableListView elv;
 	ListView lv;
+	ListView slv;
+	List<FoodItem> searchFoodItems;
 	public ShoppingListFragment slf;
 	
 	public PantryFragment() {
@@ -69,6 +71,10 @@ public class PantryFragment extends Fragment {
 	
 	public Pantry getPantry() {
 		return pantry;
+	}
+	
+	public void setSearchFoodItems(List<FoodItem> searchFoodItems) {
+		this.searchFoodItems = searchFoodItems;
 	}
 	
 	@Override
@@ -142,19 +148,36 @@ public class PantryFragment extends Fragment {
 		elv.setAdapter(new ExpandableListAdapter(getActivity(), pantry.getFoodItems()));
         lv = (ListView) view.findViewById(R.id.pantry_list);
         lv.setAdapter(new FoodItemsAdapter(getActivity(), pantry.getFoodItems()));
-        createPantry();
+        slv = (ListView) view.findViewById(R.id.search_pantry_list);
+        searchFoodItems = new ArrayList<FoodItem>();
+        for (FoodItem fi : pantry.getFoodItems()) {
+        	searchFoodItems.add(fi);
+        }
+        slv.setAdapter(new SearchFoodItemsAdapter(getActivity(), searchFoodItems));
+        createPantry(false);
         return view;
     }
 	
-	public void createPantry() {
-		if (pantry.getHowSorted() == 0) {
+	public void createPantry(boolean search) {
+		if (search) {
+			slv.setVisibility(View.VISIBLE);
 			lv.setVisibility(View.INVISIBLE);
-			elv.setVisibility(View.VISIBLE);
-			elv.invalidateViews();
-		} else {
 			elv.setVisibility(View.INVISIBLE);
-			lv.setVisibility(View.VISIBLE);
-			lv.invalidateViews();
+			slv.setAdapter(new SearchFoodItemsAdapter(getActivity(), searchFoodItems));
+			//((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
+			slv.invalidateViews();
+		} else {
+			if (pantry.getHowSorted() == 0) {
+				lv.setVisibility(View.INVISIBLE);
+				elv.setVisibility(View.VISIBLE);
+				slv.setVisibility(View.INVISIBLE);
+				elv.invalidateViews();
+			} else {
+				elv.setVisibility(View.INVISIBLE);
+				lv.setVisibility(View.VISIBLE);
+				slv.setVisibility(View.INVISIBLE);
+				lv.invalidateViews();
+			}
 		}
 	}
 	
@@ -583,9 +606,183 @@ public class PantryFragment extends Fragment {
 			}
 		}
 	}
+	
+	public class SearchFoodItemsAdapter extends ArrayAdapter<FoodItem> {
+        public SearchFoodItemsAdapter(Activity activity, List<FoodItem> list) {
+           super(activity, R.layout.pantry_item, list);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+           // Get the data item for this position
+           final FoodItem foodItem = getItem(position);    
+           // Check if an existing view is being reused, otherwise inflate the view
+           if (convertView == null) {
+              convertView = LayoutInflater.from(getContext()).inflate(R.layout.pantry_item, null);
+           }
+          
+           // Create a ListView-specific touch listener. ListViews are given special treatment because
+           // by default they handle touches for their list items... i.e. they're in charge of drawing
+           // the pressed state (the list selector), handling list item clicks, etc.
+           final SwipeDismissListViewTouchListener touchListener =
+                   new SwipeDismissListViewTouchListener(
+                           slv,
+                           new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                               @Override
+                               public boolean canDismiss(int position) {
+                                   return true;
+                               }
+
+                               @Override
+                               public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
+                                   for (int position : reverseSortedPositions) {
+                                   		FoodItem foodToRemove = ((FoodItem)slv.getAdapter().getItem(position));
+                                   		pantry.removeItem(foodToRemove);
+                                   		searchFoodItems.remove(foodToRemove);
+                                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
+                                   		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+                                   		((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
+                                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+                                   	}
+                               	}
+                           });
+           convertView.setOnTouchListener(touchListener);
+           
+           convertView.setOnClickListener(new OnClickListener() {
+           		public void onClick(View v) {
+           			if (touchListener.getAllowClick()) {
+           				final Dialog editDialog = new Dialog(PantryFragment.this.getActivity());
+           				editDialog.setContentView(R.layout.edit_popup);
+           				editDialog.setTitle("Edit Item");
+           				EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+           				EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+           				Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+                    	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);           				
+           				DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+           				nameText.setText(foodItem.getName());
+           				quantityText.setText(Double.toString(foodItem.getAmount()));
+           				int numberOfUnit = 0;
+                    	for (FoodItemUnit fic : FoodItemUnit.values()) {
+                    		if (fic == foodItem.getUnit()) {
+                    			unitText.setSelection(numberOfUnit);
+                    			break;
+                    		}
+                    		numberOfUnit++;
+                    	}             
+           				int numberOfCat = 0;
+           				for (FoodItemCategory fic : FoodItemCategory.values()) {
+           					if (fic == foodItem.getCategory()) {
+           						categoryText.setSelection(numberOfCat);
+           						break;
+           					}
+           					numberOfCat++;
+           				}
+           				expirationDate.updateDate(1900+foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
+           				editDialog.show();
+           				Button addButton = (Button) editDialog.findViewById(R.id.editButton);
+                       	addButton.setOnClickListener(new View.OnClickListener() {
+   						
+   						@Override
+   						public void onClick(View v) {
+   							
+   							editItem(editDialog, foodItem);
+   						}
+                       });
+           		}
+           	}
+           	});
+           
+       		ImageView addToShoppingList = (ImageView) convertView.findViewById(R.id.add_to_shopping_list);
+       		if(slf.isInShoppingList(foodItem)) {
+       			addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart_green));
+       		} else {
+       			addToShoppingList.setImageDrawable(getResources().getDrawable(R.drawable.shopping_cart));
+       		}
+       		addToShoppingList.setOnClickListener(new OnClickListener() {
+       			public void onClick(View v) {
+       				if (slf.isInShoppingList(foodItem)) {
+       					slf.removeItem(foodItem);
+       					Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " removed from shopping list",Toast.LENGTH_SHORT).show();
+       					slv.invalidateViews();
+       				} else {
+       					slf.addNewItem(foodItem);
+       					Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
+       					slv.invalidateViews();
+       				}
+       			}
+       		});
+       		
+       		ImageView increment = (ImageView) convertView.findViewById(R.id.increment_quantity);
+       		increment.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					foodItem.setAmount(foodItem.getAmount() + 1);
+					slv.invalidateViews();
+				}
+       			
+       		});
+       		ImageView decrement = (ImageView) convertView.findViewById(R.id.decrement_quantity);
+       		decrement.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					foodItem.setAmount(foodItem.getAmount() - 1);
+					if (foodItem.getAmount() <= 0){
+						pantry.removeItem(foodItem);
+                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
+                   		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+                   		((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
+                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+					}
+					slv.invalidateViews();
+				}
+       			
+       		});
+       		
+       		ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
+       		if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
+       		} else if (foodItem.getCategory() == FoodItemCategory.PROTEIN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.protein));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FRUIT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fruit));
+       		} else if (foodItem.getCategory() == FoodItemCategory.VEGETABLE) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.vegetable));
+       		} else if (foodItem.getCategory() == FoodItemCategory.DAIRY) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.dairy));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FROZEN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.frozen));
+       		} else if (foodItem.getCategory() == FoodItemCategory.CONDIMENT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.condiment));
+       		} else if (foodItem.getCategory() == FoodItemCategory.SWEET) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.sweet));
+       		} else if (foodItem.getCategory() == FoodItemCategory.SNACK) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.snack));
+       		} else if (foodItem.getCategory() == FoodItemCategory.GRAIN) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.grain));
+       		} else if (foodItem.getCategory() == FoodItemCategory.FAT) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fat));
+       		} else if (foodItem.getCategory() == FoodItemCategory.OTHER) {
+       			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
+       		} 
+       		TextView item = (TextView) convertView.findViewById(R.id.item);
+       		item.setText(foodItem.getName());
+       		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
+            itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+            ImageView expirationWarning = (ImageView) convertView.findViewById(R.id.expiration_warning);
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, 3);
+            if(foodItem.getExperiationDate().before(cal.getTime())) {
+            	expirationWarning.setImageDrawable(getResources().getDrawable(R.drawable.warning));
+            } else {
+            	expirationWarning.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
+       		return convertView;
+        }
+	}
     
-    public void addNewItem(FoodItem fi)
-    {
+    public void addNewItem(FoodItem fi) {
     	pantry.addItem(fi);
     	if (pantry.getHowSorted() == 0) {
     		pantry.categorySort();
@@ -599,8 +796,7 @@ public class PantryFragment extends Fragment {
     	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
     }
     
-    public void editItem(Dialog editDialog, FoodItem food)
-    {
+    public void editItem(Dialog editDialog, FoodItem food) {
     	((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(food);
     	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
     	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);

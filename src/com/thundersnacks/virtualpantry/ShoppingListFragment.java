@@ -17,6 +17,7 @@ import java.util.TreeMap;
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantry.PantryFragment.ExpandableListAdapter;
 import com.thundersnacks.virtualpantry.PantryFragment.FoodItemsAdapter;
+import com.thundersnacks.virtualpantry.PantryFragment.SearchFoodItemsAdapter;
 import com.thundersnacks.virtualpantrymodel.*;
 
 import android.app.Activity;
@@ -62,6 +63,8 @@ public class ShoppingListFragment extends Fragment {
 	View view;
 	ExpandableListView elv;
 	ListView lv;
+	ListView slv;
+	List<FoodItem> searchFoodItems;
 	public PantryFragment pf;
 	
 	public ShoppingListFragment() {
@@ -74,6 +77,10 @@ public class ShoppingListFragment extends Fragment {
 	
 	public ShoppingList getShoppingList() {
 		return shoppingList;
+	}
+	
+	public void setSearchFoodItems(List<FoodItem> searchFoodItems) {
+		this.searchFoodItems = searchFoodItems;
 	}
 	
 	@Override
@@ -97,7 +104,13 @@ public class ShoppingListFragment extends Fragment {
 		elv.setAdapter(new ExpandableListAdapter(getActivity(), shoppingList.getFoodItems()));
         lv = (ListView) view.findViewById(R.id.shopping_list_list);
         lv.setAdapter(new FoodItemsAdapter(getActivity(), shoppingList.getFoodItems()));
-        createShoppingList();
+        slv = (ListView) view.findViewById(R.id.search_shopping_list_list);
+        searchFoodItems = new ArrayList<FoodItem>();
+        for (FoodItem fi : shoppingList.getFoodItems()) {
+        	searchFoodItems.add(fi);
+        }
+        slv.setAdapter(new SearchFoodItemsAdapter(getActivity(), searchFoodItems));
+        createShoppingList(false);
         Button addToPantryButton = (Button) view.findViewById(R.id.addToPantryButton);
 	    addToPantryButton.setOnClickListener(new View.OnClickListener() {
 				
@@ -108,9 +121,12 @@ public class ShoppingListFragment extends Fragment {
 					if (lv.getVisibility() == View.VISIBLE) {
 						checked = lv.getCheckedItemPositions();
 						size = lv.getAdapter().getCount()-1;
-					} else {
+					} else if (elv.getVisibility() == View.VISIBLE) {
 						checked = elv.getCheckedItemPositions();
 						size = elv.getAdapter().getCount()-1;
+					} else {
+						checked = slv.getCheckedItemPositions();
+						size = slv.getAdapter().getCount()-1;
 					}
 					for(int i = size; i >= 0; i--) {
 						if (checked.get(i)) {
@@ -119,33 +135,55 @@ public class ShoppingListFragment extends Fragment {
 								foodToRemove = (FoodItem) lv.getAdapter().getItem(i);
 								lv.setItemChecked(i, false);
 								//((CheckBox) lv.getChildAt(i).findViewById(R.id.shopping_list_checkbox)).toggle();
-							} else {
+							} else if (elv.getVisibility() == View.VISIBLE) {
  								foodToRemove = (FoodItem) elv.getAdapter().getItem(i);
 								elv.setItemChecked(i, false);
 			               		((CheckBox) elv.getChildAt(i).findViewById(R.id.shopping_list_checkbox)).toggle();
+							} else {
+								foodToRemove = (FoodItem) slv.getAdapter().getItem(i);
+								slv.setItemChecked(i, false);
+								for (int j = 0; j < lv.getAdapter().getCount(); j++) {
+									if (foodToRemove.getName().equals(((FoodItem) lv.getAdapter().getItem(j)).getName())) {
+										lv.setItemChecked(j, false);
+			       					}
+								}
+								//((CheckBox) lv.getChildAt(i).findViewById(R.id.shopping_list_checkbox)).toggle();
 							}
 		               		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
+		               		searchFoodItems.remove(foodToRemove);
 		               		pf.addNewItem(foodToRemove);
 		               		shoppingList.removeItem(foodToRemove);
 						}
 					}
             		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+            		((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
             		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
 				}
 			});
         return view;
     }
 	
-	public void createShoppingList() {
-		/**if (shoppingList.getHowSorted() == 0) {
+	public void createShoppingList(boolean search) {
+		if (search) {
+			slv.setVisibility(View.VISIBLE);
 			lv.setVisibility(View.INVISIBLE);
-			elv.setVisibility(View.VISIBLE);
-			elv.invalidateViews();
-		} else {*/
 			elv.setVisibility(View.INVISIBLE);
-			lv.setVisibility(View.VISIBLE);
-			lv.invalidateViews();
-		//}
+			slv.setAdapter(new SearchFoodItemsAdapter(getActivity(), searchFoodItems));
+			//((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
+			slv.invalidateViews();
+		} else {
+			/**if (shoppingList.getHowSorted() == 0) {
+				lv.setVisibility(View.INVISIBLE);
+				elv.setVisibility(View.VISIBLE);
+				slv.setVisibility(View.INVISIBLE);
+				elv.invalidateViews();
+			} else {*/
+				elv.setVisibility(View.INVISIBLE);
+				lv.setVisibility(View.VISIBLE);
+				slv.setVisibility(View.INVISIBLE);
+				lv.invalidateViews();
+			//}
+		}
 	}
 	
 	public class FoodItemsAdapter extends ArrayAdapter<FoodItem> {
@@ -196,6 +234,15 @@ public class ShoppingListFragment extends Fragment {
 							lv.setItemChecked(position, true);
 						} else {
 							lv.setItemChecked(position, false);
+						}
+						for (int i = 0; i < slv.getAdapter().getCount(); i++) {
+							if (((FoodItem) slv.getAdapter().getItem(i)).getName().equals(foodItem.getName())) {
+								if (((CheckableRelativeLayout) v).isChecked()) {
+									slv.setItemChecked(position, true);
+								} else {
+									slv.setItemChecked(position, false);
+								}
+           					}
 						}
 	        		}
 				
@@ -506,6 +553,165 @@ public class ShoppingListFragment extends Fragment {
 		}
 	}
 	
+	public class SearchFoodItemsAdapter extends ArrayAdapter<FoodItem> {
+        public SearchFoodItemsAdapter(Activity activity, List<FoodItem> list) {
+           super(activity, R.layout.shopping_list_item, list);
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+           // Get the data item for this position
+           final FoodItem foodItem = getItem(position);    
+           // Check if an existing view is being reused, otherwise inflate the view
+           if (convertView == null) {
+              convertView = LayoutInflater.from(getContext()).inflate(R.layout.shopping_list_item, null);
+           }
+           
+           // Create a ListView-specific touch listener. ListViews are given special treatment because
+           // by default they handle touches for their list items... i.e. they're in charge of drawing
+           // the pressed state (the list selector), handling list item clicks, etc.
+           final SwipeDismissListViewTouchListener touchListener =
+                   new SwipeDismissListViewTouchListener(
+                           slv,
+                           new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                               @Override
+                               public boolean canDismiss(int position) {
+                                   return true;
+                               }
+
+                               @Override
+                               public void onDismiss(ListView listView, int[] reverseSortedPositions, boolean dismissRight) {
+                                   for (int position : reverseSortedPositions) {
+                                   		FoodItem foodToRemove = ((FoodItem)slv.getAdapter().getItem(position));
+                                   		shoppingList.removeItem(foodToRemove);
+                                   		searchFoodItems.remove(foodToRemove);
+                                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
+                                   		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
+                                   		((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
+                                   		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+                                   	}
+                               	}
+                           });
+           convertView.setOnTouchListener(touchListener);
+           
+           convertView.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					if (touchListener.getAllowClick()){
+						((CheckableRelativeLayout) v).toggle();
+						if (((CheckableRelativeLayout) v).isChecked()) {
+							slv.setItemChecked(position, true);
+						} else {
+							slv.setItemChecked(position, false);
+						}
+						for (int i = 0; i < lv.getAdapter().getCount(); i++) {
+							if (((FoodItem) lv.getAdapter().getItem(i)).getName().equals(foodItem.getName())) {
+								if (((CheckableRelativeLayout) v).isChecked()) {
+									lv.setItemChecked(i, true);
+								} else {
+									lv.setItemChecked(i, false);
+								}
+           					}
+						}
+	        		}
+				}
+	        });
+           
+           SparseBooleanArray checked = lv.getCheckedItemPositions();
+           int size = lv.getAdapter().getCount()-1;
+           for(int j = size; j >= 0; j--) {
+				if (checked.get(j)) {
+					FoodItem foodToRemove = (FoodItem) lv.getAdapter().getItem(j);
+					for (int i = 0; i < slv.getAdapter().getCount(); i++) {
+						if (foodToRemove.getName().equals(foodItem.getName())) {
+							slv.setItemChecked(position, true);
+       					}
+					}
+					//((CheckBox) lv.getChildAt(i).findViewById(R.id.shopping_list_checkbox)).toggle();
+				}
+           }
+           ((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
+           
+           convertView.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+    			final Dialog editDialog = new Dialog(ShoppingListFragment.this.getActivity());
+                editDialog.setContentView(R.layout.edit_popup);
+                editDialog.setTitle("Edit Item");
+                EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
+            	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+            	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
+            	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
+            	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+            	nameText.setText(foodItem.getName());
+            	quantityText.setText(Double.toString(foodItem.getAmount()));
+            	int numberOfCat = 0;
+            	int numberOfUnit = 0;
+            	for (FoodItemUnit fic : FoodItemUnit.values()) {
+            		if (fic == foodItem.getUnit()) {
+            			unitText.setSelection(numberOfUnit);
+            			break;
+            		}
+            		numberOfUnit++;
+            	}   
+            	for (FoodItemCategory fic : FoodItemCategory.values()) {
+            		if (fic == foodItem.getCategory()) {
+            			categoryText.setSelection(numberOfCat);
+            			break;
+            		}
+            		numberOfCat++;
+            	}
+            	expirationDate.updateDate(1900+foodItem.getExperiationDate().getYear(), foodItem.getExperiationDate().getMonth(), foodItem.getExperiationDate().getDate());
+                editDialog.show();
+                Button addButton = (Button) editDialog.findViewById(R.id.editButton);
+                addButton.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						
+						editItem(editDialog, foodItem);
+						editDialog.dismiss();
+					}
+                });
+                return true;
+			}
+        	   
+           });
+           ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
+            if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
+      		} else if (foodItem.getCategory() == FoodItemCategory.PROTEIN) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.protein));
+      		} else if (foodItem.getCategory() == FoodItemCategory.FRUIT) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fruit));
+      		} else if (foodItem.getCategory() == FoodItemCategory.VEGETABLE) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.vegetable));
+      		} else if (foodItem.getCategory() == FoodItemCategory.DAIRY) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.dairy));
+      		} else if (foodItem.getCategory() == FoodItemCategory.FROZEN) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.frozen));
+      		} else if (foodItem.getCategory() == FoodItemCategory.CONDIMENT) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.condiment));
+      		} else if (foodItem.getCategory() == FoodItemCategory.SWEET) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.sweet));
+      		} else if (foodItem.getCategory() == FoodItemCategory.SNACK) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.snack));
+      		} else if (foodItem.getCategory() == FoodItemCategory.GRAIN) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.grain));
+      		} else if (foodItem.getCategory() == FoodItemCategory.FAT) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fat));
+      		} else if (foodItem.getCategory() == FoodItemCategory.OTHER) {
+      			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
+      		} 
+           	TextView item = (TextView) convertView.findViewById(R.id.item);
+       		item.setText(foodItem.getName());
+       		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
+            itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+       		return convertView;
+        }
+	}
+	
 	 public void addNewItem(FoodItem fi) {
 		 if( !(fi.getName().equals("") || fi.getAmount() == 0) ) {	//TODO - correct second term?
      		shoppingList.addItem(fi);
@@ -533,8 +739,7 @@ public class ShoppingListFragment extends Fragment {
      	return shoppingList.isInShoppingList(food);
      }
      
-     public void editItem(Dialog editDialog, FoodItem food)
-     {
+     public void editItem(Dialog editDialog, FoodItem food) {
      	((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(food);
      	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
      	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
