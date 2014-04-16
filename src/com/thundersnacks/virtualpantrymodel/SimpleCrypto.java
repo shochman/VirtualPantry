@@ -14,7 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
  * ...
  * String cleartext = SimpleCrypto.decrypt(masterpassword, crypto)
  * </pre>
- * @author ferenc.hechler
+ * @author ferenc.hechler.
  */
 public class SimpleCrypto {
 
