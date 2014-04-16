@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-public class ShoppingList{
+public class ShoppingList {
 	
 	private String name;
 	private int databaseId;
