@@ -87,12 +87,12 @@ public class ShoppingListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {  
 		super.onCreate(savedInstanceState);
         shoppingList = new ShoppingList();
-        shoppingList.addItem(new StandardFoodItem("Cheddar Cheese",0,new Date(),1,FoodItemUnit.POUNDS, "y", FoodItemCategory.DAIRY));
-        shoppingList.addItem(new StandardFoodItem("Strawberry Milk",1,new Date(),2,FoodItemUnit.GALLONS," ", FoodItemCategory.DAIRY));
-        shoppingList.addItem(new StandardFoodItem("Oatmeal",2,new Date(),1,FoodItemUnit.BOX," ", FoodItemCategory.GRAIN));
-        shoppingList.addItem(new StandardFoodItem("M&M's",3,new Date(),3.37,FoodItemUnit.POUNDS," ", FoodItemCategory.SWEET));
-        shoppingList.addItem(new StandardFoodItem("Frozen yogurt",4,new Date(),4.2,FoodItemUnit.GALLONS," ", FoodItemCategory.FROZEN));
-        shoppingList.addItem(new StandardFoodItem("Avacados",5,new Date(),3,FoodItemUnit.UNITLESS," ", FoodItemCategory.FAT)); 
+        shoppingList.addItem(new StandardFoodItem("Cheddar Cheese",0,new Date(),1,FoodItemUnit.POUNDS, "y", FoodItemCategory.DAIRY,1.00));
+        shoppingList.addItem(new StandardFoodItem("Strawberry Milk",1,new Date(),2,FoodItemUnit.GALLONS," ", FoodItemCategory.DAIRY,1.00));
+        shoppingList.addItem(new StandardFoodItem("Oatmeal",2,new Date(),1,FoodItemUnit.BOX," ", FoodItemCategory.GRAIN,1.00));
+        shoppingList.addItem(new StandardFoodItem("M&M's",3,new Date(),3.37,FoodItemUnit.POUNDS," ", FoodItemCategory.SWEET,1.00));
+        shoppingList.addItem(new StandardFoodItem("Frozen yogurt",4,new Date(),4.2,FoodItemUnit.GALLONS," ", FoodItemCategory.FROZEN,1.00));
+        shoppingList.addItem(new StandardFoodItem("Avacados",5,new Date(),3,FoodItemUnit.UNITLESS," ", FoodItemCategory.FAT,1.00)); 
         shoppingList.alphabeticalSort();
     }
 	

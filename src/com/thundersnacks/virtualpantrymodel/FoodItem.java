@@ -12,8 +12,9 @@ public abstract class FoodItem {
 	private FoodItemUnit unit;
 	private String picture;
 	private FoodItemCategory category;
+	private double price;
 	
-	FoodItem( String name, int databaseId, Date expDate, double amount, FoodItemUnit unit, String pic, FoodItemCategory cat ) {
+	FoodItem( String name, int databaseId, Date expDate, double amount, FoodItemUnit unit, String pic, FoodItemCategory cat, double pri) {
 		this.name = name;
 		this.databaseId = databaseId;
 		this.expirationDate = expDate;
@@ -21,6 +22,7 @@ public abstract class FoodItem {
 		this.unit = unit;
 		this.picture = pic;
 		this.category = cat;
+		this.price=pri;
 	}
 	
 	public String getName() {
@@ -75,6 +77,14 @@ public abstract class FoodItem {
 		this.category = cat;
 	}
 
+	public double getPrice() {
+		return this.price;
+	}
+	
+	public void setPrice(double pri) {
+		this.price = pri;
+	}
+	
 	public static Comparator<FoodItem> getAlphabeticalComparator() {
 		return new Comparator<FoodItem>() {
 			public int compare(FoodItem a, FoodItem b)
@@ -84,7 +94,7 @@ public abstract class FoodItem {
 		};
 	}
 
-	public static Comparator<FoodItem> getExpirationComparator() {
+	static Comparator<FoodItem> getExpirationComparator() {
 	return new Comparator<FoodItem>() {
 			public int compare(FoodItem a, FoodItem b)
 			{
