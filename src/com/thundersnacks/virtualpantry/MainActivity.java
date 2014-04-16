@@ -227,7 +227,7 @@ public class MainActivity extends Activity {
     		slf.createShoppingList(true);
     	}
     }
-
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -384,7 +384,7 @@ public class MainActivity extends Activity {
             		addDialog.show();
             		Button addButton = (Button) addDialog.findViewById(R.id.addButtonPantry);
                     addButton.setOnClickListener(new View.OnClickListener() {
-						
+				//		
 						@Override
 							public void onClick(View v) {
 							boolean filled = false;
@@ -395,6 +395,7 @@ public class MainActivity extends Activity {
 					    	Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
 					    	Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
 					    	DatePicker expirationDate = (DatePicker) addDialog.findViewById(R.id.dpResult);
+					    	EditText priceText = (EditText) addDialog.findViewById(R.id.priceEdit);
 						    View focusView = null;
 						    
 					    	
@@ -419,11 +420,12 @@ public class MainActivity extends Activity {
 						    	String category = categoryText.getSelectedItem().toString();
 						    	String unit = unitText.getSelectedItem().toString();
 						    	Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+						    	double price = Double.parseDouble(priceText.getText().toString());
 						    	for (FoodItemCategory fic : FoodItemCategory.values()) {
 						    		if (fic.toString().equals(category)) {
 						    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
 								    		if (fiu.toString().equals(unit)) {
-								    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fiu, "y", fic));
+								    			pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fiu, "y", fic,price));
 								    			break;
 								    		}
 								    	}
@@ -460,6 +462,7 @@ public class MainActivity extends Activity {
 							EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
 							Spinner categoryText = (Spinner) addDialog.findViewById(R.id.category_spinner);
 					    	Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
+					    	EditText priceText = (EditText) addDialog.findViewById(R.id.priceEdit);
 					    	View focusView = null;
 					    	
 					    	if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
@@ -481,11 +484,12 @@ public class MainActivity extends Activity {
 						    	double quantity = Double.parseDouble(quantityText.getText().toString());
 								String category = categoryText.getSelectedItem().toString();
 						    	String unit = unitText.getSelectedItem().toString();
+						    	double price = Double.parseDouble(priceText.getText().toString());
 								for (FoodItemCategory fic : FoodItemCategory.values()) {
 						    		if (fic.toString().equals(category)) {
 						    			for (FoodItemUnit fiu : FoodItemUnit.values()) {
 								    		if (fiu.toString().equals(unit)) {
-								    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic));
+								    			slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic,price));
 								    			break;
 								    		}
 								    	}

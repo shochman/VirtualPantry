@@ -68,8 +68,24 @@
 	    		android:entries="@array/unit_array"
 	    		android:prompt="@string/unit_prompt" />
 	        
-		</LinearLayout>
+		</LinearLayout>      
             
+			<TextView android:id="@+id/priceText"
+	              android:layout_width="fill_parent"
+	              android:layout_height="wrap_content"
+	               android:layout_weight="50"
+	              android:text="Price: $" />
+			
+	        <EditText
+	            android:id="@+id/priceEdit"
+	            android:hint="Enter Price"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	             android:layout_weight="50"
+	            android:layout_gravity="right"
+   				android:inputType="number" >
+	        </EditText>
+	    
 		<TextView android:id="@+id/expireText"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
