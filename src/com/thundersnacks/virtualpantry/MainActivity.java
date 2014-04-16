@@ -206,7 +206,7 @@ public class MainActivity extends Activity {
     		List<FoodItem> foodItem = pf.getPantry().getFoodItems();
     		List<FoodItem> foodResults = new ArrayList<FoodItem>();
     		for(FoodItem food : foodItem) {
-    			if (food.getName().toLowerCase().contains(query.toLowerCase())) {	
+    			if (food.getName().equals(query)) {	
     				foodResults.add(food);
     			}
     		}
@@ -218,7 +218,7 @@ public class MainActivity extends Activity {
     		List<FoodItem> foodItem = slf.getShoppingList().getFoodItems();
     		List<FoodItem> foodResults = new ArrayList<FoodItem>();
     		for(FoodItem food : foodItem) {
-    			if(food.getName().toLowerCase().contains(query.toLowerCase())) {
+    			if(food.getName().equals(query)) {
     				foodResults.add(food);
     			}
     		}
@@ -227,7 +227,7 @@ public class MainActivity extends Activity {
     		slf.createShoppingList(true);
     	}
     }
-
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
