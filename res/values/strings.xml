@@ -30,15 +30,21 @@
         <item>Other</item>
     </string-array>
     <string-array name="unit_array">
-        <item>Pound(s)</item>
-        <item>Can(s)</item>
-        <item>Bottle(s)</item>
-        <item>Gallon(s)</item>
-        <item>Cup(s)</item>
-        <item>Bag(s)</item>
-        <item>Tub(s)</item>
-        <item>Loaf</item>
-        <item>Box(es)</item>
+        <item>lb(s)</item>
+        <item>can(s)</item>
+        <item>bottle(s)</item>
+        <item>gal(s)</item>
+        <item>cup(s)</item>
+        <item>bag(s)</item>
+        <item>tub(s)</item>
+        <item>loaf</item>
+        <item>g(s)</item>
+        <item>oz(s)</item>
+        <item>fl oz(s)</item>
+        <item>mL(s)</item>
+        <item>L(s)</item>
+        <item>pt(s)</item>
+        <item>box(es)</item>
         <item>(No Unit)</item>
         <item>Other</item>
     </string-array>

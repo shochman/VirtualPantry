@@ -11,29 +11,47 @@ public enum FoodItemUnit {
 	TUBS,
 	LOAF,
 	BOX,
+	GRAMS,
+	OUNCES,
+	FLUIDOUNCES,
+	MILLILITERS,
+	LITERS,
+	PINTS,
 	UNITLESS,
 	OTHER;
 
     public String toString() {
     	switch (this) {
 		case POUNDS:
-			return "Pound(s)";
+			return "lb(s)";
 		case CANS:
-			return "Can(s)";
+			return "can(s)";
 		case BOTTLES:
-			return "Bottle(s)";
+			return "bottle(s)";
 		case GALLONS:
-			return "Gallon(s)";
+			return "gal(s)";
 		case CUPS:
-			return "Cup(s)";
+			return "cup(s)";
 		case BAGS:
-			return "Bag(s)";
+			return "bag(s)";
 		case TUBS:
-			return "Tub(s)";
+			return "tub(s)";
 		case LOAF:
-			return "Loaf";
+			return "loaf";
 		case BOX:
-			return "Box(es)";
+			return "box(es)";
+		case GRAMS:
+			return "g(s)";
+		case OUNCES:
+			return "oz(s)";
+		case FLUIDOUNCES:
+			return "fl oz(s)";
+		case MILLILITERS:
+			return "mL(s)";
+		case LITERS:
+			return "L(s)";
+		case PINTS:
+			return "pt(s)";
 		case UNITLESS:
 			return "(No Unit)";
 		default:
