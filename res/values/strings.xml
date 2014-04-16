@@ -30,23 +30,23 @@
         <item>Other</item>
     </string-array>
     <string-array name="unit_array">
-        <item>lb(s)</item>
-        <item>can(s)</item>
-        <item>bottle(s)</item>
-        <item>gal(s)</item>
-        <item>cup(s)</item>
-        <item>bag(s)</item>
-        <item>tub(s)</item>
-        <item>loaf</item>
         <item>g(s)</item>
         <item>oz(s)</item>
+        <item>lb(s)</item>
         <item>fl oz(s)</item>
+        <item>cup(s)</item>
+        <item>pt(s)</item>
+        <item>gal(s)</item>
         <item>mL(s)</item>
         <item>L(s)</item>
-        <item>pt(s)</item>
+        <item>can(s)</item>
+        <item>bottle(s)</item>
+        <item>tub(s)</item>
         <item>box(es)</item>
-        <item>(No Unit)</item>
+        <item>bag(s)</item>
+        <item>loaf</item>
         <item>Other</item>
+        <item>(No Unit)</item>
     </string-array>
     <string name="category_prompt">Select Category</string>
     <string name="unit_prompt">Select Units</string>
