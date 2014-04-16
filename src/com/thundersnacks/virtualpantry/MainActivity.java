@@ -400,7 +400,7 @@ public class MainActivity extends Activity {
 						    
 					    	
 						    
-						    if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
+						    if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString())&& !TextUtils.isEmpty(priceText.getText().toString()))
 						    	filled = true;
 						    
 							if (!filled){
@@ -410,6 +410,9 @@ public class MainActivity extends Activity {
 								}else if (TextUtils.isEmpty(quantityText.getText().toString())){
 									quantityText.setError(getString(R.string.error_field_required));
 									focusView = quantityText;									
+								}else if (TextUtils.isEmpty(priceText.getText().toString())){
+									priceText.setError(getString(R.string.error_field_required));
+									focusView = priceText;									
 								}
 								
 								focusView.requestFocus();
@@ -465,7 +468,7 @@ public class MainActivity extends Activity {
 					    	EditText priceText = (EditText) addDialog.findViewById(R.id.priceEdit);
 					    	View focusView = null;
 					    	
-					    	if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
+					    	if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString())&& !TextUtils.isEmpty(priceText.getText().toString()))
 						    	filled = true;
 						    
 							if (!filled){
@@ -475,6 +478,9 @@ public class MainActivity extends Activity {
 								}else if (TextUtils.isEmpty(quantityText.getText().toString())){
 									quantityText.setError(getString(R.string.error_field_required));
 									focusView = quantityText;									
+								}else if (TextUtils.isEmpty(priceText.getText().toString())){
+									priceText.setError(getString(R.string.error_field_required));
+									focusView = priceText;									
 								}
 								
 								focusView.requestFocus();

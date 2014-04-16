@@ -812,11 +812,13 @@ public class PantryFragment extends Fragment {
     	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
     	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
+    	EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
+    	
     	View focusView = null;
 		boolean filled = false; 
 	    	
 		    
-		    if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString()))
+		    if (!TextUtils.isEmpty(nameText.getText().toString()) && !TextUtils.isEmpty(quantityText.getText().toString())&& !TextUtils.isEmpty(priceText.getText().toString()))
 		    	filled = true;
 		    
 		if (!filled) {
@@ -826,6 +828,9 @@ public class PantryFragment extends Fragment {
 			} else if (TextUtils.isEmpty(quantityText.getText().toString())) {
 				quantityText.setError(getString(R.string.error_field_required));
 				focusView = quantityText;									
+			}else if (TextUtils.isEmpty(priceText.getText().toString())) {
+				priceText.setError(getString(R.string.error_field_required));
+				focusView = priceText;									
 			}
 			
 			focusView.requestFocus();
@@ -840,6 +845,8 @@ public class PantryFragment extends Fragment {
 	    	Date expDate = cal.getTime(); 
 	    	food.setName(name);
 	    	food.setAmount(quantity);
+	    	double price = Double.parseDouble(priceText.getText().toString());
+	    	food.setPrice(price);
 	    	for (FoodItemUnit fic : FoodItemUnit.values()) {
 	    		if (fic.toString().equals(unit)) {
 	    			food.setUnit(fic);
