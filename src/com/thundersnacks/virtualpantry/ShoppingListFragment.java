@@ -743,6 +743,7 @@ public class ShoppingListFragment extends Fragment {
      	((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(food);
      	EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
      	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+     	EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
      	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
      	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
@@ -751,10 +752,12 @@ public class ShoppingListFragment extends Fragment {
     	String category = categoryText.getSelectedItem().toString();
     	String unit = unitText.getSelectedItem().toString();
      	Calendar cal = GregorianCalendar.getInstance();
-         cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+        cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
      	Date expDate = cal.getTime(); 
+     	double price = Double.parseDouble(priceText.getText().toString());
      	food.setName(name);
      	food.setAmount(quantity);
+     	food.setPrice(price);
     	for (FoodItemUnit fic : FoodItemUnit.values()) {
     		if (fic.toString().equals(unit)) {
     			food.setUnit(fic);
