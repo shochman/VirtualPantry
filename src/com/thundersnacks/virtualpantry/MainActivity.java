@@ -384,7 +384,7 @@ public class MainActivity extends Activity {
             		addDialog.show();
             		Button addButton = (Button) addDialog.findViewById(R.id.addButtonPantry);
                     addButton.setOnClickListener(new View.OnClickListener() {
-						
+				//		
 						@Override
 							public void onClick(View v) {
 							boolean filled = false;
