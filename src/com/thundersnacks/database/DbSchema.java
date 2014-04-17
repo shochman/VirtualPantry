@@ -18,11 +18,10 @@ public final class DbSchema {
     
     /* Inner class that defines the table contents */
     public static abstract class PantryTable implements BaseColumns {
-        public static final String TABLE_NAME = "pantry";
+        public static final String TABLE = "pantry";
         public static final String _ID = "id";
         public static final String COLUMN_PANTRY_NAME = "name";
         public static final String COLUMN_ASSOCIATED_USER = "userid";
-        public static final String COLUMN_SORT = "sort";
     }
     
     /* Inner class that defines the table contents */
@@ -30,7 +29,6 @@ public final class DbSchema {
         public static final String TABLE = "shoppinglist";
         public static final String _ID = "id";
         public static final String COLUMN_ASSOCIATED_PANTRY = "pantryid";
-        public static final String COLUMN_SORT = "sort";
     }
     
     /* Inner class that defines the table contents */
