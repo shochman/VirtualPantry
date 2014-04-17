@@ -228,11 +228,13 @@ public class PantryFragment extends Fragment {
            				editDialog.setTitle("Edit Item");
            				EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
            				EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+           				EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
            				Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
                     	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);           				
            				DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
            				nameText.setText(foodItem.getName());
            				quantityText.setText(Double.toString(foodItem.getAmount()));
+           				priceText.setText(Double.toString(foodItem.getPrice()));
            				int numberOfUnit = 0;
                     	for (FoodItemUnit fic : FoodItemUnit.values()) {
                     		if (fic == foodItem.getUnit()) {
@@ -457,6 +459,8 @@ public class PantryFragment extends Fragment {
                     	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
                     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
                     	nameText.setText(foodItem.getName());
+                    	EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
+                    	priceText.setText(Double.toString(foodItem.getPrice()));
                     	quantityText.setText(Double.toString(foodItem.getAmount()));
                     	int numberOfUnit = 0;
                     	for (FoodItemUnit fic : FoodItemUnit.values()) {
@@ -667,6 +671,8 @@ public class PantryFragment extends Fragment {
            				DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
            				nameText.setText(foodItem.getName());
            				quantityText.setText(Double.toString(foodItem.getAmount()));
+           				EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
+           				priceText.setText(Double.toString(foodItem.getPrice()));
            				int numberOfUnit = 0;
                     	for (FoodItemUnit fic : FoodItemUnit.values()) {
                     		if (fic == foodItem.getUnit()) {

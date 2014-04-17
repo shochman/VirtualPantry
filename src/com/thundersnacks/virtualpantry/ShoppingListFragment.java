@@ -258,10 +258,12 @@ public class ShoppingListFragment extends Fragment {
                 editDialog.setTitle("Edit Item");
                 EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
             	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+            	EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
             	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
             	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
             	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
             	nameText.setText(foodItem.getName());
+            	priceText.setText(Double.toString(foodItem.getPrice()));
             	quantityText.setText(Double.toString(foodItem.getAmount()));
             	int numberOfCat = 0;
             	int numberOfUnit = 0;
@@ -272,6 +274,7 @@ public class ShoppingListFragment extends Fragment {
             		}
             		numberOfUnit++;
             	}   
+            	
             	for (FoodItemCategory fic : FoodItemCategory.values()) {
             		if (fic == foodItem.getCategory()) {
             			categoryText.setSelection(numberOfCat);
