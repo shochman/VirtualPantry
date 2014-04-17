@@ -328,6 +328,8 @@ public class ShoppingListFragment extends Fragment {
        		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+        	TextView price = (TextView) convertView.findViewById(R.id.item_price);
+        	price.setText("$"+Double.toString(foodItem.getPrice()));
        		return convertView;
         }
 	}
@@ -522,6 +524,8 @@ public class ShoppingListFragment extends Fragment {
             item.setText(foodItem.getName());
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+            TextView price = (TextView) convertView.findViewById(R.id.item_price);
+        	price.setText("$"+Double.toString(foodItem.getPrice()));
             return convertView;
         }
 
@@ -711,6 +715,8 @@ public class ShoppingListFragment extends Fragment {
        		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+            TextView price = (TextView) convertView.findViewById(R.id.item_price);
+        	price.setText("$"+Double.toString(foodItem.getPrice()));
        		return convertView;
         }
 	}
