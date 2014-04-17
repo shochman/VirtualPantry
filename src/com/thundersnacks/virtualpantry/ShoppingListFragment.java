@@ -111,6 +111,13 @@ public class ShoppingListFragment extends Fragment {
         }
         slv.setAdapter(new SearchFoodItemsAdapter(getActivity(), searchFoodItems));
         createShoppingList(false);
+        
+        TextView totalPrice = (TextView) view.findViewById(R.id.totalPrice);
+    	double tp=0;
+        for (FoodItem fi : shoppingList.getFoodItems()) {
+        	tp+=fi.getPrice();
+        }
+        totalPrice.setText("Total: $"+Double.toString(tp));
         Button addToPantryButton = (Button) view.findViewById(R.id.addToPantryButton);
 	    addToPantryButton.setOnClickListener(new View.OnClickListener() {
 				
@@ -158,6 +165,14 @@ public class ShoppingListFragment extends Fragment {
             		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
             		((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
             		((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+				
+            		TextView totalPrice = (TextView) view.findViewById(R.id.totalPrice);
+                	double tp=0;
+                    for (FoodItem food : shoppingList.getFoodItems()) {
+                    	tp+=food.getPrice();
+                    }
+                    totalPrice.setText("Total: $"+Double.toString(tp));
+				
 				}
 			});
         return view;
@@ -734,6 +749,12 @@ public class ShoppingListFragment extends Fragment {
      		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
         	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(fi);
         	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+        	TextView totalPrice = (TextView) view.findViewById(R.id.totalPrice);
+        	double tp=0;
+            for (FoodItem food : shoppingList.getFoodItems()) {
+            	tp+=food.getPrice();
+            totalPrice.setText("Total: $"+Double.toString(tp));
+            }
          } 
      }
 	 
@@ -742,6 +763,12 @@ public class ShoppingListFragment extends Fragment {
 		 shoppingList.removeItem(foodToRemove);
 		 ((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 		 ((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+		 TextView totalPrice = (TextView) view.findViewById(R.id.totalPrice);
+     	double tp=0;
+         for (FoodItem food : shoppingList.getFoodItems()) {
+         	tp+=food.getPrice();
+         }
+         totalPrice.setText("Total: $"+Double.toString(tp));
 	 }
      
      public boolean isInShoppingList(FoodItem food) {
@@ -788,5 +815,11 @@ public class ShoppingListFragment extends Fragment {
      	((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
      	((ExpandableListAdapter) elv.getExpandableListAdapter()).addFoodItem(food);
      	((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
+     	TextView totalPrice = (TextView) view.findViewById(R.id.totalPrice);
+    	double tp=0;
+        for (FoodItem food1 : shoppingList.getFoodItems()) {
+        	tp+=food1.getPrice();
+        }
+        totalPrice.setText("Total: $"+Double.toString(tp));
      }
 }
