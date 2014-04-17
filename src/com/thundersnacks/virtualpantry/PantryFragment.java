@@ -736,6 +736,7 @@ public class PantryFragment extends Fragment {
 					foodItem.setAmount(foodItem.getAmount() - 1);
 					if (foodItem.getAmount() <= 0){
 						pantry.removeItem(foodItem);
+						searchFoodItems.remove(foodItem);
                    		((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
                    		((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
                    		((SearchFoodItemsAdapter) slv.getAdapter()).notifyDataSetChanged();
