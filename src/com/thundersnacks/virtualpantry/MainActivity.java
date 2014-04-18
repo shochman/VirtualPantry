@@ -368,7 +368,8 @@ public class MainActivity extends Activity {
     	// started Activity.
     	// This ensures that navigating backward from the Activity leads out of
     	// your application to the Home screen.
-    	/*TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+    	try{
+    	TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
     	// Adds the back stack for the Intent (but not the Intent itself)
     	stackBuilder.addParentStack(MainActivity.class);
     	// Adds the Intent that starts the Activity to the top of the stack
@@ -378,11 +379,14 @@ public class MainActivity extends Activity {
     	            0,
     	            PendingIntent.FLAG_UPDATE_CURRENT
     	        );
-    	mBuilder.setContentIntent(resultPendingIntent);*/
+    	mBuilder.setContentIntent(resultPendingIntent);
+    	}
+    	finally{
     	NotificationManager mNotificationManager =
     	    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     	// mId allows you to update the notification later on.
     	mNotificationManager.notify(RESULT_OK, mBuilder.build());
+    	}
         return true;
     }
     

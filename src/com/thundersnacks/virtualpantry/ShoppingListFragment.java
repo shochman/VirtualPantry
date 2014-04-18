@@ -1,5 +1,6 @@
 package com.thundersnacks.virtualpantry;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -117,7 +118,8 @@ public class ShoppingListFragment extends Fragment {
         for (FoodItem fi : shoppingList.getFoodItems()) {
         	tp+=fi.getPrice();
         }
-        totalPrice.setText("Total: $"+Double.toString(tp));
+        DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
+        totalPrice.setText("Total: $"+f.format(tp));
         Button addToPantryButton = (Button) view.findViewById(R.id.addToPantryButton);
 	    addToPantryButton.setOnClickListener(new View.OnClickListener() {
 				
@@ -171,8 +173,8 @@ public class ShoppingListFragment extends Fragment {
                     for (FoodItem food : shoppingList.getFoodItems()) {
                     	tp+=food.getPrice();
                     }
-                    totalPrice.setText("Total: $"+Double.toString(tp));
-				
+                    DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places				
+                    totalPrice.setText("Total: $"+f.format(tp));
 				}
 			});
         return view;
@@ -753,7 +755,8 @@ public class ShoppingListFragment extends Fragment {
         	double tp=0;
             for (FoodItem food : shoppingList.getFoodItems()) {
             	tp+=food.getPrice();
-            totalPrice.setText("Total: $"+Double.toString(tp));
+            	DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
+            	totalPrice.setText("Total: $"+f.format(tp));
             }
          } 
      }
@@ -768,7 +771,8 @@ public class ShoppingListFragment extends Fragment {
          for (FoodItem food : shoppingList.getFoodItems()) {
          	tp+=food.getPrice();
          }
-         totalPrice.setText("Total: $"+Double.toString(tp));
+         DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
+         totalPrice.setText("Total: $"+f.format(tp));
 	 }
      
      public boolean isInShoppingList(FoodItem food) {
@@ -820,6 +824,7 @@ public class ShoppingListFragment extends Fragment {
         for (FoodItem food1 : shoppingList.getFoodItems()) {
         	tp+=food1.getPrice();
         }
-        totalPrice.setText("Total: $"+Double.toString(tp));
+        DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
+        totalPrice.setText("Total: $"+f.format(tp));
      }
 }
