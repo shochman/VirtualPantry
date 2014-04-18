@@ -95,7 +95,7 @@ public class PantryFragment extends Fragment {
         cal.set(2014, 4, 25);
         Date d4 = cal.getTime();
         
-        cal.set(2014, 11, 6);
+        cal.set(2014, 3, 20);
         Date d5 = cal.getTime();
         
         cal.set(2014, 10, 10);
