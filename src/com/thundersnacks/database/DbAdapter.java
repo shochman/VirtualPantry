@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import com.thundersnacks.virtualpantrymodel.*;
 
 public class DbAdapter {
@@ -19,6 +22,7 @@ public class DbAdapter {
 	}
 	
 	private Date parseDate(String dateString) {
+		// TODO: actually do this for real
 		return new Date();
 	}
 	
@@ -116,13 +120,9 @@ public class DbAdapter {
 		String table = DbSchema.PantryTable.TABLE;
 		String[] columns = { DbSchema.PantryTable._ID, DbSchema.PantryTable.COLUMN_PANTRY_NAME };
 		String selection = "(" + DbSchema.PantryTable.COLUMN_ASSOCIATED_USER + " = " + userId
-							+ " AND " + DbSchema.PantryTable.COLUMN_VISIBLE + " = TRUE";
-		String[] selectionArgs = {};
-		String groupBy = "";
-		String having = "";
-		String orderBy = "";
+							+ " AND " + DbSchema.PantryTable.COLUMN_VISIBLE + " = 1 )";
 		
-		Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
 		helper.close();
 		
 		if(cursor != null) {
@@ -138,7 +138,7 @@ public class DbAdapter {
 		int id = cursor.getInt(idIndex);
 		String name = cursor.getString(nameIndex);
 		
-		Pantry pantry = new Pantry(name, id);
+		Pantry pantry = new Pantry(name, id, true);
 		ShoppingList shoppingList = getAssociatedShoppingList(id);
 		shoppingList.setName(name);
 		pantry.setShoppingList(shoppingList);
@@ -147,6 +147,90 @@ public class DbAdapter {
 		}
 		
 		return pantry;
+		
+	}
+	
+	//---insert a user into the database---
+	public long insertUser(String username, String password, String email)
+	{
+		SQLiteDatabase db = helper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(DbSchema.UserTable.COLUMN_USERNAME, username);
+		initialValues.put(DbSchema.UserTable.COLUMN_PASSWORD, password);
+		initialValues.put(DbSchema.UserTable.COLUMN_EMAIL, email);
+		long result = db.insert(DbSchema.UserTable.TABLE, null, initialValues);
+		helper.close();
+		return result;
+	}
+		
+	//---validates user credentials---
+	public User validateUserCredentials(String username, String password) throws SQLException
+	{
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String table = DbSchema.UserTable.TABLE;
+		String[] columns = { DbSchema.UserTable._ID, 
+								DbSchema.UserTable.COLUMN_EMAIL };
+		String selection = "(" + DbSchema.UserTable.COLUMN_USERNAME + " = " + username
+							+ " AND " + DbSchema.UserTable.COLUMN_PASSWORD + " = " + password + " )";
+		
+		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
+		helper.close();
+		
+		if(cursor != null) {
+			cursor.moveToFirst();
+		}
+		else
+			return null;
+		
+		int idIndex = cursor.getColumnIndex(DbSchema.UserTable._ID);
+		int emailIndex = cursor.getColumnIndex(DbSchema.UserTable.COLUMN_EMAIL);
+		
+		int id = cursor.getInt(idIndex);
+		String email = cursor.getString(emailIndex);
+		
+		return new User(username, email, password, password, id);
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//   SAVING
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private boolean savePantry(Pantry p, SQLiteDatabase db) {		
+		ContentValues args = new ContentValues();
+		args.put(DbSchema.PantryTable.COLUMN_PANTRY_NAME, p.getName());
+		args.put(DbSchema.PantryTable.COLUMN_VISIBLE, p.visible());
+		return db.update(DbSchema.PantryTable.TABLE, args, DbSchema.PantryTable._ID + "=" + p.getDatabaseId(), null) > 0;
+	}
+
+	private boolean saveFoodItem(FoodItem fi, SQLiteDatabase db) {
+		ContentValues args = new ContentValues();
+		args.put(DbSchema.FoodItemTable.COLUMN_AMOUNT, fi.getAmount());
+		args.put(DbSchema.FoodItemTable.COLUMN_CATEGORY, fi.getCategory().ordinal());
+		args.put(DbSchema.FoodItemTable.COLUMN_EXPIRATION_DATE, fi.getExperiationDate().toString());
+		args.put(DbSchema.FoodItemTable.COLUMN_PICTURE, fi.getPicture());
+		args.put(DbSchema.FoodItemTable.COLUMN_PRICE, fi.getPrice());
+		args.put(DbSchema.FoodItemTable.COLUMN_UNIT, fi.getUnit().ordinal());
+		args.put(DbSchema.FoodItemTable.COLUMN_NAME, fi.getName());
+		return db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + fi.getDatabaseId(), null) > 0;
+	}
+	
+	public boolean save(Pantry pantry) {
+		ShoppingList shoppingList = pantry.getShoppingList();
+		SQLiteDatabase db = helper.getWritableDatabase();
+		
+		boolean result = true;
+		result &= savePantry(pantry, db);
+		
+		for(FoodItem item : pantry.getFoodItems()) {
+			result &= saveFoodItem(item, db);
+		}
+		
+		for(FoodItem item : shoppingList.getFoodItems()) {
+			result &= saveFoodItem(item, db);
+		}
+		
+		helper.close();
+		return result;
 		
 	}
 	

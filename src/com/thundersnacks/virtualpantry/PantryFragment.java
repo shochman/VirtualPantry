@@ -80,7 +80,7 @@ public class PantryFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        pantry = new Pantry("My Pantry", 0);
+        pantry = new Pantry("My Pantry", 0, true);
         Calendar cal = GregorianCalendar.getInstance();
         
         cal.set(2014, 2, 28);

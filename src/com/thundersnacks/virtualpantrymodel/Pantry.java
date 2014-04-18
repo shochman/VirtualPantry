@@ -12,15 +12,18 @@ public class Pantry implements Iterable<FoodItem> {
 	private List<FoodItem> foodItems;
 	private ShoppingList shoppingList;
 	private int howSorted;
+	private boolean visible;
 	
 	public Pantry() {
 		foodItems = new ArrayList<FoodItem>();
+		visible = true;
 	}
 	
-	public Pantry(String name, int databaseId) {
+	public Pantry(String name, int databaseId, boolean visible) {
 		this.name = name;
 		this.databaseId = databaseId;
 		this.foodItems = new ArrayList<FoodItem>();
+		this.visible = visible;
 	}
 	
 	public String getName() {		
@@ -29,6 +32,14 @@ public class Pantry implements Iterable<FoodItem> {
 	
 	public void setName( String name ) {		
 		this.name = name;		
+	}
+	
+	public void setVisible(boolean isVisible) {
+		visible = isVisible;
+	}
+	
+	public boolean visible() {
+		return visible;
 	}
 	
 	public int getDatabaseId() {		
