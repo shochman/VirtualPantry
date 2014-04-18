@@ -1,138 +1,153 @@
 package com.thundersnacks.database;
 
-import android.content.ContentValues;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+import com.thundersnacks.virtualpantrymodel.*;
 
 public class DbAdapter {
 
-	public static final String KEY_UID = "uid";
-	public static final String KEY_USERNAME = "username";
-	public static final String KEY_EMAIL = "email";
-	public static final String KEY_PASSWORD = "password";
-	public static final String KEY_PID = "pid";
+	private SQLiteOpenHelper helper;
 	
-	private static final String TAG = "DBAdapter";
+	public DbAdapter(Context context) {
+		helper = new DbHelper(context);
+	}
 	
-	private static final String DATABASE_NAME = "MyDB";
-	private static final String USERS_TABLE = "users";
-	private static final String PANTRY_TABLE = "pantry";
-	private static final String U_P_ASSOCIATION_TABLE = "assoc";
-	private static final int DATABASE_VERSION = 1;
+	private Date parseDate(String dateString) {
+		return new Date();
+	}
 	
-	private static final String USERS_CREATE = 
-			"create table users (uid integer primary key autoincrement, " + 
-			"username text not null, email text not null, password text not null);";
-	private static final String PANTRY_CREATE = 
-			"create table pantry (pid integer primary key autoincrement, " +
-			"pname text not null, slid integer);";	
-	private static final String U_P_ASSOCIATION_CREATE = 
-			"create table assoc (uid integer, pid integer, " + 
-			"boolean isOwner, text permissions);";
+	private ShoppingList getAssociatedShoppingList(int pantryId) {
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String table = DbSchema.ShoppingListTable.TABLE;
+		String[] columns = { DbSchema.ShoppingListTable._ID };
+		String selection = DbSchema.ShoppingListTable.COLUMN_ASSOCIATED_PANTRY + " = " + pantryId;
+		String[] selectionArgs = {};
+		String groupBy = "";
+		String having = "";
+		String orderBy = "";
+		
+		Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+		helper.close();
+		
+		if(cursor != null) {
+			cursor.moveToFirst();
+		}
+		else {
+			return null; 	// no shopping list associated with that pantry
+		}
+		
+		int idIndex = cursor.getColumnIndex(DbSchema.ShoppingListTable._ID);
+		int id = cursor.getInt(idIndex);
+		
+		ShoppingList sl = new ShoppingList("", id);
+		for(FoodItem item : getContents(id, false)) {
+			sl.addItem(item);
+		}
+		
+		return sl;
+		
+	}
 
-	
-	private final Context context;
-	
-	private static DatabaseHelper DBHelper;
-	private static SQLiteDatabase db;
-	
-	public DbAdapter(Context ctx)
-	{
-		this.context = ctx;
-		DBHelper = new DatabaseHelper(context);
-	}
-	
-	private static class DatabaseHelper extends SQLiteOpenHelper
-	{
-		private DatabaseHelper(Context context)
-		{
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	private List<FoodItem> getContents(int id, boolean queryByPantryId) {
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String table = DbSchema.FoodItemTable.TABLE;
+		String[] columns = { DbSchema.FoodItemTable._ID, 
+								DbSchema.FoodItemTable.COLUMN_AMOUNT,
+								DbSchema.FoodItemTable.COLUMN_CATEGORY,
+								DbSchema.FoodItemTable.COLUMN_EXPIRATION_DATE,
+								DbSchema.FoodItemTable.COLUMN_NAME,
+								DbSchema.FoodItemTable.COLUMN_PICTURE,
+								DbSchema.FoodItemTable.COLUMN_UNIT,
+								DbSchema.FoodItemTable.COLUMN_PRICE };
+		String selectionColumn = queryByPantryId ? DbSchema.FoodItemTable.COLUMN_ASSOCIATED_PANTRY : DbSchema.FoodItemTable.COLUMN_ASSOCIATED_SHOPPING_LIST;  
+		String selection = selectionColumn  + " = " + id;
+		
+		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
+		helper.close();
+		
+		if(cursor != null) {
+			cursor.moveToFirst();
+		}
+		else {
+			return null; 	// no pantries associated with that user
 		}
 		
+		List<FoodItem> items = new ArrayList<FoodItem>();
 		
-		@Override
-		public void onCreate(SQLiteDatabase db)
-		{
-			try {
-				db.execSQL(USERS_CREATE);
-				db.execSQL(PANTRY_CREATE);
-				db.execSQL(U_P_ASSOCIATION_CREATE);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-		{
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-					+ newVersion + ", which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS users");
-			db.execSQL("DROP TABLE IF EXISTS pantry");
-			db.execSQL("DROP TABLE IF EXISTS assoc");
-			onCreate(db);
-		}
-		
-		//---open the database---
-		public DatabaseHelper open() throws SQLException
-		{
-			db = DBHelper.getWritableDatabase();
-			return this;
-		}
-		
-		//---close the database---
-		public void close()
-		{
-			DBHelper.close();
-		}
-		
-		//---insert a user into the database---
-		public long insertUser(String username, String password, String email)
-		{
-			ContentValues initialValues = new ContentValues();
-			initialValues.put(KEY_USERNAME, username);
-			initialValues.put(KEY_PASSWORD, password);
-			initialValues.put(KEY_EMAIL, email);
-			return db.insert(USERS_TABLE, null, initialValues);
-		}
-		
-		//---delete a particular user---
-		public boolean deleteUser(long rowId) 
-		{
-			return db.delete(USERS_TABLE, KEY_UID + "=" + rowId, null) > 0;
-		}
-		
-		//---retrieves all the user---
-		public Cursor getAllUsers()
-		{
-			return db.query(USERS_TABLE, new String[] {KEY_UID, KEY_USERNAME, KEY_PASSWORD, KEY_EMAIL}, null, null, null, null, null);
-		}
-		
-		//---retrieves a particular user---
-		public Cursor getUser(long rowId) throws SQLException
-		{
-			Cursor mCursor = 
-					db.query(true, USERS_TABLE, new String[] {KEY_UID,
-							KEY_USERNAME, KEY_PASSWORD, KEY_EMAIL}, KEY_UID + "=" + rowId, null,
-							null, null, null, null);
-			if(mCursor != null) {
-				mCursor.moveToFirst();
-			}
-			return mCursor;
-		}
-		
-		public boolean updateUser(long rowId, String username, String email, String password) 
-		{
-			ContentValues args = new ContentValues();
-			args.put(KEY_USERNAME, username);
-			args.put(KEY_EMAIL, email);
-			args.put(KEY_PASSWORD, password);
-			return db.update(USERS_TABLE, args, KEY_UID + "=" + rowId, null) > 0;
+		do {
+			int idIndex = cursor.getColumnIndex(DbSchema.FoodItemTable._ID);
+			int amountIndex = cursor.getColumnIndex(DbSchema.FoodItemTable.COLUMN_AMOUNT);
+			int catIndex = cursor.getColumnIndex(DbSchema.FoodItemTable.COLUMN_CATEGORY);
+			int expIndex = cursor.getColumnIndex(DbSchema.FoodItemTable.COLUMN_EXPIRATION_DATE);
+			int nameIndex = cursor.getColumnIndex(DbSchema.FoodItemTable.COLUMN_NAME);
+			int picIndex = cursor.getColumnIndex(DbSchema.FoodItemTable.COLUMN_PICTURE);
+			int unitIndex = cursor.getColumnIndex(DbSchema.FoodItemTable.COLUMN_UNIT);
+			int priceIndex = cursor.getColumnIndex(DbSchema.FoodItemTable.COLUMN_PRICE);
 			
-		}
+			int foodItemId = cursor.getInt(idIndex);
+			double amount = cursor.getDouble(amountIndex);
+			int categoryValue = cursor.getInt(catIndex);
+			FoodItemCategory cat = FoodItemCategory.values()[categoryValue];
+			String expString = cursor.getString(expIndex);
+			Date expDate = parseDate(expString);
+			String name = cursor.getString(nameIndex);
+			String pic = cursor.getString(picIndex);
+			int unitVal = cursor.getInt(unitIndex);
+			FoodItemUnit unit = FoodItemUnit.values()[unitVal];
+			double price = cursor.getDouble(priceIndex);
+			
+			items.add(new StandardFoodItem(name, foodItemId, expDate, amount, unit, pic, cat, price ));
+		} while(cursor.moveToNext());
+		
+		return items;
+		
 	}
+	
+	public Pantry restorePantry(int userId) {
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String table = DbSchema.PantryTable.TABLE;
+		String[] columns = { DbSchema.PantryTable._ID, DbSchema.PantryTable.COLUMN_PANTRY_NAME };
+		String selection = "(" + DbSchema.PantryTable.COLUMN_ASSOCIATED_USER + " = " + userId
+							+ " AND " + DbSchema.PantryTable.COLUMN_VISIBLE + " = TRUE";
+		String[] selectionArgs = {};
+		String groupBy = "";
+		String having = "";
+		String orderBy = "";
+		
+		Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+		helper.close();
+		
+		if(cursor != null) {
+			cursor.moveToFirst();
+		}
+		else {
+			return null; 	// no pantries associated with that user
+		}
+		
+		int idIndex = cursor.getColumnIndex(DbSchema.PantryTable._ID);
+		int nameIndex = cursor.getColumnIndex(DbSchema.PantryTable.COLUMN_PANTRY_NAME);
+		
+		int id = cursor.getInt(idIndex);
+		String name = cursor.getString(nameIndex);
+		
+		Pantry pantry = new Pantry(name, id);
+		ShoppingList shoppingList = getAssociatedShoppingList(id);
+		shoppingList.setName(name);
+		pantry.setShoppingList(shoppingList);
+		for(FoodItem item : getContents(id, true)) {
+			pantry.addItem(item);
+		}
+		
+		return pantry;
+		
+	}
+	
 }

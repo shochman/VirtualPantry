@@ -22,6 +22,7 @@ public final class DbSchema {
         public static final String _ID = "id";
         public static final String COLUMN_PANTRY_NAME = "name";
         public static final String COLUMN_ASSOCIATED_USER = "userid";
+        public static final String COLUMN_VISIBLE = "visible";
     }
     
     /* Inner class that defines the table contents */
@@ -43,6 +44,7 @@ public final class DbSchema {
         public static final String COLUMN_UNIT = "unit";
         public static final String COLUMN_CATEGORY = "category";
         public static final String COLUMN_PICTURE = "picture";
+        public static final String COLUMN_PRICE = "price";
     }
     
 }

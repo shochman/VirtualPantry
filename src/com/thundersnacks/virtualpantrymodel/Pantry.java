@@ -39,6 +39,10 @@ public class Pantry implements Iterable<FoodItem> {
 		return shoppingList;
 	}
 	
+	public void setShoppingList( ShoppingList sl ) {
+		this.shoppingList = sl;
+	}
+	
 	public boolean addItem(FoodItem itemToAdd) {
 		// return true if insert is successful
 		// throws exception when item can't be added

@@ -25,7 +25,8 @@ public class DbHelper extends SQLiteOpenHelper  {
     	    DbSchema.PantryTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
     	    DbSchema.PantryTable.COLUMN_PANTRY_NAME + " TEXT NOT NULL, " +
     	    "FOREIGN KEY(" + DbSchema.PantryTable.COLUMN_ASSOCIATED_USER + ") REFERENCES " 
-    	    + DbSchema.UserTable.TABLE +"(" + DbSchema.UserTable._ID + ");";
+    	    + DbSchema.UserTable.TABLE +"(" + DbSchema.UserTable._ID + "," + 
+    	    DbSchema.PantryTable.COLUMN_VISIBLE + " BOOLEAN NOT NULL);";
     
     private static final String SQL_CREATE_TABLE_SHOPPINGLIST =
     	    "CREATE TABLE " + DbSchema.ShoppingListTable.TABLE + " (" +
@@ -44,6 +45,7 @@ public class DbHelper extends SQLiteOpenHelper  {
     	    DbSchema.FoodItemTable.COLUMN_EXPIRATION_DATE + " DATE, " +
     	    DbSchema.FoodItemTable.COLUMN_UNIT + " INTEGER, " +
     	    DbSchema.FoodItemTable.COLUMN_CATEGORY + " INTEGER, " +
+    	    DbSchema.FoodItemTable.COLUMN_PRICE + " DOUBLE, " +
     	    DbSchema.FoodItemTable.COLUMN_PICTURE + " TEXT);";
     
     private static final String SQL_DELETE_DB = "DROP TABLE IF EXISTS " + DbSchema.FoodItemTable.TABLE + ";" +
