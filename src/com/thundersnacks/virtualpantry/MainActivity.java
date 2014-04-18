@@ -23,15 +23,19 @@ import com.thundersnacks.virtualpantrymodel.BarCodeParser.Table;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.FoodItemUnit;
+import com.thundersnacks.virtualpantrymodel.Recipe;
+import com.thundersnacks.virtualpantrymodel.RecipeArray;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 import com.thundersnacks.zxing.IntentIntegrator;
 import com.thundersnacks.zxing.IntentResult;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.SparseBooleanArray;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -46,21 +50,27 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
@@ -113,6 +123,38 @@ public class MainActivity extends Activity {
 	    	//super.onPostExecute(result);
 	    	text = result;
 	    	this.dialog.dismiss();
+	    }
+	  }
+	
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+	    ImageView bmImage;
+
+	    public DownloadImageTask(ImageView bmImage) {
+	        this.bmImage = bmImage;
+	    }
+
+	    @Override
+	    protected void onPreExecute() {
+	        // TODO Auto-generated method stub
+	        super.onPreExecute();
+	    }
+
+	    protected Bitmap doInBackground(String... urls) {
+	        String urldisplay = urls[0];
+	        Bitmap mIcon11 = null;
+	        try {
+	          InputStream in = new java.net.URL(urldisplay).openStream();
+	          mIcon11 = BitmapFactory.decodeStream(in);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return mIcon11;
+	    }
+
+	    @Override 
+	    protected void onPostExecute(Bitmap result) {
+	        super.onPostExecute(result);
+	        bmImage.setImageBitmap(Bitmap.createScaledBitmap(result, 100, 100, false));
 	    }
 	  }
 	
@@ -349,22 +391,6 @@ public class MainActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_search:
-              
-            	String query = getIntent().getStringExtra(SearchManager.QUERY);
-    			//use the query to search pantry data
-    		//	FoodItemCategory[] categoryList = FoodItemCategory.values();
-
-    			PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
-
-    			List<FoodItem> foodItem = pf.getPantry().getFoodItems();
-    			List<FoodItem> foodResults = new ArrayList<FoodItem>();
-    			for(FoodItem food : foodItem){
-    				if (food.getName().equals(query))
-    				{	
-    					foodResults.add(food);
-    				}
-    			}
-            	
                 return true;
             case R.id.action_settings:
             	Intent intent = new Intent(this, SettingsActivity.class);
@@ -376,6 +402,100 @@ public class MainActivity extends Activity {
             	 */
             	
                 return true;
+            case R.id.action_recipe:
+            	final Dialog recipeDialog = new Dialog(this);
+            	recipeDialog.setTitle("Select Food Items");
+            	recipeDialog.setContentView(R.layout.find_recipe);
+            	PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
+            	final ListView lv = (ListView) recipeDialog.findViewById(R.id.recipe_list);
+            	class FoodItemsAdapter extends ArrayAdapter<FoodItem> {
+                    public FoodItemsAdapter(Activity activity, List<FoodItem> list) {
+                       super(activity, R.layout.shopping_list_item, list);
+                    }
+
+                    @Override
+                    public View getView(final int position, View convertView, ViewGroup parent) {
+                       // Get the data item for this position
+                       final FoodItem foodItem = getItem(position);    
+                       // Check if an existing view is being reused, otherwise inflate the view
+                       if (convertView == null) {
+                          convertView = LayoutInflater.from(getContext()).inflate(R.layout.shopping_list_item, null);
+                       }
+                       
+                       convertView.setOnClickListener(new OnClickListener(){
+            				@Override
+            				public void onClick(View v) {
+            						((CheckableRelativeLayout) v).toggle();
+            						if (((CheckableRelativeLayout) v).isChecked()) {
+            							lv.setItemChecked(position, true);
+            						} else {
+            							lv.setItemChecked(position, false);
+            						}
+            				}
+            	        });
+                       
+                       ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
+                        if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.PROTEIN) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.protein));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.FRUIT) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fruit));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.VEGETABLE) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.vegetable));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.DAIRY) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.dairy));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.FROZEN) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.frozen));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.CONDIMENT) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.condiment));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.SWEET) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.sweet));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.SNACK) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.snack));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.GRAIN) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.grain));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.FAT) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.fat));
+                  		} else if (foodItem.getCategory() == FoodItemCategory.OTHER) {
+                  			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.other));
+                  		} 
+                       	TextView item = (TextView) convertView.findViewById(R.id.item);
+                   		item.setText(foodItem.getName());
+                   		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
+                        itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+                   		return convertView;
+                    }
+            	}
+            	lv.setAdapter(new FoodItemsAdapter(this, pf.getPantry().getFoodItems()));
+            	Button recipeButton = (Button) recipeDialog.findViewById(R.id.find_recipe);
+            	recipeButton.setOnClickListener(new View.OnClickListener() {
+    				
+    				@Override
+    				public void onClick(View v) {
+    					SparseBooleanArray checked = lv.getCheckedItemPositions();
+    					int size = lv.getAdapter().getCount()-1;
+    					List<String> foodRecipeArray = new ArrayList<String>();
+    					for(int i = size; i >= 0; i--) {
+    						if (checked.get(i)) {
+    							FoodItem foodToUse;
+    								foodToUse = (FoodItem) lv.getAdapter().getItem(i);
+    								foodRecipeArray.add(foodToUse.getName());
+    								//((CheckBox) lv.getChildAt(i).findViewById(R.id.shopping_list_checkbox)).toggle();	
+    						}
+    					}
+    					int i = 0;
+    					String[] stringArr = new String[foodRecipeArray.size()];
+    					for (String s : foodRecipeArray) {
+    						stringArr[i++] = s;
+    					}
+    					RecipeArray recipeArray = suggestRecipes(stringArr);
+    					recipeDialog.dismiss();
+    					openRecipeResults(recipeArray);	
+    				}
+    			});
+            	recipeDialog.show();
+            	return true;
             case R.id.action_new:
             	addDialog = new Dialog(this);
             	if (getActionBar().getSelectedTab().getPosition() == 0) {
@@ -663,7 +783,69 @@ public class MainActivity extends Activity {
     
     
     ///////////////////////////////////////////////////////////
+	public RecipeArray suggestRecipes(String... foodItems) {
+    	String url = "http://food2fork.com/api/search?key=a2490ddc95bd1869db2b2d2f17133530&count=10&q=";
+    	for(int i = 0 ; i < foodItems.length; i++) {
+    		//item.replaceAll("\\s", "%20");
+    		//item += ",";
+    		foodItems[i] = foodItems[i].replaceAll("\\s", "%20");
+    		url += foodItems[i];
+    		url += ",";
+    		//url += item;
+    		//url += ",";
+    	}
+    	//url = url.replaceAll("\\s", "%20");
+    	Toast.makeText(getApplicationContext(), "Searching for recipes...", Toast.LENGTH_LONG).show();
+    	DownloadWebPageTask task = new DownloadWebPageTask();
+    	String jsonDoc = null;
+    	try {
+    		jsonDoc = task.execute( new String[]{url} ).get();
+    	} catch(InterruptedException e) {
+    		e.printStackTrace();
+    	} catch(ExecutionException e) {
+    		e.printStackTrace();
+    	}
+    	RecipeArray recipes = new RecipeArray();
+    	recipes.parse(jsonDoc);
+    	return recipes;
+	}
     
+    public void openRecipeResults(RecipeArray recipeArray) {
+    	Dialog recipeResultsDialog = new Dialog(this);
+		recipeResultsDialog.setTitle("Recipe Results");
+    	recipeResultsDialog.setContentView(R.layout.recipe_results);
+    	final ListView lv = (ListView) recipeResultsDialog.findViewById(R.id.recipe_results_list);
+    	class FoodItemsAdapter extends ArrayAdapter<Recipe> {
+            public FoodItemsAdapter(Activity activity, List<Recipe> list) {
+               super(activity, R.layout.recipe_item, list);
+            }
+
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+               // Get the data item for this position
+               final Recipe recipe = getItem(position);    
+               // Check if an existing view is being reused, otherwise inflate the view
+               if (convertView == null) {
+                  convertView = LayoutInflater.from(getContext()).inflate(R.layout.recipe_item, null);
+               }
+               
+               convertView.setOnClickListener(new OnClickListener(){
+    				@Override
+    				public void onClick(View v) {
+    					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(recipe.getF2f_url()));
+    					startActivity(browserIntent);	
+    				}
+    	        });
+               	TextView recipeNameText = (TextView) convertView.findViewById(R.id.recipe_name);
+           		recipeNameText.setText(recipe.getName());
+           		ImageView recipeImageView = (ImageView) convertView.findViewById(R.id.recipe_image);
+           		new DownloadImageTask(recipeImageView).execute(recipe.getImg_url());
+           		return convertView;
+            }
+    	}
+    	lv.setAdapter(new FoodItemsAdapter(this, ((List<Recipe>)recipeArray.getRecipeArray())));
+    	recipeResultsDialog.show();
+    }
     
     
     

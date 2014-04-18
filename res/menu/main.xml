@@ -26,16 +26,16 @@
         android:showAsAction="never"
         android:title="@string/action_sort" />
     
+    <!-- Recipe, should always be in the overflow -->
+    <item
+        android:id="@+id/action_recipe"
+        android:showAsAction="never"
+        android:title="@string/action_recipe" />
+    
     <item
         android:id="@+id/action_help"
         android:showAsAction="never"
         android:title="@string/action_help" />
-        
-    <!-- Change Pantry, should always be in the overflow -->
-    <item
-        android:id="@+id/action_change_pantry"
-        android:showAsAction="never"
-        android:title="@string/action_change_pantry" />
     
     <!-- Settings, should always be in the overflow -->
     <item
