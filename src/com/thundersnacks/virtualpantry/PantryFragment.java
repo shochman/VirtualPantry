@@ -104,37 +104,37 @@ public class PantryFragment extends Fragment {
         cal.set(2014, 0, 1);
         Date d7 = cal.getTime();
         
-        pantry.addItem(new StandardFoodItem("Coke", 0, d5, 6, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE,1.00));
-        pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , 4, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE,1.00));
+        pantry.addItem(new StandardFoodItem("Coke", 0, d5, 6, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE,1.75));
+        pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , 4, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE,1.75));
         
-        pantry.addItem(new StandardFoodItem("Ketchup", 0, d3, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT,1.00));
-        pantry.addItem(new StandardFoodItem("Mustard", 0, d2, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT,1.00));
+        pantry.addItem(new StandardFoodItem("Ketchup", 0, d3, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT,1.80));
+        pantry.addItem(new StandardFoodItem("Mustard", 0, d2, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT,1.76));
         
-        pantry.addItem(new StandardFoodItem("2% Milk", 0, d2, 1, FoodItemUnit.GALLONS, "", FoodItemCategory.DAIRY,1.00));
-        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.DAIRY,1.00));
-        pantry.addItem(new StandardFoodItem("Yogurt", 0, d1, 3, FoodItemUnit.CUPS, "", FoodItemCategory.DAIRY,1.00));
+        pantry.addItem(new StandardFoodItem("2% Milk", 0, d2, 1, FoodItemUnit.GALLONS, "", FoodItemCategory.DAIRY,2.59));
+        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.DAIRY,2.36));
+        pantry.addItem(new StandardFoodItem("Yogurt", 0, d1, 3, FoodItemUnit.CUPS, "", FoodItemCategory.DAIRY,4.20));
         
         pantry.addItem(new StandardFoodItem("Butter", 0, d4, 0.5, FoodItemUnit.BOX, "", FoodItemCategory.FAT,1.00));
         
-        pantry.addItem(new StandardFoodItem("Ice Cream", 0, d3, 1, FoodItemUnit.TUBS, "", FoodItemCategory.FROZEN,1.00));
+        pantry.addItem(new StandardFoodItem("Ice Cream", 0, d3, 1, FoodItemUnit.TUBS, "", FoodItemCategory.FROZEN,4.00));
         
-        pantry.addItem(new StandardFoodItem("Apple", 0, d2, 1, FoodItemUnit.UNITLESS, "", FoodItemCategory.FRUIT,1.00));
+        pantry.addItem(new StandardFoodItem("Apple", 0, d2, 1, FoodItemUnit.UNITLESS, "", FoodItemCategory.FRUIT,0.87));
         pantry.addItem(new StandardFoodItem("Pear", 0, d2, 1, FoodItemUnit.UNITLESS, "", FoodItemCategory.FRUIT,1.00));
         
-        pantry.addItem(new StandardFoodItem("Bread", 0, d1, 0.5, FoodItemUnit.LOAF, "", FoodItemCategory.GRAIN,1.00));
-        pantry.addItem(new StandardFoodItem("Cereal", 0, d3, 2, FoodItemUnit.BOX, "", FoodItemCategory.GRAIN,1.00));
+        pantry.addItem(new StandardFoodItem("Bread", 0, d1, 0.5, FoodItemUnit.LOAF, "", FoodItemCategory.GRAIN,1.34));
+        pantry.addItem(new StandardFoodItem("Cereal", 0, d3, 2, FoodItemUnit.BOX, "", FoodItemCategory.GRAIN,2.68));
         
-        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, d2, 1, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN,1.00));
-        pantry.addItem(new StandardFoodItem("Ground Beef", 0, d4, 0.5, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN,1.00));
+        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, d2, 1, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN,2.10));
+        pantry.addItem(new StandardFoodItem("Ground Beef", 0, d4, 0.5, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN,3.66));
         
-        pantry.addItem(new StandardFoodItem("Potato Chips", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK,1.00));
-        pantry.addItem(new StandardFoodItem("Pretzels", 0, d7, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK,1.00));
+        pantry.addItem(new StandardFoodItem("Potato Chips", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK,3.60));
+        pantry.addItem(new StandardFoodItem("Pretzels", 0, d7, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK,1.78));
         
         pantry.addItem(new StandardFoodItem("Chocolate", 0, d7, 1, FoodItemUnit.POUNDS, "", FoodItemCategory.SWEET,1.00));
         pantry.addItem(new StandardFoodItem("Cookies", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SWEET,1.00));
         
-        pantry.addItem(new StandardFoodItem("Carrots", 0, d1, 2, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE,1.00));
-        pantry.addItem(new StandardFoodItem("Lettuce", 0, d4, 1, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE,1.00));
+        pantry.addItem(new StandardFoodItem("Carrots", 0, d1, 2, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE,0.90));
+        pantry.addItem(new StandardFoodItem("Lettuce", 0, d4, 1, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE,1.80));
         pantry.addItem(new StandardFoodItem("Broccoli", 0, d2, 0.5, FoodItemUnit.POUNDS, "", FoodItemCategory.VEGETABLE,1.00));
         
         pantry.categorySort();

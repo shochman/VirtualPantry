@@ -3,6 +3,7 @@ package com.thundersnacks.virtualpantry;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.thundersnacks.database.DbAdapter;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.User;
 
@@ -26,6 +27,8 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import java.security.MessageDigest;
+import java.math.BigInteger;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -38,7 +41,7 @@ public class LoginActivity extends Activity {
 	 * TODO: remove after connecting to a real authentication system.
 	 */
 	private static ArrayList<String> DUMMY_CREDENTIALS = new ArrayList<String>();
-
+	private static String seed = "kjf83mfwhf2";
 	/**
 	 * The default email to populate the email field with.
 	 */
@@ -70,8 +73,8 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		// Set up the login form.
-		DUMMY_CREDENTIALS.add("bar@example.com:world");
-		DUMMY_CREDENTIALS.add("foo@example.com:hello");
+		DUMMY_CREDENTIALS.add("bar@example.com:" + hashPW("world"));
+		DUMMY_CREDENTIALS.add("foo@example.com:" + hashPW("hello"));
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
@@ -134,7 +137,7 @@ public class LoginActivity extends Activity {
 
 		// Store values at the time of the login attempt.
 		mEmail = mEmailView.getText().toString();
-		mPassword = mPasswordView.getText().toString();
+		mPassword = hashPW(mPasswordView.getText().toString());
 
 		boolean cancel = false;
 		View focusView = null;
@@ -253,8 +256,10 @@ public class LoginActivity extends Activity {
 		}
 		
 		if(valid)
-			DUMMY_CREDENTIALS.add(email+":"+password);
-		
+		{
+			DUMMY_CREDENTIALS.add(email+":"+hashPW(password));
+			//DbAdapter.insertUser(username, hashPW(password), email);
+		}
 		return valid;
 		
 	}
@@ -351,4 +356,27 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
+	
+	public static String hashPW(String password) {
+		String hashtext = "";
+		try{
+			String plaintext = password;
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			m.reset();
+			m.update(plaintext.getBytes());
+			byte[] digest = m.digest();
+			BigInteger bigInt = new BigInteger(1,digest);
+			hashtext = bigInt.toString(16);
+			// Now we need to zero pad it if you actually want the full 32 chars.
+			while(hashtext.length() < 32 ){
+				hashtext = "0"+hashtext;
+			} 
+			
+		} catch(Exception e) {
+				e.printStackTrace();
+		}
+		
+		return hashtext;
+	}
+
 }
