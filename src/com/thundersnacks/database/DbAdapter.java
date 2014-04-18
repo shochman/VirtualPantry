@@ -164,13 +164,13 @@ public class DbAdapter {
 	}
 		
 	//---validates user credentials---
-	public User validateUserCredentials(String username, String password) throws SQLException
+	public User validateUserCredentials(String email, String password) throws SQLException
 	{
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String table = DbSchema.UserTable.TABLE;
 		String[] columns = { DbSchema.UserTable._ID, 
-								DbSchema.UserTable.COLUMN_EMAIL };
-		String selection = "(" + DbSchema.UserTable.COLUMN_USERNAME + " = " + username
+								DbSchema.UserTable.COLUMN_USERNAME };
+		String selection = "(" + DbSchema.UserTable.COLUMN_EMAIL + " = " + email
 							+ " AND " + DbSchema.UserTable.COLUMN_PASSWORD + " = " + password + " )";
 		
 		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
@@ -183,10 +183,10 @@ public class DbAdapter {
 			return null;
 		
 		int idIndex = cursor.getColumnIndex(DbSchema.UserTable._ID);
-		int emailIndex = cursor.getColumnIndex(DbSchema.UserTable.COLUMN_EMAIL);
+		int usernameIndex = cursor.getColumnIndex(DbSchema.UserTable.COLUMN_USERNAME);
 		
 		int id = cursor.getInt(idIndex);
-		String email = cursor.getString(emailIndex);
+		String username = cursor.getString(usernameIndex);
 		
 		return new User(username, email, password, password, id);
 		
