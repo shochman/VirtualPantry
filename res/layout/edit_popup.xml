@@ -57,7 +57,7 @@
 	            android:layout_height="wrap_content"
 	             android:layout_weight="50"
 	            android:layout_gravity="right"
-   				android:inputType="number" >
+   				android:inputType="numberDecimal" >
 
 	        </EditText>
 	        
@@ -75,7 +75,7 @@
 	              android:layout_width="fill_parent"
 	              android:layout_height="wrap_content"
 	               android:layout_weight="50"
-	              android:text="Price: $" />
+	              android:text="Price" />
 			
 	        <EditText
 	            android:id="@+id/priceEdit"
@@ -84,7 +84,7 @@
 	            android:layout_height="wrap_content"
 	             android:layout_weight="50"
 	            android:layout_gravity="right"
-   				android:inputType="number" >
+   				android:inputType="numberDecimal" >
 	        </EditText>
 	        
 		<TextView android:id="@+id/expireText"
