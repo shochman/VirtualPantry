@@ -809,16 +809,17 @@ public class MainActivity extends Activity {
     	} catch(ExecutionException e) {
     		e.printStackTrace();
     	}
-    	RecipeArray recipes = new RecipeArray();
-    	recipes.parse(jsonDoc);
+    	RecipeArray recipes;
+    	if (jsonDoc.equals("{\"count\": 0, \"recipes\": []}")) {
+    		recipes = null;
+    	} else {
+    		recipes = new RecipeArray();
+    		recipes.parse(jsonDoc);
+    	}
     	return recipes;
 	}
     
     public void openRecipeResults(RecipeArray recipeArray) {
-    	Dialog recipeResultsDialog = new Dialog(this);
-		recipeResultsDialog.setTitle("Recipe Results");
-    	recipeResultsDialog.setContentView(R.layout.recipe_results);
-    	final ListView lv = (ListView) recipeResultsDialog.findViewById(R.id.recipe_results_list);
     	class FoodItemsAdapter extends ArrayAdapter<Recipe> {
             public FoodItemsAdapter(Activity activity, List<Recipe> list) {
                super(activity, R.layout.recipe_item, list);
@@ -847,8 +848,16 @@ public class MainActivity extends Activity {
            		return convertView;
             }
     	}
-    	lv.setAdapter(new FoodItemsAdapter(this, ((List<Recipe>)recipeArray.getRecipeArray())));
-    	recipeResultsDialog.show();
+    	if (recipeArray != null) {
+    		Dialog recipeResultsDialog = new Dialog(this);
+    		recipeResultsDialog.setTitle("Recipe Results");
+        	recipeResultsDialog.setContentView(R.layout.recipe_results);
+    		final ListView lv = (ListView) recipeResultsDialog.findViewById(R.id.recipe_results_list);
+    		lv.setAdapter(new FoodItemsAdapter(this, ((List<Recipe>)recipeArray.getRecipeArray())));
+    		recipeResultsDialog.show();
+    	} else {
+    		Toast.makeText(getApplicationContext(), "No results found", Toast.LENGTH_LONG).show();
+    	}
     }
     
     
