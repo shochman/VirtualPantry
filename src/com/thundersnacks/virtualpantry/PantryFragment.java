@@ -1,4 +1,5 @@
 package com.thundersnacks.virtualpantry;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -95,7 +96,7 @@ public class PantryFragment extends Fragment {
         cal.set(2014, 4, 25);
         Date d4 = cal.getTime();
         
-        cal.set(2014, 11, 6);
+        cal.set(2014, 3, 20);
         Date d5 = cal.getTime();
         
         cal.set(2014, 10, 10);
@@ -234,7 +235,8 @@ public class PantryFragment extends Fragment {
            				DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
            				nameText.setText(foodItem.getName());
            				quantityText.setText(Double.toString(foodItem.getAmount()));
-           				priceText.setText(Double.toString(foodItem.getPrice()));
+           				DecimalFormat df = new DecimalFormat("#.00");
+           				priceText.setText(df.format(foodItem.getPrice()));
            				int numberOfUnit = 0;
                     	for (FoodItemUnit fic : FoodItemUnit.values()) {
                     		if (fic == foodItem.getUnit()) {
@@ -460,7 +462,8 @@ public class PantryFragment extends Fragment {
                     	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
                     	nameText.setText(foodItem.getName());
                     	EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
-                    	priceText.setText(Double.toString(foodItem.getPrice()));
+                    	DecimalFormat df = new DecimalFormat("#.00");
+                    	priceText.setText(df.format(foodItem.getPrice()));
                     	quantityText.setText(Double.toString(foodItem.getAmount()));
                     	int numberOfUnit = 0;
                     	for (FoodItemUnit fic : FoodItemUnit.values()) {
@@ -672,7 +675,8 @@ public class PantryFragment extends Fragment {
            				nameText.setText(foodItem.getName());
            				quantityText.setText(Double.toString(foodItem.getAmount()));
            				EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
-           				priceText.setText(Double.toString(foodItem.getPrice()));
+           				DecimalFormat df = new DecimalFormat("#.00");
+           				priceText.setText(df.format(foodItem.getPrice()));
            				int numberOfUnit = 0;
                     	for (FoodItemUnit fic : FoodItemUnit.values()) {
                     		if (fic == foodItem.getUnit()) {

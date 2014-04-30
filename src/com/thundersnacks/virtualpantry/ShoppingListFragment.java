@@ -1,6 +1,7 @@
 package com.thundersnacks.virtualpantry;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -118,8 +119,8 @@ public class ShoppingListFragment extends Fragment {
         for (FoodItem fi : shoppingList.getFoodItems()) {
         	tp+=fi.getPrice();
         }
-        DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
-        totalPrice.setText("Total: $"+f.format(tp));
+        NumberFormat nf = NumberFormat.getCurrencyInstance();  // this will helps you to always keeps in two decimal places
+        totalPrice.setText("Total: "+nf.format(tp));
         Button addToPantryButton = (Button) view.findViewById(R.id.addToPantryButton);
 	    addToPantryButton.setOnClickListener(new View.OnClickListener() {
 				
@@ -173,8 +174,8 @@ public class ShoppingListFragment extends Fragment {
                     for (FoodItem food : shoppingList.getFoodItems()) {
                     	tp+=food.getPrice();
                     }
-                    DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places				
-                    totalPrice.setText("Total: $"+f.format(tp));
+                    NumberFormat nf = NumberFormat.getCurrencyInstance();  // this will helps you to always keeps in two decimal places				
+                    totalPrice.setText("Total: "+nf.format(tp));
 				}
 			});
         return view;
@@ -280,7 +281,8 @@ public class ShoppingListFragment extends Fragment {
             	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
             	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
             	nameText.setText(foodItem.getName());
-            	priceText.setText(Double.toString(foodItem.getPrice()));
+            	DecimalFormat df = new DecimalFormat("#.00");
+            	priceText.setText(df.format(foodItem.getPrice()));
             	quantityText.setText(Double.toString(foodItem.getAmount()));
             	int numberOfCat = 0;
             	int numberOfUnit = 0;
@@ -345,8 +347,9 @@ public class ShoppingListFragment extends Fragment {
        		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
         	TextView price = (TextView) convertView.findViewById(R.id.item_price);
-        	price.setText("$"+Double.toString(foodItem.getPrice()));
+        	price.setText(nf.format(foodItem.getPrice()));
        		return convertView;
         }
 	}
@@ -475,11 +478,14 @@ public class ShoppingListFragment extends Fragment {
      			editDialog.setTitle("Edit Item");
      			EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
              	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+             	EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
              	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
              	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
             	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
              	nameText.setText(foodItem.getName());
              	quantityText.setText(Double.toString(foodItem.getAmount()));
+             	DecimalFormat df = new DecimalFormat("#.00");
+             	priceText.setText(df.format(foodItem.getAmount()));
              	int numberOfUnit = 0;
             	for (FoodItemUnit fic : FoodItemUnit.values()) {
             		if (fic == foodItem.getUnit()) {
@@ -541,8 +547,9 @@ public class ShoppingListFragment extends Fragment {
             item.setText(foodItem.getName());
             TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
             TextView price = (TextView) convertView.findViewById(R.id.item_price);
-        	price.setText("$"+Double.toString(foodItem.getPrice()));
+        	price.setText(nf.format(foodItem.getPrice()));
             return convertView;
         }
 
@@ -665,11 +672,14 @@ public class ShoppingListFragment extends Fragment {
                 editDialog.setTitle("Edit Item");
                 EditText nameText = (EditText) editDialog.findViewById(R.id.nameEdit);
             	EditText quantityText = (EditText) editDialog.findViewById(R.id.quantityEdit);
+            	EditText priceText = (EditText) editDialog.findViewById(R.id.priceEdit);
             	Spinner categoryText = (Spinner) editDialog.findViewById(R.id.category_spinner);
             	Spinner unitText = (Spinner) editDialog.findViewById(R.id.unit_spinner);
             	DatePicker expirationDate = (DatePicker) editDialog.findViewById(R.id.dpResult);
             	nameText.setText(foodItem.getName());
             	quantityText.setText(Double.toString(foodItem.getAmount()));
+            	DecimalFormat df = new DecimalFormat("#.00");
+            	priceText.setText(df.format(foodItem.getPrice()));
             	int numberOfCat = 0;
             	int numberOfUnit = 0;
             	for (FoodItemUnit fic : FoodItemUnit.values()) {
@@ -732,8 +742,9 @@ public class ShoppingListFragment extends Fragment {
        		item.setText(foodItem.getName());
        		TextView itemQuantity = (TextView) convertView.findViewById(R.id.item_quantity);
             itemQuantity.setText(foodItem.getAmount() + " " + foodItem.getUnit());
+            NumberFormat nf = NumberFormat.getCurrencyInstance();
             TextView price = (TextView) convertView.findViewById(R.id.item_price);
-        	price.setText("$"+Double.toString(foodItem.getPrice()));
+        	price.setText(nf.format(foodItem.getPrice()));
        		return convertView;
         }
 	}
@@ -755,8 +766,8 @@ public class ShoppingListFragment extends Fragment {
         	double tp=0;
             for (FoodItem food : shoppingList.getFoodItems()) {
             	tp+=food.getPrice();
-            	DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
-            	totalPrice.setText("Total: $"+f.format(tp));
+            	NumberFormat nf = NumberFormat.getCurrencyInstance();  // this will helps you to always keeps in two decimal places
+            	totalPrice.setText("Total: " + nf.format(tp));
             }
          } 
      }
@@ -771,8 +782,8 @@ public class ShoppingListFragment extends Fragment {
          for (FoodItem food : shoppingList.getFoodItems()) {
          	tp+=food.getPrice();
          }
-         DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
-         totalPrice.setText("Total: $"+f.format(tp));
+         NumberFormat nf = NumberFormat.getCurrencyInstance(); // this will helps you to always keeps in two decimal places
+         totalPrice.setText("Total: "+nf.format(tp));
 	 }
      
      public boolean isInShoppingList(FoodItem food) {
@@ -824,7 +835,7 @@ public class ShoppingListFragment extends Fragment {
         for (FoodItem food1 : shoppingList.getFoodItems()) {
         	tp+=food1.getPrice();
         }
-        DecimalFormat f = new DecimalFormat("##.00");  // this will helps you to always keeps in two decimal places
-        totalPrice.setText("Total: $"+f.format(tp));
+        NumberFormat nf = NumberFormat.getCurrencyInstance();  // this will helps you to always keeps in two decimal places
+        totalPrice.setText("Total: "+nf.format(tp));
      }
 }
