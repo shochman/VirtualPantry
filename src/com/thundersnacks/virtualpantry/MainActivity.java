@@ -736,53 +736,53 @@ public class MainActivity extends Activity {
 		    	startActivity(intent);
 				this.finish();
 			}
-		}
-		IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-		if (scanningResult != null) {
-			//we have a result
-			String scanContent = scanningResult.getContents();
-			String scanFormat = scanningResult.getFormatName();
-			
-			BarCodeParser barCodeParser = new BarCodeParser();
-			Table table = null;
-			
-			DownloadWebPageTask task = new DownloadWebPageTask();
-	        String xmlText = null;
-			try {
-				xmlText = task.execute(new String[] { "http://www.upcdatabase.com/item/"+scanContent }).get();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			try {
-				if(xmlText != "" && xmlText != null)
-					table = barCodeParser.parse(xmlText);
+		} else if (requestCode == IntentIntegrator.REQUEST_CODE) {
+			IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+			if (scanningResult != null) {
+				//we have a result
+				String scanContent = scanningResult.getContents();
+				String scanFormat = scanningResult.getFormatName();
 				
-			} catch (XmlPullParserException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				BarCodeParser barCodeParser = new BarCodeParser();
+				Table table = null;
+				
+				DownloadWebPageTask task = new DownloadWebPageTask();
+				String xmlText = null;
+				try {
+					xmlText = task.execute(new String[] { "http://www.upcdatabase.com/item/"+scanContent }).get();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				try {
+					if(xmlText != "" && xmlText != null)
+						table = barCodeParser.parse(xmlText);
+				
+				} catch (XmlPullParserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Toast.makeText(getApplicationContext(), table != null ? table.description : "", Toast.LENGTH_LONG).show();
+				EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
+				EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
+				Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
+				String description = table != null ? table.description : "null";
+				String size = table != null ? table.size : "0";
+				nameText.setText(table != null ? table.description : "null");
+				quantityText.setText(table != null ? table.size : "0");
+				unitText.setSelection(table != null ? table.foodItemUnit.ordinal() : FoodItemUnit.UNITLESS.ordinal());
+			} else {
+				Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
+				toast.show();
 			}
-			Toast.makeText(getApplicationContext(), table != null ? table.description : "", Toast.LENGTH_LONG).show();
-			EditText nameText = (EditText) addDialog.findViewById(R.id.nameEdit);
-			EditText quantityText = (EditText) addDialog.findViewById(R.id.quantityEdit);
-			Spinner unitText = (Spinner) addDialog.findViewById(R.id.unit_spinner);
-			String description = table != null ? table.description : "null";
-			String size = table != null ? table.size : "0";
-			nameText.setText(table != null ? table.description : "null");
-			quantityText.setText(table != null ? table.size : "0");
-			unitText.setSelection(table != null ? table.foodItemUnit.ordinal() : FoodItemUnit.UNITLESS.ordinal());
-		} else {
-			Toast toast = Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT);
-			toast.show();
 		}
-		
 	}
     
     
