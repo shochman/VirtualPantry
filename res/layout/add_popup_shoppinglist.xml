@@ -83,7 +83,7 @@
 	            android:layout_height="wrap_content"
 	             android:layout_weight="50"
 	            android:layout_gravity="right"
-   				android:inputType="number" >
+   				android:inputType="numberDecimal" >
 	        </EditText>
 	        
         <TextView android:id="@+id/categoryText"
