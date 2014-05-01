@@ -327,7 +327,7 @@ public class PantryFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					AlertDialog.Builder seek = new AlertDialog.Builder(
-							PantryFragment.this.getActivity());//PantryFragment.this.getActivity().getApplicationContext()
+							PantryFragment.this.getActivity());
 					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
 
 						// set title
@@ -610,8 +610,8 @@ public class PantryFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					AlertDialog.Builder seek = new AlertDialog.Builder(
-							PantryFragment.this.getActivity().getApplicationContext());
-					View exp =  LayoutInflater.from(getActivity()).inflate(R.layout.seek,null,false);
+							PantryFragment.this.getActivity());
+					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
 
 						// set title
 					
@@ -877,8 +877,8 @@ public class PantryFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					AlertDialog.Builder seek = new AlertDialog.Builder(
-							PantryFragment.this.getActivity().getApplicationContext());
-					View exp =  LayoutInflater.from(getActivity()).inflate(R.layout.seek,null,false);
+							PantryFragment.this.getActivity());
+					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
 
 						// set title
 					
