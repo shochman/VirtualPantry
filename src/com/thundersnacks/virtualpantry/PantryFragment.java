@@ -339,7 +339,8 @@ public class PantryFragment extends Fragment {
 						public void onClick(DialogInterface dialog,int id) {
 
 							dialog.cancel();
-							foodItem.setAmount(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100));
+							DecimalFormat df = new DecimalFormat("#.00");
+							foodItem.setAmount(Double.parseDouble(df.format(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100))));
 							if (foodItem.getAmount() <= 0){
 								pantry.removeItem(foodItem);
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
@@ -628,8 +629,8 @@ public class PantryFragment extends Fragment {
 						public void onClick(DialogInterface dialog,int id) {
 
 							dialog.cancel();
-							foodItem.setAmount(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100));
-							if (foodItem.getAmount() <= 0){
+							DecimalFormat df = new DecimalFormat("#.00");
+							foodItem.setAmount(Double.parseDouble(df.format(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100))));							if (foodItem.getAmount() <= 0){
 								pantry.removeItem(foodItem);
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
 								((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
@@ -903,8 +904,8 @@ public class PantryFragment extends Fragment {
 						public void onClick(DialogInterface dialog,int id) {
 
 							dialog.cancel();
-							foodItem.setAmount(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100));
-							if (foodItem.getAmount() <= 0){
+							DecimalFormat df = new DecimalFormat("#.00");
+							foodItem.setAmount(Double.parseDouble(df.format(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100))));							if (foodItem.getAmount() <= 0){
 								pantry.removeItem(foodItem);
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
 								((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
