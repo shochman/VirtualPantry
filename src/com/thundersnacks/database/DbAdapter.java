@@ -288,7 +288,7 @@ public class DbAdapter {
 		args.put(DbSchema.FoodItemTable.COLUMN_UNIT, fi.getUnit().ordinal());
 		args.put(DbSchema.FoodItemTable.COLUMN_NAME, fi.getName());
 		int affectedRows = db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + fi.getDatabaseId(), null);
-		long insert = -1;
+		long insert = -1; 
 		if(affectedRows == 0){
 			Cursor select = db.rawQuery("select * from fooditem where name = '"+ fi.getName()+"'", null);
 			if(select != null) {
