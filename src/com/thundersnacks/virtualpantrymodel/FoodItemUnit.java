@@ -54,6 +54,9 @@ public enum FoodItemUnit {
 			return "pt(s)";
 		case UNITLESS:
 			return "(No Unit)";
+			
+		case OTHER:
+			return "Other";
 		default:
 			return "";
     	}
