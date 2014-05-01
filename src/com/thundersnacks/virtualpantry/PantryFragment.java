@@ -18,9 +18,11 @@ import com.thundersnacks.virtualpantrymodel.Pantry;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -41,6 +43,9 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +65,7 @@ public class PantryFragment extends Fragment {
 	ListView lv;
 	ListView slv;
 	List<FoodItem> searchFoodItems;
+	//final Context context = PantryFragment.this.getActivity();
 	public ShoppingListFragment slf;
 	
 	public PantryFragment() {
@@ -315,6 +321,60 @@ public class PantryFragment extends Fragment {
        			
        		});
        		
+       		final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressbar);
+       		progressBar.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					AlertDialog.Builder seek = new AlertDialog.Builder(
+							PantryFragment.this.getActivity());
+					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
+
+						// set title
+					
+					seek.setTitle("Your Title");
+					seek.setView(exp);
+					seek.setTitle("Progress");
+					seek.setNegativeButton("Ok",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							
+							dialog.cancel();
+						}
+						});
+					seek.show();
+			final	SeekBar	colour =(SeekBar) exp.findViewById(R.id.seekBar1);
+					
+					colour.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+						@Override
+						public void onProgressChanged(SeekBar seekBar,
+								int progress, boolean fromUser) {
+							// TODO Auto-generated method stub
+						
+							
+						}
+
+						@Override
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							
+						//	progressBar.setOnGenericMotionListener();
+							
+						}
+
+						@Override
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							progressBar.setProgress(colour.getMax()-colour.getProgress());
+							
+							
+						}
+						
+							
+					});
+				}
+       		});
+       		
        		ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
        		if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
        			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
@@ -544,7 +604,61 @@ public class PantryFragment extends Fragment {
        			
        		});
        		
-            ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
+       		final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressbar);
+       		progressBar.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					AlertDialog.Builder seek = new AlertDialog.Builder(
+							PantryFragment.this.getActivity());
+					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
+
+						// set title
+					
+					seek.setTitle("Your Title");
+					seek.setView(exp);
+					seek.setTitle("Progress");
+					seek.setNegativeButton("Ok",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							
+							dialog.cancel();
+						}
+						});
+					seek.show();
+			final	SeekBar	colour =(SeekBar) exp.findViewById(R.id.seekBar1);
+					
+					colour.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+						@Override
+						public void onProgressChanged(SeekBar seekBar,
+								int progress, boolean fromUser) {
+							// TODO Auto-generated method stub
+						
+							
+						}
+
+						@Override
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							
+						//	progressBar.setOnGenericMotionListener();
+							
+						}
+
+						@Override
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							progressBar.setProgress(colour.getMax()-colour.getProgress());
+							
+							
+						}
+						
+							
+					});
+				}
+       		});
+            
+       		ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);
        		if (foodItem.getCategory() == FoodItemCategory.BEVERAGE) {
        			categoryImage.setImageDrawable(getResources().getDrawable(R.drawable.beverage));
        		} else if (foodItem.getCategory() == FoodItemCategory.PROTEIN) {
@@ -755,6 +869,60 @@ public class PantryFragment extends Fragment {
 					slv.invalidateViews();
 				}
        			
+       		});
+       		
+       		final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressbar);
+       		progressBar.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					AlertDialog.Builder seek = new AlertDialog.Builder(
+							PantryFragment.this.getActivity());
+					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
+
+						// set title
+					
+					seek.setTitle("Your Title");
+					seek.setView(exp);
+					seek.setTitle("Progress");
+					seek.setNegativeButton("Ok",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							
+							dialog.cancel();
+						}
+						});
+					seek.show();
+			final	SeekBar	colour =(SeekBar) exp.findViewById(R.id.seekBar1);
+					
+					colour.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+						@Override
+						public void onProgressChanged(SeekBar seekBar,
+								int progress, boolean fromUser) {
+							// TODO Auto-generated method stub
+						
+							
+						}
+
+						@Override
+						public void onStartTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							
+						//	progressBar.setOnGenericMotionListener();
+							
+						}
+
+						@Override
+						public void onStopTrackingTouch(SeekBar seekBar) {
+							// TODO Auto-generated method stub
+							progressBar.setProgress(colour.getMax()-colour.getProgress());
+							
+							
+						}
+						
+							
+					});
+				}
        		});
        		
        		ImageView categoryImage = (ImageView) convertView.findViewById(R.id.category_image);

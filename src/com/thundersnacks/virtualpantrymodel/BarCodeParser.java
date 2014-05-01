@@ -17,12 +17,16 @@ public class BarCodeParser {
 		int startIndex = in.indexOf("<table");
 		int endIndex = in.lastIndexOf("</table>");
 		// Include </table>
-		String in2 = in.substring(startIndex, endIndex+8);
-		XmlPullParser parser = Xml.newPullParser();
-		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-		parser.setInput(new StringReader (in2));
-		parser.nextTag();
-		return readFeed(parser);
+		if(startIndex != -1)
+		{
+			String in2 = in.substring(startIndex, endIndex+8);
+			XmlPullParser parser = Xml.newPullParser();
+			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+			parser.setInput(new StringReader (in2));
+			parser.nextTag();
+			return readFeed(parser);
+		}
+		else return null;
 	}
 
 	private Table readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
