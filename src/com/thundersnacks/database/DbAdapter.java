@@ -324,4 +324,13 @@ public class DbAdapter {
 		
 	}
 	
+	public boolean removeFromPantry(FoodItem item) {
+		SQLiteDatabase db = helper.getWritableDatabase(); 
+		ContentValues args = new ContentValues();
+		args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_PANTRY, -1);
+		int affectedRows = db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + item.getDatabaseId(), null);
+		helper.close();
+		return affectedRows > 0;
+	}
+	
 }
