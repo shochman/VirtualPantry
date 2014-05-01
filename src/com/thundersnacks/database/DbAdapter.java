@@ -333,4 +333,13 @@ public class DbAdapter {
 		return affectedRows > 0;
 	}
 	
+	public boolean removeFromSL(FoodItem item) {
+		SQLiteDatabase db = helper.getWritableDatabase(); 
+		ContentValues args = new ContentValues();
+		args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_SHOPPING_LIST, -1);
+		int affectedRows = db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + item.getDatabaseId(), null);
+		helper.close();
+		return affectedRows > 0;
+	}
+	
 }

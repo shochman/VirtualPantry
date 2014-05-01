@@ -173,6 +173,7 @@ public class PantryFragment extends Fragment {
 									for (int position : reverseSortedPositions) {
 										FoodItem foodToRemove = ((FoodItem)lv.getAdapter().getItem(position));
 										pantry.removeItem(foodToRemove);
+										DbAdapter.instance(null).removeFromPantry(foodItem);
 										((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
 										((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 										((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
@@ -238,6 +239,7 @@ public class PantryFragment extends Fragment {
 				public void onClick(View v) {
 					if (slf.isInShoppingList(foodItem)) {
 						slf.removeItem(foodItem);
+						DbAdapter.instance(null).removeFromSL(foodItem);
 						Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " removed from shopping list",Toast.LENGTH_SHORT).show();
 						lv.invalidateViews();
 					} else {
@@ -298,6 +300,7 @@ public class PantryFragment extends Fragment {
 							foodItem.setAmount(Double.parseDouble(df.format(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100))));
 							if (foodItem.getAmount() <= 0){
 								pantry.removeItem(foodItem);
+								DbAdapter.instance(null).removeFromPantry(foodItem);
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
 								((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
@@ -464,6 +467,7 @@ public class PantryFragment extends Fragment {
 									for (int position : reverseSortedPositions) {
 										FoodItem foodToRemove = (FoodItem)elv.getAdapter().getItem(position);
 										pantry.removeItem(foodToRemove);
+										DbAdapter.instance(null).removeFromPantry(foodItem);
 										((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
 										((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 										((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
@@ -530,6 +534,7 @@ public class PantryFragment extends Fragment {
 				public void onClick(View v) {
 					if (slf.isInShoppingList(foodItem)) {
 						slf.removeItem(foodItem);
+						DbAdapter.instance(null).removeFromSL(foodItem);
 						Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " removed from shopping list",Toast.LENGTH_SHORT).show();
 						elv.invalidateViews();
 					} else {
@@ -558,6 +563,7 @@ public class PantryFragment extends Fragment {
 					foodItem.setAmount(foodItem.getAmount() - 1);
 					if (foodItem.getAmount() <= 0){
 						pantry.removeItem(foodItem);
+						DbAdapter.instance(null).removeFromPantry(foodItem);
 						((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
 						((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 						((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
@@ -588,6 +594,7 @@ public class PantryFragment extends Fragment {
 							DecimalFormat df = new DecimalFormat("#.00");
 							foodItem.setAmount(Double.parseDouble(df.format(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100))));							if (foodItem.getAmount() <= 0){
 								pantry.removeItem(foodItem);
+								DbAdapter.instance(null).removeFromPantry(foodItem);
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
 								((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
@@ -737,6 +744,7 @@ public class PantryFragment extends Fragment {
 									for (int position : reverseSortedPositions) {
 										FoodItem foodToRemove = ((FoodItem)slv.getAdapter().getItem(position));
 										pantry.removeItem(foodToRemove);
+										DbAdapter.instance(null).removeFromPantry(foodItem);
 										searchFoodItems.remove(foodToRemove);
 										((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodToRemove);
 										((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
@@ -804,6 +812,7 @@ public class PantryFragment extends Fragment {
 				public void onClick(View v) {
 					if (slf.isInShoppingList(foodItem)) {
 						slf.removeItem(foodItem);
+						DbAdapter.instance(null).removeFromSL(foodItem);
 						Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " removed from shopping list",Toast.LENGTH_SHORT).show();
 						slv.invalidateViews();
 					} else {
@@ -832,6 +841,7 @@ public class PantryFragment extends Fragment {
 					foodItem.setAmount(foodItem.getAmount() - 1);
 					if (foodItem.getAmount() <= 0){
 						pantry.removeItem(foodItem);
+						DbAdapter.instance(null).removeFromPantry(foodItem);
 						searchFoodItems.remove(foodItem);
 						((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
 						((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
@@ -864,6 +874,7 @@ public class PantryFragment extends Fragment {
 							DecimalFormat df = new DecimalFormat("#.00");
 							foodItem.setAmount(Double.parseDouble(df.format(foodItem.getAmount()*(1 -  (double)colour.getProgress()/100))));							if (foodItem.getAmount() <= 0){
 								pantry.removeItem(foodItem);
+								DbAdapter.instance(null).removeFromPantry(foodItem);
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).removeFoodItem(foodItem);
 								((FoodItemsAdapter) lv.getAdapter()).notifyDataSetChanged();
 								((ExpandableListAdapter) elv.getExpandableListAdapter()).notifyDataSetChanged();
