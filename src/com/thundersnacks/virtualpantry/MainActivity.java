@@ -622,6 +622,7 @@ public class MainActivity extends Activity {
 									for (FoodItemUnit fiu : FoodItemUnit.values()) {
 										if (fiu.toString().equals(unit)) {
 											slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic,price, ""));
+											DbAdapter.instance(null).save(pantryFragment.getPantry());
 											break;
 										}
 									}
