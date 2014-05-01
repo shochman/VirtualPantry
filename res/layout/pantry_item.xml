@@ -21,6 +21,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/linearLayout1"
         android:layout_toRightOf="@id/category_image"
         android:orientation="vertical" >
  
@@ -28,6 +29,10 @@
         	android:id="@+id/item"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
+        	android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
         	android:paddingLeft="5dp"
         	android:textStyle="bold" />
     
@@ -35,12 +40,17 @@
  			android:id="@+id/item_quantity"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
+        	android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
         	android:paddingLeft="15dp"
         	android:textStyle="bold" />
     
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
