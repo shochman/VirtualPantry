@@ -1,5 +1,7 @@
 package com.thundersnacks.virtualpantrymodel;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
@@ -17,6 +19,28 @@ import javax.crypto.spec.SecretKeySpec;
  * @author ferenc.hechler.
  */
 public class SimpleCrypto {
+	
+		public static String hashPW(String password) {
+			String hashtext = "";
+			try{
+				String plaintext = password;
+				MessageDigest m = MessageDigest.getInstance("MD5");
+				m.reset();
+				m.update(plaintext.getBytes());
+				byte[] digest = m.digest();
+				BigInteger bigInt = new BigInteger(1,digest);
+				hashtext = bigInt.toString(16);
+				// Now we need to zero pad it if you actually want the full 32 chars.
+				while(hashtext.length() < 32 ){
+					hashtext = "0"+hashtext;
+				} 
+				
+			} catch(Exception e) {
+					e.printStackTrace();
+			}
+			
+			return hashtext;
+		}
 
         public static String encrypt(String seed, String cleartext) throws Exception {
                 byte[] rawKey = getRawKey(seed.getBytes());

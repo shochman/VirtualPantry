@@ -13,8 +13,9 @@ public abstract class FoodItem {
 	private String picture;
 	private FoodItemCategory category;
 	private double price;
+	private String expString;
 	
-	FoodItem( String name, int databaseId, Date expDate, double amount, FoodItemUnit unit, String pic, FoodItemCategory cat, double pri) {
+	FoodItem( String name, int databaseId, Date expDate, double amount, FoodItemUnit unit, String pic, FoodItemCategory cat, double pri, String expString) {
 		this.name = name;
 		this.databaseId = databaseId;
 		this.expirationDate = expDate;
@@ -23,6 +24,7 @@ public abstract class FoodItem {
 		this.picture = pic;
 		this.category = cat;
 		this.price=pri;
+		this.expString = expString;
 	}
 	
 	public String getName() {
@@ -43,6 +45,14 @@ public abstract class FoodItem {
 	
 	public void setExperiationDate(Date date) {
 		this.expirationDate = date;
+	}
+	
+	public String getExperiationDateString() {
+		return expString;
+	}
+	
+	public void setExperiationDateString(String date) {
+		this.expString = date;
 	}
 	
 	public double getAmount() {

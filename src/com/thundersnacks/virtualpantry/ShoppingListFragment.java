@@ -88,14 +88,8 @@ public class ShoppingListFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {  
 		super.onCreate(savedInstanceState);
-        shoppingList = new ShoppingList();
-        shoppingList.addItem(new StandardFoodItem("Cheddar Cheese",0,new Date(),1,FoodItemUnit.POUNDS, "y", FoodItemCategory.DAIRY,2.36));
-        shoppingList.addItem(new StandardFoodItem("Strawberry Milk",1,new Date(),0.5,FoodItemUnit.GALLONS," ", FoodItemCategory.DAIRY,4.69));
-        shoppingList.addItem(new StandardFoodItem("Oatmeal",2,new Date(),1,FoodItemUnit.BOX," ", FoodItemCategory.GRAIN,2.50));
-        shoppingList.addItem(new StandardFoodItem("M&M's",3,new Date(),2.63,FoodItemUnit.POUNDS," ", FoodItemCategory.SWEET,8.89));
-        shoppingList.addItem(new StandardFoodItem("Frozen yogurt",4,new Date(),16,FoodItemUnit.OUNCES," ", FoodItemCategory.FROZEN,5.60));
-        shoppingList.addItem(new StandardFoodItem("Avacados",5,new Date(),3,FoodItemUnit.UNITLESS," ", FoodItemCategory.FAT,2.00)); 
-        shoppingList.alphabeticalSort();
+		pf = (PantryFragment) getActivity().getFragmentManager().findFragmentByTag("Pantry");
+		setShoppingList(pf.getPantry().getShoppingList());
     }
 	
 	@Override

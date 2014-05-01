@@ -35,11 +35,8 @@ public class LoginActivity extends Activity {
 	 */
 	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
 
-	/**
-	 * Keep track of the login task to ensure we can cancel it if requested.
-	 */
-	// private UserLoginTask mAuthTask = null;
-
+	public static User currentUser = null;
+	
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
 	private String mPassword;
@@ -65,9 +62,7 @@ public class LoginActivity extends Activity {
 		
 		// Set up the login form.
 		Context context = LoginActivity.this.getApplicationContext(); 
-		this.dbAdapter = new DbAdapter(context);
-		//DUMMY_CREDENTIALS.add("bar@example.com:" + hashPW("world"));
-		//DUMMY_CREDENTIALS.add("foo@example.com:" + hashPW("hello"));
+		this.dbAdapter = DbAdapter.instance(context);
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
@@ -120,10 +115,6 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		/*if (mAuthTask != null) {
-			return;
-		}*/
-
 		// Reset errors.
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
@@ -170,6 +161,7 @@ public class LoginActivity extends Activity {
 			boolean success = user != null;
 			showProgress(false);
 			if (success) {
+				currentUser = user;
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 		    	startActivity(intent);
 				finish();
@@ -180,11 +172,6 @@ public class LoginActivity extends Activity {
 	}
 
 	public void attemptRegister() {
-		
-		/*if (mAuthTask != null) {
-			return;
-		}*/
-		
 		final Dialog registerDialog = new Dialog(LoginActivity.this);
 		registerDialog.setContentView(R.layout.register_popup);
     	registerDialog.setTitle("Registration");
@@ -198,11 +185,12 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {					
 				if (registerUser(registerDialog, registration)) 
 					registerDialog.dismiss();
+					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+			    	startActivity(intent);
+					finish();
 			}
 		});
         
-		//mPasswordView
-		//	.setError(getString(R.string.error_incorrect_password));
 		mPasswordView.requestFocus();
 	}
 	
@@ -258,8 +246,9 @@ public class LoginActivity extends Activity {
 		
 		if(valid)
 		{
-			// DUMMY_CREDENTIALS.add(email+":"+hashPW(password));
 			dbAdapter.insertUser(username, hashPW(password), email);
+			User user = dbAdapter.validateUserCredentials(email, hashPW(password));
+			currentUser = user;
 		}
 		return valid;
 		

@@ -1,7 +1,9 @@
 package com.thundersnacks.database;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -10,20 +12,43 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.thundersnacks.virtualpantrymodel.*;
 
 public class DbAdapter {
 
 	private SQLiteOpenHelper helper;
+	private static DbAdapter adapter = null;
 	
-	public DbAdapter(Context context) {
+	public static DbAdapter instance(Context context) {
+		if(adapter == null) {
+			adapter = new DbAdapter(context);
+		}
+		
+		return adapter;
+	}
+	
+	private DbAdapter(Context context) {
 		helper = new DbHelper(context);
 	}
 	
 	private Date parseDate(String dateString) {
-		// TODO: actually do this for real
-		return new Date();
+		try {
+			Calendar cal = GregorianCalendar.getInstance();
+	        String[] pieces = dateString.split("-");
+	        String year = pieces[0];
+	        String month = pieces[1];
+	        String day = pieces[2];
+	        int year1 = Integer.parseInt(year);
+	        int month1 = Integer.parseInt(month);
+	        int day1 = Integer.parseInt(day);
+	        cal.set(year1, month1, day1);
+	        return cal.getTime();
+		}
+		catch(Exception e) {
+			return new Date();
+		}
 	}
 	
 	private ShoppingList getAssociatedShoppingList(int pantryId) {
@@ -32,19 +57,18 @@ public class DbAdapter {
 		String table = DbSchema.ShoppingListTable.TABLE;
 		String[] columns = { DbSchema.ShoppingListTable._ID };
 		String selection = DbSchema.ShoppingListTable.COLUMN_ASSOCIATED_PANTRY + " = " + pantryId;
-		String[] selectionArgs = {};
-		String groupBy = "";
-		String having = "";
-		String orderBy = "";
 		
-		Cursor cursor = db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
-		helper.close();
+		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
 		
 		if(cursor != null) {
 			cursor.moveToFirst();
 		}
 		else {
 			return null; 	// no shopping list associated with that pantry
+		}
+		
+		if(cursor.getCount() == 0) {
+			throw new SQLException("No associated shopping list exists!!");
 		}
 		
 		int idIndex = cursor.getColumnIndex(DbSchema.ShoppingListTable._ID);
@@ -55,6 +79,8 @@ public class DbAdapter {
 			sl.addItem(item);
 		}
 		
+		cursor.close();
+		helper.close();
 		return sl;
 		
 	}
@@ -74,7 +100,6 @@ public class DbAdapter {
 		String selection = selectionColumn  + " = " + id;
 		
 		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
-		helper.close();
 		
 		if(cursor != null) {
 			cursor.moveToFirst();
@@ -84,6 +109,10 @@ public class DbAdapter {
 		}
 		
 		List<FoodItem> items = new ArrayList<FoodItem>();
+		
+		if(cursor.getCount() == 0) {
+			return items;
+		}
 		
 		do {
 			int idIndex = cursor.getColumnIndex(DbSchema.FoodItemTable._ID);
@@ -107,29 +136,38 @@ public class DbAdapter {
 			FoodItemUnit unit = FoodItemUnit.values()[unitVal];
 			double price = cursor.getDouble(priceIndex);
 			
-			items.add(new StandardFoodItem(name, foodItemId, expDate, amount, unit, pic, cat, price ));
+			items.add(new StandardFoodItem(name, foodItemId, expDate, amount, unit, pic, cat, price, expString ));
 		} while(cursor.moveToNext());
 		
+		cursor.close();
+		helper.close();
 		return items;
-		
 	}
 	
 	public Pantry restorePantry(int userId) {
 		
-		SQLiteDatabase db = helper.getReadableDatabase();
+		SQLiteDatabase db = helper.getWritableDatabase();
 		String table = DbSchema.PantryTable.TABLE;
 		String[] columns = { DbSchema.PantryTable._ID, DbSchema.PantryTable.COLUMN_PANTRY_NAME };
-		String selection = "(" + DbSchema.PantryTable.COLUMN_ASSOCIATED_USER + " = " + userId
-							+ " AND " + DbSchema.PantryTable.COLUMN_VISIBLE + " = 1 )";
-		
+		String selection = DbSchema.PantryTable.COLUMN_ASSOCIATED_USER + " = " + userId;
 		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
-		helper.close();
 		
 		if(cursor != null) {
 			cursor.moveToFirst();
 		}
 		else {
 			return null; 	// no pantries associated with that user
+		}
+		
+		if(cursor.getCount() == 0) {
+			long pantryID = insertPantry("My Pantry", userId);
+			int i = (int)pantryID;
+			long slID = insertShoppingList(i);
+			int j = (int)slID;
+			Pantry newPantry = new Pantry("My Pantry", i, true);
+			ShoppingList newShoppingList = new ShoppingList("My Shopping List", j);
+			newPantry.setShoppingList(newShoppingList);
+			return newPantry;
 		}
 		
 		int idIndex = cursor.getColumnIndex(DbSchema.PantryTable._ID);
@@ -146,6 +184,8 @@ public class DbAdapter {
 			pantry.addItem(item);
 		}
 		
+		cursor.close();
+		helper.close();
 		return pantry;
 		
 	}
@@ -161,6 +201,30 @@ public class DbAdapter {
 		db.insert(DbSchema.UserTable.TABLE, null, initialValues);
 		helper.close();
 		return validateUserCredentials(email, password) != null;
+	}
+	
+	//---insert a pantry into the database---
+	public long insertPantry(String name, int userId)
+	{		
+		SQLiteDatabase db = helper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(DbSchema.PantryTable.COLUMN_PANTRY_NAME, name);
+		initialValues.put(DbSchema.PantryTable.COLUMN_ASSOCIATED_USER, userId);
+		initialValues.put(DbSchema.PantryTable.COLUMN_VISIBLE, 1);
+		long id = db.insert(DbSchema.PantryTable.TABLE, null, initialValues);
+		helper.close();
+		return id;
+	}
+	
+	//---insert a shopping list into the database---
+	public long insertShoppingList(int pantryId)
+	{		
+		SQLiteDatabase db = helper.getWritableDatabase();
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(DbSchema.ShoppingListTable.COLUMN_ASSOCIATED_PANTRY, pantryId);
+		long id = db.insert(DbSchema.ShoppingListTable.TABLE, null, initialValues);
+		helper.close();
+		return id;
 	}
 		
 	//---validates user credentials---
@@ -214,16 +278,25 @@ public class DbAdapter {
 		return db.update(DbSchema.PantryTable.TABLE, args, DbSchema.PantryTable._ID + "=" + p.getDatabaseId(), null) > 0;
 	}
 
-	private boolean saveFoodItem(FoodItem fi, SQLiteDatabase db) {
+	private boolean saveFoodItem(FoodItem fi, int pantryId, int shoppingListId, SQLiteDatabase db) {
 		ContentValues args = new ContentValues();
 		args.put(DbSchema.FoodItemTable.COLUMN_AMOUNT, fi.getAmount());
 		args.put(DbSchema.FoodItemTable.COLUMN_CATEGORY, fi.getCategory().ordinal());
 		args.put(DbSchema.FoodItemTable.COLUMN_EXPIRATION_DATE, fi.getExperiationDate().toString());
+		Log.i("date",fi.getExperiationDate().toString());
 		args.put(DbSchema.FoodItemTable.COLUMN_PICTURE, fi.getPicture());
 		args.put(DbSchema.FoodItemTable.COLUMN_PRICE, fi.getPrice());
 		args.put(DbSchema.FoodItemTable.COLUMN_UNIT, fi.getUnit().ordinal());
 		args.put(DbSchema.FoodItemTable.COLUMN_NAME, fi.getName());
-		return db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + fi.getDatabaseId(), null) > 0;
+		int affectedRows = db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + fi.getDatabaseId(), null);
+		long insert = -1;
+		if(affectedRows == 0){
+			args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_PANTRY, pantryId);
+			args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_SHOPPING_LIST, shoppingListId);
+			insert = db.insert(DbSchema.FoodItemTable.TABLE, null, args);
+		}
+		
+		return insert == -1 && affectedRows == 0;
 	}
 	
 	public boolean save(Pantry pantry) {
@@ -234,11 +307,11 @@ public class DbAdapter {
 		result &= savePantry(pantry, db);
 		
 		for(FoodItem item : pantry.getFoodItems()) {
-			result &= saveFoodItem(item, db);
+			result &= saveFoodItem(item, pantry.getDatabaseId(), -1, db);
 		}
 		
 		for(FoodItem item : shoppingList.getFoodItems()) {
-			result &= saveFoodItem(item, db);
+			result &= saveFoodItem(item, -1, shoppingList.getDatabaseId(), db);
 		}
 		
 		helper.close();

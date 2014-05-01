@@ -24,6 +24,8 @@ import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
+import com.thundersnacks.database.DbAdapter;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -336,6 +338,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		}
 		if (key.equals("signout"))
 		{
+			DbAdapter.instance(SettingsActivity.this.getApplicationContext()).save(MainActivity.pantryFragment.getPantry());
 			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         	boolean defValue = false;
         	boolean selectSignOut = sharedPref.getBoolean("signout", defValue);

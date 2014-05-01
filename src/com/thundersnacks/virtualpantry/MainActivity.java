@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.thundersnacks.database.DbAdapter;
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.BarCodeParser;
 import com.thundersnacks.virtualpantrymodel.BarCodeParser.Table;
@@ -65,7 +66,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
@@ -120,7 +120,6 @@ public class MainActivity extends Activity {
 		}
 		@Override
 		protected void onPostExecute(String result) {
-			//super.onPostExecute(result);
 			text = result;
 			this.dialog.dismiss();
 		}
@@ -242,7 +241,6 @@ public class MainActivity extends Activity {
 	private void handleSearch(Intent intent) {
 		String query = intent.getStringExtra(SearchManager.QUERY);
 		//use the query to search pantry data
-		//FoodItemCategory[] categoryList = FoodItemCategory.values();
 		if (getActionBar().getSelectedTab().getPosition() == 0) {
 			PantryFragment pf = (PantryFragment) getFragmentManager().findFragmentByTag("Pantry");
 			List<FoodItem> foodItem = pf.getPantry().getFoodItems();
@@ -546,19 +544,23 @@ public class MainActivity extends Activity {
 							double quantity = Double.parseDouble(quantityText.getText().toString());
 							String category = categoryText.getSelectedItem().toString();
 							String unit = unitText.getSelectedItem().toString();
-							Date expDate = new Date(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+							Calendar cal = GregorianCalendar.getInstance();
+					        cal.set(expirationDate.getYear(), expirationDate.getMonth(), expirationDate.getDayOfMonth());
+					        String expString = expirationDate.getYear() +"-"+ expirationDate.getMonth()+ "-"+ expirationDate.getDayOfMonth() + "";
+							Date expDate = cal.getTime();
 							double price = Double.parseDouble(priceText.getText().toString());
 							for (FoodItemCategory fic : FoodItemCategory.values()) {
 								if (fic.toString().equals(category)) {
 									for (FoodItemUnit fiu : FoodItemUnit.values()) {
 										if (fiu.toString().equals(unit)) {
-											pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fiu, "y", fic,price));
+											pf.addNewItem(new StandardFoodItem(name, 0, expDate, quantity, fiu, "y", fic,price, expString));
 											break;
 										}
 									}
 								}
 							}
 
+							DbAdapter.instance(null).save(pf.getPantry());
 							addDialog.dismiss();
 						}
 					}
@@ -619,7 +621,7 @@ public class MainActivity extends Activity {
 								if (fic.toString().equals(category)) {
 									for (FoodItemUnit fiu : FoodItemUnit.values()) {
 										if (fiu.toString().equals(unit)) {
-											slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic,price));
+											slf.addNewItem(new StandardFoodItem(name, 0, new Date(), quantity, fiu, "y", fic,price, ""));
 											break;
 										}
 									}
@@ -732,6 +734,7 @@ public class MainActivity extends Activity {
 	{
 		if(requestCode == REQUEST_EXIT){
 			if (resultCode == RESULT_OK){
+				DbAdapter.instance(null).save(pantryFragment.getPantry());
 				Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 				startActivity(intent);
 				this.finish();

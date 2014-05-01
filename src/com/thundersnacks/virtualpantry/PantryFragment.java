@@ -6,15 +6,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.thundersnacks.database.DbAdapter;
 import com.thundersnacks.virtualpantry.R;
 import com.thundersnacks.virtualpantrymodel.FoodItem;
 import com.thundersnacks.virtualpantrymodel.FoodItemCategory;
 import com.thundersnacks.virtualpantrymodel.FoodItemUnit;
 import com.thundersnacks.virtualpantrymodel.Pantry;
+import com.thundersnacks.virtualpantrymodel.ShoppingList;
 import com.thundersnacks.virtualpantrymodel.StandardFoodItem;
 
 import android.app.Activity;
@@ -23,11 +24,9 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,7 +34,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -60,12 +58,12 @@ import android.widget.Toast;
 public class PantryFragment extends Fragment {
 	
 	private Pantry pantry;
-	View view;
-	ExpandableListView elv;
-	ListView lv;
-	ListView slv;
-	List<FoodItem> searchFoodItems;
-	//final Context context = PantryFragment.this.getActivity();
+	private View view;
+	private ExpandableListView elv;
+	private ListView lv;
+	private ListView slv;
+	private List<FoodItem> searchFoodItems;
+	private DbAdapter db = DbAdapter.instance(null);
 	public ShoppingListFragment slf;
 	
 	public PantryFragment() {
@@ -87,64 +85,16 @@ public class PantryFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        pantry = new Pantry("My Pantry", 0, true);
-        Calendar cal = GregorianCalendar.getInstance();
-        
-        cal.set(2014, 2, 28);
-        Date d1 = cal.getTime();
-        
-        cal.set(2014, 4, 2);
-        Date d2 =  cal.getTime();
-        
-        cal.set(2014, 7, 17);
-        Date d3 = cal.getTime();
-        
-        cal.set(2014, 4, 25);
-        Date d4 = cal.getTime();
-        
-        cal.set(2014, 3, 20);
-        Date d5 = cal.getTime();
-        
-        cal.set(2014, 10, 10);
-        Date d6 = cal.getTime();
-        
-        cal.set(2014, 0, 1);
-        Date d7 = cal.getTime();
-        
-        pantry.addItem(new StandardFoodItem("Coke", 0, d5, 6, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE,1.75));
-        pantry.addItem(new StandardFoodItem("Sprite", 0, d6 , 4, FoodItemUnit.CANS, "", FoodItemCategory.BEVERAGE,1.75));
-        
-        pantry.addItem(new StandardFoodItem("Ketchup", 0, d3, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT,1.80));
-        pantry.addItem(new StandardFoodItem("Mustard", 0, d2, 1, FoodItemUnit.BOTTLES, "", FoodItemCategory.CONDIMENT,1.76));
-        
-        pantry.addItem(new StandardFoodItem("2% Milk", 0, d2, 1, FoodItemUnit.GALLONS, "", FoodItemCategory.DAIRY,2.59));
-        pantry.addItem(new StandardFoodItem("Shredded Cheese", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.DAIRY,2.36));
-        pantry.addItem(new StandardFoodItem("Yogurt", 0, d1, 3, FoodItemUnit.CUPS, "", FoodItemCategory.DAIRY,4.20));
-        
-        pantry.addItem(new StandardFoodItem("Butter", 0, d4, 0.5, FoodItemUnit.BOX, "", FoodItemCategory.FAT,1.00));
-        
-        pantry.addItem(new StandardFoodItem("Ice Cream", 0, d3, 1, FoodItemUnit.TUBS, "", FoodItemCategory.FROZEN,4.00));
-        
-        pantry.addItem(new StandardFoodItem("Apple", 0, d2, 1, FoodItemUnit.UNITLESS, "", FoodItemCategory.FRUIT,0.87));
-        pantry.addItem(new StandardFoodItem("Pear", 0, d2, 1, FoodItemUnit.UNITLESS, "", FoodItemCategory.FRUIT,1.00));
-        
-        pantry.addItem(new StandardFoodItem("Bread", 0, d1, 0.5, FoodItemUnit.LOAF, "", FoodItemCategory.GRAIN,1.34));
-        pantry.addItem(new StandardFoodItem("Cereal", 0, d3, 2, FoodItemUnit.BOX, "", FoodItemCategory.GRAIN,2.68));
-        
-        pantry.addItem(new StandardFoodItem("Chicken Breast", 0, d2, 1, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN,2.10));
-        pantry.addItem(new StandardFoodItem("Ground Beef", 0, d4, 0.5, FoodItemUnit.POUNDS, "", FoodItemCategory.PROTEIN,3.66));
-        
-        pantry.addItem(new StandardFoodItem("Potato Chips", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK,3.60));
-        pantry.addItem(new StandardFoodItem("Pretzels", 0, d7, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SNACK,1.78));
-        
-        pantry.addItem(new StandardFoodItem("Chocolate", 0, d7, 1, FoodItemUnit.POUNDS, "", FoodItemCategory.SWEET,1.00));
-        pantry.addItem(new StandardFoodItem("Cookies", 0, d3, 1, FoodItemUnit.BAGS, "", FoodItemCategory.SWEET,1.00));
-        
-        pantry.addItem(new StandardFoodItem("Carrots", 0, d1, 2, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE,0.90));
-        pantry.addItem(new StandardFoodItem("Lettuce", 0, d4, 1, FoodItemUnit.BAGS, "", FoodItemCategory.VEGETABLE,1.80));
-        pantry.addItem(new StandardFoodItem("Broccoli", 0, d2, 0.5, FoodItemUnit.POUNDS, "", FoodItemCategory.VEGETABLE,1.00));
-        
-        pantry.categorySort();
+		Pantry loadedPantry = db.restorePantry(LoginActivity.currentUser.getDatabaseId());
+		if(loadedPantry!=null) {
+			setPantry(loadedPantry);
+		}
+		else {
+			Pantry mPantry = new Pantry();
+			ShoppingList mShoppingList = new ShoppingList();
+			mPantry.setShoppingList(mShoppingList);
+			setPantry(mPantry);
+		}
     }
 	
 	@Override
@@ -162,6 +112,9 @@ public class PantryFragment extends Fragment {
         }
         slv.setAdapter(new SearchFoodItemsAdapter(getActivity(), searchFoodItems));
         createPantry(false);
+        if(slf != null) {
+        	slf.setShoppingList(pantry.getShoppingList());
+        }
         return view;
     }
 	

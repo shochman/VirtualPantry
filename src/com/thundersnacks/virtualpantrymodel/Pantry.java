@@ -24,6 +24,8 @@ public class Pantry implements Iterable<FoodItem> {
 		this.databaseId = databaseId;
 		this.foodItems = new ArrayList<FoodItem>();
 		this.visible = visible;
+		this.howSorted = 0;
+		this.shoppingList = new ShoppingList();
 	}
 	
 	public String getName() {		
