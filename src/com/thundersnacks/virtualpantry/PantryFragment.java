@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -275,10 +276,10 @@ public class PantryFragment extends Fragment {
 			});
 
 			final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressbar);
-			progressBar.setOnClickListener(new OnClickListener() {
+			progressBar.setOnLongClickListener(new OnLongClickListener() {
 
 				@Override
-				public void onClick(View v) {
+				public boolean onLongClick(View v) {
 					AlertDialog.Builder seek = new AlertDialog.Builder(
 							PantryFragment.this.getActivity());
 					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
@@ -332,6 +333,7 @@ public class PantryFragment extends Fragment {
 
 
 					});
+					return true;
 				}
 			});
 
@@ -565,10 +567,10 @@ public class PantryFragment extends Fragment {
 			});
 
 			final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressbar);
-			progressBar.setOnClickListener(new OnClickListener() {
+			progressBar.setOnLongClickListener(new OnLongClickListener() {
 
 				@Override
-				public void onClick(View v) {
+				public boolean onLongClick(View v) {
 					AlertDialog.Builder seek = new AlertDialog.Builder(
 							PantryFragment.this.getActivity());
 					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
@@ -623,6 +625,7 @@ public class PantryFragment extends Fragment {
 
 
 					});
+					return true;
 				}
 			});
 
@@ -840,10 +843,10 @@ public class PantryFragment extends Fragment {
 			});
 
 			final ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.progressbar);
-			progressBar.setOnClickListener(new OnClickListener() {
+			progressBar.setOnLongClickListener(new OnLongClickListener() {
 
 				@Override
-				public void onClick(View v) {
+				public boolean onLongClick(View v) {
 					AlertDialog.Builder seek = new AlertDialog.Builder(
 							PantryFragment.this.getActivity());
 					View exp =  LayoutInflater.from(PantryFragment.this.getActivity()).inflate(R.layout.seek,null,false);
@@ -898,6 +901,7 @@ public class PantryFragment extends Fragment {
 
 
 					});
+					return true;
 				}
 			});
 
