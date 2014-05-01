@@ -412,7 +412,7 @@ import java.util.List;
                 }
             }
         });
-
+ 
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
