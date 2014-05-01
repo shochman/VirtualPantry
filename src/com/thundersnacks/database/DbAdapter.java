@@ -151,45 +151,57 @@ public class DbAdapter {
 	}
 	
 	//---insert a user into the database---
-	public long insertUser(String username, String password, String email)
-	{
+	public boolean insertUser(String username, String password, String email)
+	{		
 		SQLiteDatabase db = helper.getWritableDatabase();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(DbSchema.UserTable.COLUMN_USERNAME, username);
 		initialValues.put(DbSchema.UserTable.COLUMN_PASSWORD, password);
 		initialValues.put(DbSchema.UserTable.COLUMN_EMAIL, email);
-		long result = db.insert(DbSchema.UserTable.TABLE, null, initialValues);
+		db.insert(DbSchema.UserTable.TABLE, null, initialValues);
 		helper.close();
-		return result;
+		return validateUserCredentials(email, password) != null;
 	}
 		
 	//---validates user credentials---
 	public User validateUserCredentials(String email, String password) throws SQLException
 	{
-		SQLiteDatabase db = helper.getReadableDatabase();
+		SQLiteDatabase db = helper.getWritableDatabase();
 		String table = DbSchema.UserTable.TABLE;
-		String[] columns = { DbSchema.UserTable._ID, 
-								DbSchema.UserTable.COLUMN_USERNAME };
-		String selection = "(" + DbSchema.UserTable.COLUMN_EMAIL + " = " + email
-							+ " AND " + DbSchema.UserTable.COLUMN_PASSWORD + " = " + password + " )";
 		
-		Cursor cursor = db.query(table, columns, selection, null, null, null, null);
-		helper.close();
+		Cursor cursor = db.query(table, null, null, null, null, null, null);
 		
-		if(cursor != null) {
+		if(cursor != null) { 
 			cursor.moveToFirst();
 		}
-		else
+		else {
 			return null;
+		}
+		
+		if(cursor.getCount() == 0){
+			return null;
+		}
 		
 		int idIndex = cursor.getColumnIndex(DbSchema.UserTable._ID);
 		int usernameIndex = cursor.getColumnIndex(DbSchema.UserTable.COLUMN_USERNAME);
+		int emailIndex = cursor.getColumnIndex(DbSchema.UserTable.COLUMN_EMAIL);
+		int passwordIndex = cursor.getColumnIndex(DbSchema.UserTable.COLUMN_PASSWORD);
 		
-		int id = cursor.getInt(idIndex);
-		String username = cursor.getString(usernameIndex);
+		while(!cursor.isAfterLast()) {
+			int id = cursor.getInt(idIndex);
+			String username = cursor.getString(usernameIndex);
+			String pswd = cursor.getString(passwordIndex);
+			String emailU = cursor.getString(emailIndex);
+			if(email.equals(emailU) && password.equals(pswd)) {
+				return new User(username, emailU, pswd, pswd, id);
+			}
+			cursor.moveToNext();
+		}
 		
-		return new User(username, email, password, password, id);
+		cursor.close();
+		helper.close();
 		
+		return null;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
