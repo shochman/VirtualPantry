@@ -1,59 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.thundersnacks.virtualpantry.CheckableRelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-        
+<com.thundersnacks.virtualpantry.CheckableRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp" >
+
     <ImageView
         android:id="@+id/category_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true" />
-    
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/item"
+        android:layout_toLeftOf="@+id/shopping_list_checkbox"
         android:layout_toRightOf="@id/category_image"
         android:orientation="vertical" >
-        
-    	<TextView
+
+        <TextView
             android:id="@+id/item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
+            android:ellipsize="end"
             android:focusable="false"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingLeft="5dp"
             android:textStyle="bold" />
-    	
-    	<TextView
- 			android:id="@+id/item_price"
-       	 	android:layout_width="wrap_content"
-       	 	android:layout_height="wrap_content"
-        	android:paddingLeft="15dp"
-        	android:focusable="false"
-        	android:textStyle="bold" />
-    
-    	<TextView
- 			android:id="@+id/item_quantity"
-       	 	android:layout_width="wrap_content"
-       	 	android:layout_height="wrap_content"
-        	android:paddingLeft="15dp"
-        	android:focusable="false"
-        	android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/item_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:textStyle="bold" />
     </LinearLayout>
-    	
-   <!-- We dont want to be able to click the CheckBox -
+
+    <!--
+        We dont want to be able to click the CheckBox -
         android:clickable="false" added.
-        CheckableRelativeLayout takes care of the toggle when clicking the row -->
-        
+        CheckableRelativeLayout takes care of the toggle when clicking the row
+    -->
+
     <CheckBox
-              android:id="@+id/shopping_list_checkbox"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:clickable="false"
-              android:focusable="false" 
-              android:layout_alignParentRight="true" />
-            
+        android:id="@+id/shopping_list_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:clickable="false"
+        android:focusable="false" />
+
 </com.thundersnacks.virtualpantry.CheckableRelativeLayout>

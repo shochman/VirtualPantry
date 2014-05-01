@@ -14,7 +14,7 @@
         android:id="@+id/addToPantryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Selected Items to Pantry"/>
+        android:text="Selected Items to Pantry"/>
         
     
      <TextView
