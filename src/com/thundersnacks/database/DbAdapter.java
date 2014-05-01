@@ -342,4 +342,13 @@ public class DbAdapter {
 		return affectedRows > 0;
 	}
 	
+	public boolean addToSL(FoodItem item, ShoppingList list) {
+		SQLiteDatabase db = helper.getWritableDatabase(); 
+		ContentValues args = new ContentValues();
+		args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_SHOPPING_LIST, list.getDatabaseId());
+		int affectedRows = db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + item.getDatabaseId(), null);
+		helper.close();
+		return affectedRows > 0;
+	}
+	
 }

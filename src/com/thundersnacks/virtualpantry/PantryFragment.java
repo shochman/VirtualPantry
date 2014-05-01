@@ -244,6 +244,7 @@ public class PantryFragment extends Fragment {
 						lv.invalidateViews();
 					} else {
 						slf.addNewItem(foodItem);
+						DbAdapter.instance(null).addToSL(foodItem, slf.getShoppingList());
 						Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
 						lv.invalidateViews();
 					}
@@ -539,6 +540,7 @@ public class PantryFragment extends Fragment {
 						elv.invalidateViews();
 					} else {
 						slf.addNewItem(foodItem);
+						DbAdapter.instance(null).addToSL(foodItem, slf.getShoppingList());
 						Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
 						elv.invalidateViews();
 					}
@@ -817,6 +819,7 @@ public class PantryFragment extends Fragment {
 						slv.invalidateViews();
 					} else {
 						slf.addNewItem(foodItem);
+						DbAdapter.instance(null).addToSL(foodItem, slf.getShoppingList());
 						Toast.makeText(PantryFragment.this.getActivity(),foodItem.getName() + " added to shopping list",Toast.LENGTH_SHORT).show();
 						slv.invalidateViews();
 					}
