@@ -282,8 +282,7 @@ public class DbAdapter {
 		ContentValues args = new ContentValues();
 		args.put(DbSchema.FoodItemTable.COLUMN_AMOUNT, fi.getAmount());
 		args.put(DbSchema.FoodItemTable.COLUMN_CATEGORY, fi.getCategory().ordinal());
-		args.put(DbSchema.FoodItemTable.COLUMN_EXPIRATION_DATE, fi.getExperiationDate().toString());
-		Log.i("date",fi.getExperiationDate().toString());
+		args.put(DbSchema.FoodItemTable.COLUMN_EXPIRATION_DATE, fi.getExperiationDateString());
 		args.put(DbSchema.FoodItemTable.COLUMN_PICTURE, fi.getPicture());
 		args.put(DbSchema.FoodItemTable.COLUMN_PRICE, fi.getPrice());
 		args.put(DbSchema.FoodItemTable.COLUMN_UNIT, fi.getUnit().ordinal());
@@ -291,9 +290,15 @@ public class DbAdapter {
 		int affectedRows = db.update(DbSchema.FoodItemTable.TABLE, args, DbSchema.FoodItemTable._ID + "=" + fi.getDatabaseId(), null);
 		long insert = -1;
 		if(affectedRows == 0){
-			args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_PANTRY, pantryId);
-			args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_SHOPPING_LIST, shoppingListId);
-			insert = db.insert(DbSchema.FoodItemTable.TABLE, null, args);
+			Cursor select = db.rawQuery("select * from fooditem where name = '"+ fi.getName()+"'", null);
+			if(select != null) {
+				select.moveToFirst();
+				if(select.getCount() == 0) {
+					args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_PANTRY, pantryId);
+					args.put(DbSchema.FoodItemTable.COLUMN_ASSOCIATED_SHOPPING_LIST, shoppingListId);
+					insert = db.insert(DbSchema.FoodItemTable.TABLE, null, args);
+				}
+			}
 		}
 		
 		return insert == -1 && affectedRows == 0;
